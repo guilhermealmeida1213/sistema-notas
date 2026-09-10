@@ -212,11 +212,10 @@ jwt.secret=${JWT_SECRET}
 demo.data.enabled=${DEMO_DATA_ENABLED:false}
 ```
 
-> Nunca publique senhas reais ou chaves JWT no repositório.
 
 ---
 
-## ▶️ Executando o projeto
+## Executando o projeto
 
 ### Pré-requisitos
 
