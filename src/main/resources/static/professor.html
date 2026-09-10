@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sistema Acadêmico | Professor</title>
+
+    <link rel="stylesheet" href="/css/professor.css">
+</head>
+
+<body>
+
+<button
+        id="botaoMenuMobileProfessor"
+        class="botao-menu-mobile"
+        type="button"
+        aria-label="Abrir menu"
+        aria-expanded="false">
+
+    ☰
+
+</button>
+
+<div class="layout">
+
+    <!-- =========================
+         MENU LATERAL
+         ========================= -->
+
+    <aside
+            class="sidebar"
+            id="sidebarProfessor">
+
+        <div class="logo">
+            <h2>Sistema Acadêmico</h2>
+            <span>Portal do Professor</span>
+        </div>
+
+        <nav>
+
+            <button
+                    class="menu-item ativo"
+                    data-secao="inicio">
+                Início
+            </button>
+
+            <button
+                    class="menu-item"
+                    data-secao="notas">
+                Notas
+            </button>
+
+            <button
+                    class="menu-item"
+                    data-secao="faltas">
+                Faltas
+            </button>
+
+        </nav>
+
+        <button
+                id="botaoSair"
+                class="botao-sair">
+            Sair
+        </button>
+
+    </aside>
+
+    <div
+            id="overlayMenuProfessor"
+            class="overlay-menu">
+    </div>
+
+    <!-- =========================
+         CONTEÚDO PRINCIPAL
+         ========================= -->
+
+    <main class="conteudo">
+
+        <header class="topo">
+
+            <div>
+
+                <p class="saudacao">
+                    Bem-vindo ao portal do professor
+                </p>
+
+                <h1>
+                    Gestão acadêmica
+                </h1>
+
+            </div>
+
+            <div class="usuario">
+                Professor
+            </div>
+
+        </header>
+
+
+        <!-- =========================
+             INÍCIO
+             ========================= -->
+
+        <section
+                id="inicio"
+                class="secao ativa">
+
+            <h2>Resumo</h2>
+
+            <div class="cards">
+
+                <article class="card">
+
+                    <span>
+                        Notas cadastradas
+                    </span>
+
+                    <strong id="totalNotas">
+                        --
+                    </strong>
+
+                </article>
+
+
+                <article class="card">
+
+                    <span>
+                        Faltas registradas
+                    </span>
+
+                    <strong id="totalFaltas">
+                        --
+                    </strong>
+
+                </article>
+
+            </div>
+
+
+            <div class="painel">
+
+                <h3>
+                    Minhas turmas
+                </h3>
+
+                <p id="mensagemInicio">
+                    Carregando informações...
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             NOTAS
+             ========================= -->
+
+        <section
+                id="notas"
+                class="secao">
+
+            <div class="cabecalho-secao">
+
+                <h2>
+                    Notas das minhas turmas
+                </h2>
+
+                <button
+                        id="botaoAbrirNota"
+                        class="botao-primario"
+                        type="button">
+
+                    + Lançar nota
+
+                </button>
+
+            </div>
+
+
+            <div class="painel">
+
+                <!-- =========================
+                     FILTROS DE NOTAS
+                     ========================= -->
+
+                <div class="area-filtros">
+
+                    <div class="cabecalho-filtros">
+
+                        <div>
+                            <h3>Filtros</h3>
+                            <span>
+                                Encontre rapidamente as notas desejadas.
+                            </span>
+                        </div>
+
+                        <button
+                                id="botaoLimparFiltrosNotas"
+                                class="botao-secundario"
+                                type="button">
+
+                            Limpar filtros
+
+                        </button>
+
+                    </div>
+
+
+                    <div class="grade-filtros">
+
+                        <div class="campo-filtro">
+
+                            <label for="filtroNotaTurma">
+                                Turma
+                            </label>
+
+                            <select id="filtroNotaTurma">
+                                <option value="">
+                                    Todas as turmas
+                                </option>
+                            </select>
+
+                        </div>
+
+
+                        <div class="campo-filtro">
+
+                            <label for="filtroNotaDisciplina">
+                                Disciplina
+                            </label>
+
+                            <select id="filtroNotaDisciplina">
+                                <option value="">
+                                    Todas as disciplinas
+                                </option>
+                            </select>
+
+                        </div>
+
+
+                        <div class="campo-filtro">
+
+                            <label for="filtroNotaAluno">
+                                Aluno
+                            </label>
+
+                            <select id="filtroNotaAluno">
+                                <option value="">
+                                    Todos os alunos
+                                </option>
+                            </select>
+
+                        </div>
+
+
+                        <div class="campo-filtro">
+
+                            <label for="filtroNotaAvaliacao">
+                                Avaliação
+                            </label>
+
+                            <select id="filtroNotaAvaliacao">
+
+                                <option value="">
+                                    Todas as avaliações
+                                </option>
+
+                                <option value="AVC">
+                                    AVC
+                                </option>
+
+                                <option value="AVG">
+                                    AVG
+                                </option>
+
+                                <option value="AVI">
+                                    AVI
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <p
+                            id="resultadoFiltroNotas"
+                            class="resultado-filtro">
+                    </p>
+
+                </div>
+
+
+                <div id="listaNotas">
+                    Carregando notas...
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             FALTAS
+             ========================= -->
+
+        <section
+                id="faltas"
+                class="secao">
+
+            <div class="cabecalho-secao">
+
+                <h2>
+                    Faltas das minhas turmas
+                </h2>
+
+                <button
+                        id="botaoAbrirFalta"
+                        class="botao-primario"
+                        type="button">
+
+                    + Lançar falta
+
+                </button>
+
+            </div>
+
+
+            <div class="painel">
+
+                <!-- =========================
+                     FILTROS DE FALTAS
+                     ========================= -->
+
+                <div class="area-filtros">
+
+                    <div class="cabecalho-filtros">
+
+                        <div>
+                            <h3>Filtros</h3>
+                            <span>
+                                Filtre as faltas por turma, disciplina ou aluno.
+                            </span>
+                        </div>
+
+                        <button
+                                id="botaoLimparFiltrosFaltas"
+                                class="botao-secundario"
+                                type="button">
+
+                            Limpar filtros
+
+                        </button>
+
+                    </div>
+
+
+                    <div class="grade-filtros grade-filtros-tres">
+
+                        <div class="campo-filtro">
+
+                            <label for="filtroFaltaTurma">
+                                Turma
+                            </label>
+
+                            <select id="filtroFaltaTurma">
+                                <option value="">
+                                    Todas as turmas
+                                </option>
+                            </select>
+
+                        </div>
+
+
+                        <div class="campo-filtro">
+
+                            <label for="filtroFaltaDisciplina">
+                                Disciplina
+                            </label>
+
+                            <select id="filtroFaltaDisciplina">
+                                <option value="">
+                                    Todas as disciplinas
+                                </option>
+                            </select>
+
+                        </div>
+
+
+                        <div class="campo-filtro">
+
+                            <label for="filtroFaltaAluno">
+                                Aluno
+                            </label>
+
+                            <select id="filtroFaltaAluno">
+                                <option value="">
+                                    Todos os alunos
+                                </option>
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <p
+                            id="resultadoFiltroFaltas"
+                            class="resultado-filtro">
+                    </p>
+
+                </div>
+
+
+                <div id="listaFaltas">
+                    Carregando faltas...
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- =========================
+     MODAL - LANÇAR NOTA
+     ========================= -->
+
+<div
+        id="modalNota"
+        class="modal">
+
+    <div class="modal-conteudo">
+
+        <div class="modal-cabecalho">
+
+            <h3>
+                Lançar nota
+            </h3>
+
+            <button
+                    id="botaoFecharNota"
+                    class="botao-fechar"
+                    type="button">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <form id="formNota">
+
+            <div class="campo-formulario">
+
+                <label for="notaVinculo">
+                    Turma / Disciplina
+                </label>
+
+                <select
+                        id="notaVinculo"
+                        required>
+
+                    <option value="">
+                        Selecione a turma e disciplina
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="notaAluno">
+                    Aluno
+                </label>
+
+                <select
+                        id="notaAluno"
+                        required
+                        disabled>
+
+                    <option value="">
+                        Selecione primeiro a turma
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="notaTipoAvaliacao">
+                    Tipo de avaliação
+                </label>
+
+                <select
+                        id="notaTipoAvaliacao"
+                        required>
+
+                    <option value="">
+                        Selecione
+                    </option>
+
+                    <option value="AVC">
+                        AVC
+                    </option>
+
+                    <option value="AVG">
+                        AVG
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="notaValor">
+                    Nota
+                </label>
+
+                <input
+                        type="number"
+                        id="notaValor"
+                        min="0"
+                        max="10"
+                        step="0.01"
+                        required>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="notaData">
+                    Data da avaliação
+                </label>
+
+                <input
+                        type="date"
+                        id="notaData"
+                        required>
+
+            </div>
+
+
+            <p
+                    id="mensagemNota"
+                    class="mensagem-formulario">
+            </p>
+
+
+            <button
+                    type="submit"
+                    class="botao-primario botao-salvar">
+
+                Salvar nota
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     MODAL - EDITAR NOTA
+     ========================= -->
+
+<div
+        id="modalEditarNota"
+        class="modal">
+
+    <div class="modal-conteudo">
+
+        <div class="modal-cabecalho">
+
+            <h3>
+                Editar nota
+            </h3>
+
+            <button
+                    id="botaoFecharEditarNota"
+                    class="botao-fechar"
+                    type="button">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <form id="formEditarNota">
+
+            <input
+                    type="hidden"
+                    id="editarNotaId">
+
+
+            <div class="informacao-edicao">
+
+                <strong id="editarNotaAluno">
+                    --
+                </strong>
+
+                <span id="editarNotaDisciplina">
+                    --
+                </span>
+
+                <span id="editarNotaTipo">
+                    --
+                </span>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="editarNotaValor">
+                    Nova nota
+                </label>
+
+                <input
+                        type="number"
+                        id="editarNotaValor"
+                        min="0"
+                        max="10"
+                        step="0.01"
+                        required>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="editarNotaData">
+                    Data da avaliação
+                </label>
+
+                <input
+                        type="date"
+                        id="editarNotaData"
+                        required>
+
+            </div>
+
+
+            <p
+                    id="mensagemEditarNota"
+                    class="mensagem-formulario">
+            </p>
+
+
+            <button
+                    type="submit"
+                    class="botao-primario botao-salvar">
+
+                Salvar alteração
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     MODAL - LANÇAR FALTA
+     ========================= -->
+
+<div
+        id="modalFalta"
+        class="modal">
+
+    <div class="modal-conteudo">
+
+        <div class="modal-cabecalho">
+
+            <h3>
+                Lançar falta
+            </h3>
+
+            <button
+                    id="botaoFecharFalta"
+                    class="botao-fechar"
+                    type="button">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <form id="formFalta">
+
+            <div class="campo-formulario">
+
+                <label for="faltaVinculo">
+                    Turma / Disciplina
+                </label>
+
+                <select
+                        id="faltaVinculo"
+                        required>
+
+                    <option value="">
+                        Selecione a turma e disciplina
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="faltaAluno">
+                    Aluno
+                </label>
+
+                <select
+                        id="faltaAluno"
+                        required
+                        disabled>
+
+                    <option value="">
+                        Selecione primeiro a turma
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="faltaQuantidade">
+                    Quantidade de faltas
+                </label>
+
+                <input
+                        type="number"
+                        id="faltaQuantidade"
+                        min="1"
+                        step="1"
+                        required>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="faltaData">
+                    Data da falta
+                </label>
+
+                <input
+                        type="date"
+                        id="faltaData"
+                        required>
+
+            </div>
+
+
+            <p
+                    id="mensagemFalta"
+                    class="mensagem-formulario">
+            </p>
+
+
+            <button
+                    type="submit"
+                    class="botao-primario botao-salvar">
+
+                Salvar falta
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     MODAL - EDITAR FALTA
+     ========================= -->
+
+<div
+        id="modalEditarFalta"
+        class="modal">
+
+    <div class="modal-conteudo">
+
+        <div class="modal-cabecalho">
+
+            <h3>
+                Editar falta
+            </h3>
+
+            <button
+                    id="botaoFecharEditarFalta"
+                    class="botao-fechar"
+                    type="button">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <form id="formEditarFalta">
+
+            <input
+                    type="hidden"
+                    id="editarFaltaId">
+
+
+            <div class="informacao-edicao">
+
+                <strong id="editarFaltaAluno">
+                    --
+                </strong>
+
+                <span id="editarFaltaDisciplina">
+                    --
+                </span>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="editarFaltaQuantidade">
+                    Quantidade de faltas
+                </label>
+
+                <input
+                        type="number"
+                        id="editarFaltaQuantidade"
+                        min="1"
+                        step="1"
+                        required>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="editarFaltaData">
+                    Data da falta
+                </label>
+
+                <input
+                        type="date"
+                        id="editarFaltaData"
+                        required>
+
+            </div>
+
+
+            <p
+                    id="mensagemEditarFalta"
+                    class="mensagem-formulario">
+            </p>
+
+
+            <button
+                    type="submit"
+                    class="botao-primario botao-salvar">
+
+                Salvar alteração
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script src="/js/professor.js"></script>
+
+</body>
+
+</html>

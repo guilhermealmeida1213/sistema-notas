@@ -1,0 +1,59 @@
+# =========================
+# MAVEN
+# =========================
+target/
+
+# =========================
+# INTELLIJ IDEA
+# =========================
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# =========================
+# STS / ECLIPSE
+# =========================
+.apt_generated/
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache/
+
+# =========================
+# NETBEANS
+# =========================
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+
+# =========================
+# VS CODE
+# =========================
+.vscode/
+
+# =========================
+# SEGREDOS / AMBIENTE
+# =========================
+.env
+.env.*
+application-local.properties
+
+# =========================
+# LOGS / TEMPORÁRIOS
+# =========================
+*.log
+erro.txt
+
+# =========================
+# SISTEMA OPERACIONAL
+# =========================
+.DS_Store
+Thumbs.db
+
+requests.http

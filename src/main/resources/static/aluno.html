@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sistema Acadêmico | Aluno</title>
+
+    <link rel="stylesheet" href="/css/aluno.css">
+</head>
+
+<body>
+<button
+        id="botaoMenuMobile"
+        class="botao-menu-mobile"
+        type="button"
+        aria-label="Abrir menu"
+        aria-expanded="false">
+
+    ☰
+
+</button>
+<div class="layout">
+
+    <!-- MENU LATERAL -->
+    <aside class="sidebar"
+           id="sidebarAluno">
+
+        <div class="logo">
+            <h2>Sistema Acadêmico</h2>
+            <span>Portal do Aluno</span>
+        </div>
+
+        <nav>
+            <button class="menu-item ativo" data-secao="inicio">
+                Início
+            </button>
+
+            <button class="menu-item" data-secao="notas">
+                Notas e Médias
+            </button>
+
+            <button class="menu-item" data-secao="faltas">
+                Faltas
+            </button>
+
+            <button class="menu-item" data-secao="assistente">
+                Assistente IA
+            </button>
+        </nav>
+
+        <button id="botaoSair" class="botao-sair">
+            Sair
+        </button>
+
+    </aside>
+
+    <div
+            id="overlayMenu"
+            class="overlay-menu">
+    </div>
+
+    <!-- CONTEÚDO -->
+    <main class="conteudo">
+
+        <header class="topo">
+            <div>
+                <p class="saudacao">Bem-vindo ao seu portal</p>
+                <h1>Meu desempenho acadêmico</h1>
+            </div>
+
+            <div class="usuario">
+                <span>Aluno</span>
+            </div>
+        </header>
+
+        <!-- INÍCIO -->
+        <section id="inicio" class="secao ativa">
+
+            <h2>Resumo acadêmico</h2>
+
+            <div class="cards">
+
+                <article class="card">
+                    <span>Média geral</span>
+                    <strong id="mediaGeral">--</strong>
+                </article>
+
+                <article class="card">
+                    <span>Situação</span>
+                    <strong id="situacao">Carregando...</strong>
+                </article>
+
+                <article class="card">
+                    <span>Total de faltas</span>
+                    <strong id="totalFaltas">--</strong>
+                </article>
+
+            </div>
+
+            <div class="painel">
+                <h3>Visão geral</h3>
+
+                <p id="mensagemResumo">
+                    Carregando suas informações acadêmicas...
+                </p>
+            </div>
+
+        </section>
+
+        <!-- NOTAS -->
+        <section id="notas" class="secao">
+
+            <h2>Notas e Médias</h2>
+
+            <div class="painel">
+                <div id="listaNotas">
+                    Carregando notas...
+                </div>
+            </div>
+
+        </section>
+
+        <!-- FALTAS -->
+        <section id="faltas" class="secao">
+
+            <h2>Faltas</h2>
+
+            <div class="painel">
+                <div id="listaFaltas">
+                    Carregando faltas...
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ASSISTENTE -->
+        <section id="assistente" class="secao">
+
+            <h2>Assistente Acadêmico</h2>
+
+            <div class="painel assistente-container">
+
+                <p>
+                    Pergunte sobre suas notas, faltas ou desempenho.
+                </p>
+
+                <div id="chat" class="chat">
+                    <div class="mensagem assistente">
+                        Olá! Como posso ajudar com seu desempenho acadêmico?
+                    </div>
+                </div>
+
+                <form id="formAssistente">
+
+                    <input
+                            type="text"
+                            id="perguntaAssistente"
+                            placeholder="Ex.: Como estão minhas notas?"
+                            required
+                    >
+
+                    <button type="submit">
+                        Enviar
+                    </button>
+
+                </form>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="/js/aluno.js"></script>
+
+</body>
+
+</html>
