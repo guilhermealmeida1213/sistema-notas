@@ -65,7 +65,6 @@ public class SecurityConfig {
                                 // =========================
                                 // SWAGGER / OPENAPI
                                 // =========================
-
                                 .requestMatchers(
                                         "/swagger-ui/**",
                                         "/swagger-ui.html",
@@ -76,9 +75,9 @@ public class SecurityConfig {
                                 // =========================
                                 // FRONTEND PÚBLICO
                                 // =========================
-
                                 .requestMatchers(
                                         HttpMethod.GET,
+                                        "/",
                                         "/login",
                                         "/login.html",
                                         "/aluno.html",
@@ -98,7 +97,6 @@ public class SecurityConfig {
                                 // =========================
                                 // ERROS
                                 // =========================
-
                                 .requestMatchers(
                                         "/error"
                                 ).permitAll()
@@ -107,7 +105,6 @@ public class SecurityConfig {
                                 // =========================
                                 // LOGIN API
                                 // =========================
-
                                 .requestMatchers(
                                         HttpMethod.POST,
                                         "/usuarios/login"
@@ -117,7 +114,6 @@ public class SecurityConfig {
                                 // =========================
                                 // USUÁRIOS
                                 // =========================
-
                                 .requestMatchers(
                                         HttpMethod.POST,
                                         "/usuarios"
@@ -142,7 +138,6 @@ public class SecurityConfig {
                                 // =========================
                                 // ALUNOS
                                 // =========================
-
                                 .requestMatchers(
                                         HttpMethod.POST,
                                         "/alunos"
@@ -157,7 +152,6 @@ public class SecurityConfig {
                                 // =========================
                                 // PROFESSORES
                                 // =========================
-
                                 .requestMatchers(
                                         HttpMethod.POST,
                                         "/professores"
@@ -182,7 +176,6 @@ public class SecurityConfig {
                                 // =========================
                                 // DISCIPLINAS
                                 // =========================
-
                                 .requestMatchers(
                                         HttpMethod.POST,
                                         "/disciplinas"
@@ -211,7 +204,6 @@ public class SecurityConfig {
                                 // =========================
                                 // TURMAS
                                 // =========================
-
                                 .requestMatchers(
                                         HttpMethod.POST,
                                         "/turmas"
@@ -240,7 +232,6 @@ public class SecurityConfig {
                                 // =========================
                                 // TURMA + DISCIPLINA
                                 // =========================
-
                                 .requestMatchers(
                                         HttpMethod.GET,
                                         "/turmas-disciplinas/minhas"
@@ -270,7 +261,6 @@ public class SecurityConfig {
                                 // =========================
                                 // MATRÍCULAS
                                 // =========================
-
                                 .requestMatchers(
                                         HttpMethod.GET,
                                         "/matriculas/minhas"
@@ -305,7 +295,6 @@ public class SecurityConfig {
                                 // =========================
                                 // NOTAS
                                 // =========================
-
                                 .requestMatchers(
                                         HttpMethod.GET,
                                         "/notas/minhas"
@@ -366,7 +355,6 @@ public class SecurityConfig {
                                 // =========================
                                 // FALTAS
                                 // =========================
-
                                 .requestMatchers(
                                         HttpMethod.GET,
                                         "/faltas/minhas"
@@ -407,7 +395,6 @@ public class SecurityConfig {
                                 // =========================
                                 // ASSISTENTE
                                 // =========================
-
                                 .requestMatchers(
                                         HttpMethod.POST,
                                         "/assistente/perguntar"
@@ -417,7 +404,6 @@ public class SecurityConfig {
                                 // =========================
                                 // AUDITORIA
                                 // =========================
-
                                 .requestMatchers(
                                         HttpMethod.GET,
                                         "/auditorias"
@@ -427,7 +413,6 @@ public class SecurityConfig {
                                 // =========================
                                 // REGRA FINAL
                                 // =========================
-
                                 .anyRequest().authenticated()
                         )
 
@@ -444,7 +429,6 @@ public class SecurityConfig {
         // RESPOSTA PADRONIZADA
         // 401 / 403
         // =========================
-
         private void escreverErroSeguranca(
                 HttpServletResponse response,
                 int status,
