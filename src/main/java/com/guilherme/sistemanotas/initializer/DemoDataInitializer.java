@@ -462,52 +462,68 @@ public class DemoDataInitializer implements CommandLineRunner {
     }
 
     // =====================================================
-    // PROFESSOR
-    // =====================================================
+// PROFESSOR
+// =====================================================
 
     private Professor criarProfessorSeNaoExistir(
             String nome,
             String email,
             String registro) {
 
-        return professorRepository
-                .findByRegistro(registro)
-                .orElseGet(() -> {
+        Optional<Professor> professorExistente =
+                professorRepository.findByRegistro(registro);
 
-                    Usuario usuario =
-                            usuarioRepository
-                                    .findByEmail(email)
-                                    .orElseGet(() -> {
+        if (professorExistente.isPresent()) {
 
-                                        Usuario novoUsuario =
-                                                new Usuario();
+            Professor professor =
+                    professorExistente.get();
 
-                                        novoUsuario.setNome(nome);
-                                        novoUsuario.setEmail(email);
-                                        novoUsuario.setSenha(
-                                                passwordEncoder.encode(
-                                                        demoPassword
-                                                )
-                                        );
-                                        novoUsuario.setPerfil(
-                                                PerfilUsuario.PROFESSOR
-                                        );
+            Usuario usuario =
+                    professor.getUsuario();
 
-                                        return usuarioRepository.save(
-                                                novoUsuario
-                                        );
-                                    });
+            usuario.setSenha(
+                    passwordEncoder.encode(demoPassword)
+            );
 
-                    Professor professor =
-                            new Professor();
+            usuarioRepository.save(usuario);
 
-                    professor.setRegistro(registro);
-                    professor.setUsuario(usuario);
+            return professor;
+        }
 
-                    return professorRepository.save(
-                            professor
-                    );
-                });
+        Usuario usuario =
+                usuarioRepository
+                        .findByEmail(email)
+                        .orElseGet(() -> {
+
+                            Usuario novoUsuario =
+                                    new Usuario();
+
+                            novoUsuario.setNome(nome);
+                            novoUsuario.setEmail(email);
+                            novoUsuario.setPerfil(
+                                    PerfilUsuario.PROFESSOR
+                            );
+
+                            return usuarioRepository.save(
+                                    novoUsuario
+                            );
+                        });
+
+        usuario.setSenha(
+                passwordEncoder.encode(demoPassword)
+        );
+
+        usuarioRepository.save(usuario);
+
+        Professor professor =
+                new Professor();
+
+        professor.setRegistro(registro);
+        professor.setUsuario(usuario);
+
+        return professorRepository.save(
+                professor
+        );
     }
 
     // =====================================================
@@ -583,66 +599,82 @@ public class DemoDataInitializer implements CommandLineRunner {
     }
 
     // =====================================================
-    // ALUNO
-    // =====================================================
+// ALUNO
+// =====================================================
 
     private Aluno criarAlunoSeNaoExistir(
             String nome,
             String numeroMatricula,
             int indice) {
 
-        return alunoRepository
-                .findByMatricula(numeroMatricula)
-                .orElseGet(() -> {
+        Optional<Aluno> alunoExistente =
+                alunoRepository.findByMatricula(numeroMatricula);
 
-                    String email =
-                            gerarEmailAluno(nome);
+        if (alunoExistente.isPresent()) {
 
-                    Usuario usuario =
-                            usuarioRepository
-                                    .findByEmail(email)
-                                    .orElseGet(() -> {
+            Aluno aluno =
+                    alunoExistente.get();
 
-                                        Usuario novoUsuario =
-                                                new Usuario();
+            Usuario usuario =
+                    aluno.getUsuario();
 
-                                        novoUsuario.setNome(nome);
-                                        novoUsuario.setEmail(email);
-                                        novoUsuario.setSenha(
-                                                passwordEncoder.encode(
-                                                        demoPassword
-                                                )
-                                        );
-                                        novoUsuario.setPerfil(
-                                                PerfilUsuario.ALUNO
-                                        );
+            usuario.setSenha(
+                    passwordEncoder.encode(demoPassword)
+            );
 
-                                        return usuarioRepository.save(
-                                                novoUsuario
-                                        );
-                                    });
+            usuarioRepository.save(usuario);
 
-                    Aluno aluno =
-                            new Aluno();
+            return aluno;
+        }
 
-                    aluno.setMatricula(numeroMatricula);
+        String email =
+                gerarEmailAluno(nome);
 
-                    /*
-                     * Datas apenas para demonstração.
-                     * Variadas de forma determinística.
-                     */
-                    aluno.setDataNascimento(
-                            LocalDate.of(
-                                    2002 + (indice % 5),
-                                    1 + (indice % 12),
-                                    1 + (indice % 27)
-                            )
-                    );
+        Usuario usuario =
+                usuarioRepository
+                        .findByEmail(email)
+                        .orElseGet(() -> {
 
-                    aluno.setUsuario(usuario);
+                            Usuario novoUsuario =
+                                    new Usuario();
 
-                    return alunoRepository.save(aluno);
-                });
+                            novoUsuario.setNome(nome);
+                            novoUsuario.setEmail(email);
+                            novoUsuario.setPerfil(
+                                    PerfilUsuario.ALUNO
+                            );
+
+                            return usuarioRepository.save(
+                                    novoUsuario
+                            );
+                        });
+
+        usuario.setSenha(
+                passwordEncoder.encode(demoPassword)
+        );
+
+        usuarioRepository.save(usuario);
+
+        Aluno aluno =
+                new Aluno();
+
+        aluno.setMatricula(numeroMatricula);
+
+        /*
+         * Datas apenas para demonstração.
+         * Variadas de forma determinística.
+         */
+        aluno.setDataNascimento(
+                LocalDate.of(
+                        2002 + (indice % 5),
+                        1 + (indice % 12),
+                        1 + (indice % 27)
+                )
+        );
+
+        aluno.setUsuario(usuario);
+
+        return alunoRepository.save(aluno);
     }
 
     // =====================================================
