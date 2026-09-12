@@ -188,6 +188,62 @@ const contadorNotas =
     );
 
 // =========================
+// MODAL LANÇAR AVI
+// =========================
+
+const botaoAbrirAvi =
+    document.getElementById(
+        "botaoAbrirAvi"
+    );
+
+const modalAvi =
+    document.getElementById(
+        "modalAvi"
+    );
+
+const botaoFecharAvi =
+    document.getElementById(
+        "botaoFecharAvi"
+    );
+
+const formAvi =
+    document.getElementById(
+        "formAvi"
+    );
+
+const aviMatricula =
+    document.getElementById(
+        "aviMatricula"
+    );
+
+const aviAlunoNome =
+    document.getElementById(
+        "aviAlunoNome"
+    );
+
+const aviTurmaNome =
+    document.getElementById(
+        "aviTurmaNome"
+    );
+
+let aviIdMatriculaSelecionada = null;
+
+const aviValor =
+    document.getElementById(
+        "aviValor"
+    );
+
+const aviData =
+    document.getElementById(
+        "aviData"
+    );
+
+const mensagemAvi =
+    document.getElementById(
+        "mensagemAvi"
+    );
+
+// =========================
 // MODAL NOVO USUÁRIO
 // =========================
 
@@ -4579,6 +4635,284 @@ formTrocarProfessor.addEventListener(
     }
 );
 
+// =========================
+// LOCALIZAR MATRÍCULA AVI
+// =========================
+
+function localizarMatriculaAvi() {
+
+    const numeroDigitado =
+        aviMatricula.value.trim();
+
+    aviIdMatriculaSelecionada = null;
+
+    aviAlunoNome.value = "";
+    aviTurmaNome.value = "";
+
+    mensagemAvi.textContent = "";
+    mensagemAvi.className =
+        "mensagem-formulario";
+
+    if (!numeroDigitado) {
+        return;
+    }
+
+
+    const matriculaEncontrada =
+        matriculas.find(matricula => {
+
+            const numeroMatricula =
+                String(
+                    matricula.aluno?.matricula ?? ""
+                );
+
+            return numeroMatricula ===
+                numeroDigitado;
+        });
+
+
+    if (!matriculaEncontrada) {
+
+        mensagemAvi.textContent =
+            "Matrícula não encontrada.";
+
+        return;
+    }
+
+
+    aviIdMatriculaSelecionada =
+        matriculaEncontrada.idMatricula;
+
+
+    aviAlunoNome.value =
+        matriculaEncontrada.aluno
+            ?.usuario
+            ?.nome ?? "";
+
+
+    aviTurmaNome.value =
+        matriculaEncontrada.turma
+            ?.nome ?? "";
+
+
+    mensagemAvi.textContent =
+        "Aluno localizado com sucesso.";
+}
+
+// =========================
+// ABRIR MODAL AVI
+// =========================
+
+function abrirModalAvi() {
+
+    formAvi.reset();
+
+    aviAlunoNome.value = "";
+    aviTurmaNome.value = "";
+
+    aviIdMatriculaSelecionada =
+        null;
+
+    mensagemAvi.textContent =
+        "";
+
+    mensagemAvi.className =
+        "mensagem-formulario";
+
+    modalAvi.classList.add(
+        "ativo"
+    );
+
+    aviMatricula.focus();
+}
+
+
+// =========================
+// FECHAR MODAL AVI
+// =========================
+
+function fecharModalAvi() {
+
+    modalAvi.classList.remove(
+        "ativo"
+    );
+
+    formAvi.reset();
+
+    mensagemAvi.textContent =
+        "";
+
+    mensagemAvi.className =
+        "mensagem-formulario";
+}
+
+
+// =========================
+// EVENTOS MODAL AVI
+// =========================
+
+botaoAbrirAvi.addEventListener(
+    "click",
+    abrirModalAvi
+);
+
+botaoFecharAvi.addEventListener(
+    "click",
+    fecharModalAvi
+);
+
+modalAvi.addEventListener(
+    "click",
+    function (event) {
+
+        if (
+            event.target ===
+            modalAvi
+        ) {
+
+            fecharModalAvi();
+        }
+    }
+);
+
+aviMatricula.addEventListener(
+    "input",
+    localizarMatriculaAvi
+);
+
+// =========================
+// LANÇAR AVI
+// =========================
+
+formAvi.addEventListener(
+    "submit",
+    async function (event) {
+
+        event.preventDefault();
+
+        mensagemAvi.textContent = "";
+
+        if (!aviIdMatriculaSelecionada) {
+
+            mensagemAvi.textContent =
+                "Informe uma matrícula válida.";
+
+            return;
+        }
+
+
+        const valor =
+            Number(aviValor.value);
+
+        if (
+            Number.isNaN(valor) ||
+            valor < 0 ||
+            valor > 10
+        ) {
+
+            mensagemAvi.textContent =
+                "A nota deve estar entre 0 e 10.";
+
+            return;
+        }
+
+
+        if (!aviData.value) {
+
+            mensagemAvi.textContent =
+                "Informe a data da avaliação.";
+
+            return;
+        }
+
+
+        const dados = {
+
+            idMatricula:
+            aviIdMatriculaSelecionada,
+
+            valor:
+            valor,
+
+            dataAvaliacao:
+            aviData.value
+        };
+
+
+        try {
+
+            const response =
+                await requisicaoAutenticada(
+                    "/notas/avi",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+                        body:
+                            JSON.stringify(dados)
+                    }
+                );
+
+            if (!response) {
+                return;
+            }
+
+            if (!response.ok) {
+
+                let mensagemErro =
+                    "Não foi possível lançar a AVI.";
+
+                try {
+
+                    const erro =
+                        await response.json();
+
+                    mensagemErro =
+                        erro.mensagem ||
+                        erro.message ||
+                        erro.detail ||
+                        mensagemErro;
+
+                } catch (erro) {
+
+                    console.error(
+                        "Não foi possível ler a resposta de erro.",
+                        erro
+                    );
+                }
+
+                throw new Error(
+                    mensagemErro
+                );
+            }
+
+            mensagemAvi.textContent =
+                "AVI lançada com sucesso!";
+
+
+            await carregarNotas();
+
+
+            setTimeout(
+                function () {
+
+                    fecharModalAvi();
+
+                },
+                1000
+            );
+
+        } catch (erro) {
+
+        mensagemAvi.textContent =
+        erro.message ||
+        "Não foi possível lançar a AVI.";
+        }
+    }
+);
+
 
 // =========================
 // TABELA NOTAS
@@ -6837,7 +7171,6 @@ window.addEventListener(
         }
     }
 );
-
 
 // =========================
 // INICIALIZAÇÃO

@@ -506,9 +506,31 @@
             id="notas"
             class="secao">
 
-      <h2>
-        Notas
-      </h2>
+      <div class="cabecalho-secao">
+
+        <div>
+
+          <h2>
+            Notas
+          </h2>
+
+          <p>
+            Consulte as avaliações e gerencie a AVI integrada.
+          </p>
+
+        </div>
+
+
+        <button
+                id="botaoAbrirAvi"
+                class="botao-primario"
+                type="button">
+
+          + Lançar AVI
+
+        </button>
+
+      </div>
 
 
       <div class="painel painel-filtros">
@@ -2193,6 +2215,130 @@
               class="botao-primario botao-salvar">
 
         Salvar alterações
+
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
+
+<!-- =========================================================
+     MODAL - LANÇAR AVI
+     ========================================================= -->
+
+<div
+        id="modalAvi"
+        class="modal">
+
+  <div class="modal-conteudo">
+
+    <div class="modal-cabecalho">
+
+      <h3>
+        Lançar AVI integrada
+      </h3>
+
+      <button
+              id="botaoFecharAvi"
+              class="botao-fechar"
+              type="button">
+        ×
+      </button>
+
+    </div>
+
+
+    <form id="formAvi">
+
+      <div class="campo-formulario">
+
+        <label for="aviMatricula">
+          Matrícula
+        </label>
+
+        <input
+                type="text"
+                id="aviMatricula"
+                placeholder="Digite a matrícula do aluno"
+                autocomplete="off"
+                required>
+
+      </div>
+
+
+      <div class="campo-formulario">
+
+        <label for="aviAlunoNome">
+          Aluno
+        </label>
+
+        <input
+                type="text"
+                id="aviAlunoNome"
+                disabled>
+
+      </div>
+
+
+      <div class="campo-formulario">
+
+        <label for="aviTurmaNome">
+          Turma
+        </label>
+
+        <input
+                type="text"
+                id="aviTurmaNome"
+                disabled>
+
+      </div>
+
+
+      <div class="campo-formulario">
+
+        <label for="aviValor">
+          Nota AVI
+        </label>
+
+        <input
+                type="number"
+                id="aviValor"
+                min="0"
+                max="10"
+                step="0.01"
+                placeholder="Ex.: 8.50"
+                required>
+
+      </div>
+
+
+      <div class="campo-formulario">
+
+        <label for="aviData">
+          Data da avaliação
+        </label>
+
+        <input
+                type="date"
+                id="aviData"
+                required>
+
+      </div>
+
+
+      <p
+              id="mensagemAvi"
+              class="mensagem-formulario">
+      </p>
+
+
+      <button
+              type="submit"
+              class="botao-primario botao-salvar">
+
+        Lançar AVI
 
       </button>
 
