@@ -27,10 +27,6 @@ public class NotaController {
         this.notaService = notaService;
     }
 
-    // =========================
-    // CADASTRAR AVC / AVG
-    // =========================
-
     @PostMapping
     public Nota criar(
             @RequestBody Nota nota,
@@ -45,11 +41,6 @@ public class NotaController {
         );
     }
 
-    // =========================
-    // LANÇAR AVI INTEGRADA
-    // ADMIN
-    // =========================
-
     @PostMapping("/avi")
     public List<Nota> lancarAvi(
             @RequestBody LancamentoAviDTO dados,
@@ -63,11 +54,6 @@ public class NotaController {
                 emailUsuario
         );
     }
-
-    // =========================
-    // ATUALIZAR AVI INTEGRADA
-    // ADMIN
-    // =========================
 
     @PutMapping("/avi/{idMatricula}")
     public List<Nota> atualizarAviIntegrada(
@@ -85,11 +71,6 @@ public class NotaController {
         );
     }
 
-    // =========================
-    // ATUALIZAR AVC / AVG
-    // PROFESSOR / ADMIN
-    // =========================
-
     @PutMapping("/{id}")
     public Nota atualizar(
             @PathVariable Integer id,
@@ -106,21 +87,11 @@ public class NotaController {
         );
     }
 
-    // =========================
-    // LISTAR TODAS AS NOTAS
-    // ADMIN
-    // =========================
-
     @GetMapping
     public List<NotaAdminDTO> listar() {
 
         return notaService.listar();
     }
-
-    // =========================
-    // LISTAR MINHAS NOTAS
-    // ALUNO
-    // =========================
 
     @GetMapping("/minhas")
     public List<NotaAlunoDTO> listarMinhasNotas(
@@ -132,11 +103,6 @@ public class NotaController {
         return notaService.listarMinhasNotas(email);
     }
 
-    // =========================
-    // LISTAR MINHAS MÉDIAS
-    // ALUNO
-    // =========================
-
     @GetMapping("/minhas-medias")
     public List<MediaDisciplinaDTO> listarMinhasMedias(
             Authentication authentication) {
@@ -146,11 +112,6 @@ public class NotaController {
 
         return notaService.calcularMinhasMedias(email);
     }
-
-    // =========================
-    // MEU RESUMO ACADÊMICO
-    // ALUNO
-    // =========================
 
     @GetMapping("/meu-resumo")
     public List<ResumoDisciplinaDTO> meuResumo(
@@ -162,11 +123,6 @@ public class NotaController {
         return notaService.gerarMeuResumo(email);
     }
 
-    // =========================
-    // NOTAS DAS MINHAS TURMAS
-    // PROFESSOR
-    // =========================
-
     @GetMapping("/minhas-turmas")
     public List<NotaProfessorDTO> listarNotasDasMinhasTurmas(
             Authentication authentication) {
@@ -177,11 +133,6 @@ public class NotaController {
         return notaService
                 .listarNotasDasMinhasTurmas(email);
     }
-
-    // =========================
-    // BUSCAR NOTA POR ID
-    // ADMIN
-    // =========================
 
     @GetMapping("/id/{id}")
     public ResponseEntity<Nota> buscarPorId(

@@ -4,6 +4,7 @@ import com.guilherme.sistemanotas.model.Aluno;
 import com.guilherme.sistemanotas.model.PerfilUsuario;
 import com.guilherme.sistemanotas.model.Usuario;
 import com.guilherme.sistemanotas.repository.AlunoRepository;
+import com.guilherme.sistemanotas.repository.MatriculaRepository;
 import com.guilherme.sistemanotas.repository.UsuarioRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -18,33 +19,27 @@ public class AlunoService {
 
     private final AlunoRepository alunoRepository;
     private final UsuarioRepository usuarioRepository;
+    private final MatriculaRepository matriculaRepository;
 
     public AlunoService(
             AlunoRepository alunoRepository,
-            UsuarioRepository usuarioRepository) {
+            UsuarioRepository usuarioRepository,
+            MatriculaRepository matriculaRepository) {
 
         this.alunoRepository = alunoRepository;
         this.usuarioRepository = usuarioRepository;
+        this.matriculaRepository = matriculaRepository;
     }
-
-    // =========================
-    // CADASTRAR ALUNO
-    // =========================
 
     @Transactional
     public Aluno salvar(Aluno aluno) {
 
         if (aluno == null) {
-
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
                     "Dados do aluno são obrigatórios"
             );
         }
-
-        // =========================
-        // VALIDAR MATRÍCULA
-        // =========================
 
         if (aluno.getMatricula() == null ||
                 aluno.getMatricula().isBlank()) {
@@ -56,17 +51,9 @@ public class AlunoService {
         }
 
         String matricula =
-                aluno
-                        .getMatricula()
-                        .trim();
+                aluno.getMatricula().trim();
 
-        aluno.setMatricula(
-                matricula
-        );
-
-        // =========================
-        // VALIDAR USUÁRIO
-        // =========================
+        aluno.setMatricula(matricula);
 
         if (aluno.getUsuario() == null ||
                 aluno.getUsuario().getIdUsuario() == null) {
@@ -78,9 +65,7 @@ public class AlunoService {
         }
 
         Integer idUsuario =
-                aluno
-                        .getUsuario()
-                        .getIdUsuario();
+                aluno.getUsuario().getIdUsuario();
 
         Usuario usuario =
                 usuarioRepository
@@ -92,21 +77,12 @@ public class AlunoService {
                                 )
                         );
 
-        // =========================
-        // VALIDAR PERFIL
-        // =========================
-
         if (usuario.getPerfil() != PerfilUsuario.ALUNO) {
-
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
                     "O usuário informado não possui perfil ALUNO"
             );
         }
-
-        // =========================
-        // IMPEDIR MATRÍCULA DUPLICADA
-        // =========================
 
         if (alunoRepository
                 .findByMatricula(matricula)
@@ -118,14 +94,8 @@ public class AlunoService {
             );
         }
 
-        // =========================
-        // IMPEDIR USUÁRIO DUPLICADO
-        // =========================
-
         if (alunoRepository
-                .findByUsuario_Email(
-                        usuario.getEmail()
-                )
+                .findByUsuario_Email(usuario.getEmail())
                 .isPresent()) {
 
             throw new ResponseStatusException(
@@ -134,33 +104,43 @@ public class AlunoService {
             );
         }
 
-        aluno.setUsuario(
-                usuario
-        );
+        aluno.setUsuario(usuario);
 
-        return alunoRepository.save(
-                aluno
-        );
+        return alunoRepository.save(aluno);
     }
 
-    // =========================
-    // LISTAR ALUNOS
-    // =========================
-
     public List<Aluno> listar() {
-
         return alunoRepository
                 .findAllByOrderByUsuario_NomeAsc();
     }
 
-    // =========================
-    // BUSCAR POR ID
-    // =========================
+    public Optional<Aluno> buscarPorId(Integer id) {
+        return alunoRepository.findById(id);
+    }
 
-    public Optional<Aluno> buscarPorId(
-            Integer id) {
+    @Transactional
+    public void excluir(Integer id) {
 
-        return alunoRepository
-                .findById(id);
+        Aluno aluno =
+                alunoRepository
+                        .findById(id)
+                        .orElseThrow(() ->
+                                new ResponseStatusException(
+                                        HttpStatus.NOT_FOUND,
+                                        "Aluno não encontrado"
+                                )
+                        );
+
+        if (!matriculaRepository
+                .findByAluno_IdAluno(id)
+                .isEmpty()) {
+
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Não é possível excluir o aluno porque ele possui matrícula vinculada"
+            );
+        }
+
+        alunoRepository.delete(aluno);
     }
 }

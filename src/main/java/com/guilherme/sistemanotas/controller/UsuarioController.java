@@ -31,11 +31,6 @@ public class UsuarioController {
         this.jwtService = jwtService;
     }
 
-    // =========================
-    // CADASTRAR USUÁRIO
-    // ADMIN
-    // =========================
-
     @PostMapping
     public Usuario criar(
             @Valid
@@ -48,19 +43,11 @@ public class UsuarioController {
         );
     }
 
-    // =========================
-    // LISTAR USUÁRIOS
-    // =========================
-
     @GetMapping
     public List<Usuario> listar() {
 
         return usuarioService.listar();
     }
-
-    // =========================
-    // BUSCAR POR ID
-    // =========================
 
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> buscarPorId(
@@ -82,11 +69,6 @@ public class UsuarioController {
                 .notFound()
                 .build();
     }
-
-    // =========================
-    // ATUALIZAR USUÁRIO
-    // ADMIN
-    // =========================
 
     @PutMapping("/{id}")
     public ResponseEntity<Usuario> atualizar(
@@ -114,11 +96,6 @@ public class UsuarioController {
                 .build();
     }
 
-    // =========================
-    // EXCLUIR USUÁRIO
-    // ADMIN
-    // =========================
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluir(
             @PathVariable Integer id,
@@ -138,10 +115,6 @@ public class UsuarioController {
                 .notFound()
                 .build();
     }
-
-    // =========================
-    // LOGIN + JWT
-    // =========================
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(

@@ -23,10 +23,6 @@ public class DisciplinaController {
                 disciplinaService;
     }
 
-    // =========================
-    // CADASTRAR
-    // =========================
-
     @PostMapping
     public Disciplina criar(
             @Valid
@@ -37,19 +33,11 @@ public class DisciplinaController {
         );
     }
 
-    // =========================
-    // LISTAR
-    // =========================
-
     @GetMapping
     public List<Disciplina> listar() {
 
         return disciplinaService.listar();
     }
-
-    // =========================
-    // BUSCAR POR ID
-    // =========================
 
     @GetMapping("/{id}")
     public ResponseEntity<Disciplina> buscarPorId(
@@ -71,10 +59,6 @@ public class DisciplinaController {
                 .build();
     }
 
-    // =========================
-    // ATUALIZAR
-    // =========================
-
     @PutMapping("/{id}")
     public ResponseEntity<Disciplina> atualizar(
             @PathVariable Integer id,
@@ -93,10 +77,6 @@ public class DisciplinaController {
                 atualizada
         );
     }
-
-    // =========================
-    // EXCLUIR
-    // =========================
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluir(

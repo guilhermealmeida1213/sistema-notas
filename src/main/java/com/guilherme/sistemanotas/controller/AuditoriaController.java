@@ -18,11 +18,6 @@ public class AuditoriaController {
         this.auditoriaService = auditoriaService;
     }
 
-    // =========================
-    // LISTAR AUDITORIAS
-    // ADMIN
-    // =========================
-
     @GetMapping
     public List<Auditoria> listar() {
 

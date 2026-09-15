@@ -18,11 +18,6 @@ public class AssistenteController {
         this.assistenteService = assistenteService;
     }
 
-    // =========================
-    // PERGUNTAR AO ASSISTENTE
-    // ALUNO
-    // =========================
-
     @PostMapping("/perguntar")
     public AssistenteRespostaDTO perguntar(
             @RequestBody AssistentePerguntaDTO dados,

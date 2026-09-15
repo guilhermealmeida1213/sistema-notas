@@ -23,10 +23,6 @@ public class FaltaController {
         this.faltaService = faltaService;
     }
 
-    // =========================
-    // CADASTRAR FALTA
-    // =========================
-
     @PostMapping
     public Falta criar(
             @RequestBody Falta falta,
@@ -40,11 +36,6 @@ public class FaltaController {
                 emailUsuario
         );
     }
-
-    // =========================
-    // ATUALIZAR FALTA
-    // PROFESSOR / ADMIN
-    // =========================
 
     @PutMapping("/{id}")
     public Falta atualizar(
@@ -62,21 +53,11 @@ public class FaltaController {
         );
     }
 
-    // =========================
-    // LISTAR TODAS AS FALTAS
-    // ADMIN
-    // =========================
-
     @GetMapping
     public List<FaltaAdminDTO> listar() {
 
         return faltaService.listar();
     }
-
-    // =========================
-    // LISTAR MINHAS FALTAS
-    // ALUNO
-    // =========================
 
     @GetMapping("/minhas")
     public List<FaltaAlunoDTO> listarMinhasFaltas(
@@ -88,11 +69,6 @@ public class FaltaController {
         return faltaService.listarMinhasFaltas(email);
     }
 
-    // =========================
-    // LISTAR FALTAS DAS MINHAS TURMAS
-    // PROFESSOR
-    // =========================
-
     @GetMapping("/minhas-turmas")
     public List<FaltaProfessorDTO> listarFaltasDasMinhasTurmas(
             Authentication authentication) {
@@ -103,11 +79,6 @@ public class FaltaController {
         return faltaService
                 .listarFaltasDasMinhasTurmas(email);
     }
-
-    // =========================
-    // BUSCAR FALTA POR ID
-    // ADMIN
-    // =========================
 
     @GetMapping("/id/{id}")
     public ResponseEntity<Falta> buscarPorId(

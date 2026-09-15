@@ -18,28 +18,41 @@ public class AlunoController {
         this.alunoService = alunoService;
     }
 
-    // Cadastrar aluno
     @PostMapping
     public Aluno criar(@RequestBody Aluno aluno) {
         return alunoService.salvar(aluno);
     }
 
-    // Listar alunos
     @GetMapping
     public List<Aluno> listar() {
         return alunoService.listar();
     }
 
-    // Buscar aluno por ID
     @GetMapping("/{id}")
     public ResponseEntity<Aluno> buscarPorId(@PathVariable Integer id) {
 
-        Optional<Aluno> aluno = alunoService.buscarPorId(id);
+        Optional<Aluno> aluno =
+                alunoService.buscarPorId(id);
 
         if (aluno.isPresent()) {
-            return ResponseEntity.ok(aluno.get());
+            return ResponseEntity.ok(
+                    aluno.get()
+            );
         }
 
-        return ResponseEntity.notFound().build();
+        return ResponseEntity
+                .notFound()
+                .build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluir(
+            @PathVariable Integer id) {
+
+        alunoService.excluir(id);
+
+        return ResponseEntity
+                .noContent()
+                .build();
     }
 }

@@ -325,6 +325,45 @@ const mensagemEditarUsuario =
     );
 
 
+// ========================
+// MODAL NOVO ALUNO
+// ========================
+
+const botaoAbrirAluno =
+    document.getElementById(
+        "botaoAbrirAluno"
+    );
+
+const botaoFecharAluno =
+    document.getElementById(
+        "botaoFecharAluno"
+    );
+
+const modalAluno =
+    document.getElementById(
+        "modalAluno"
+    );
+
+const formAluno =
+    document.getElementById(
+        "formAluno"
+    );
+
+const alunoUsuario =
+    document.getElementById(
+        "alunoUsuario"
+    );
+
+const alunoMatricula =
+    document.getElementById(
+        "alunoMatricula"
+    );
+
+const mensagemAluno =
+    document.getElementById(
+        "mensagemAluno"
+    );
+
 // =========================
 // MODAL NOVO PROFESSOR
 // =========================
@@ -1269,6 +1308,128 @@ function preencherSelectProfessor() {
     });
 }
 
+// =========================
+// USUÁRIOS ALUNOS
+// DISPONÍVEIS
+// =========================
+
+function obterUsuariosAlunosDisponiveis() {
+
+    return usuarios.filter(usuario => {
+
+        if (
+            usuario.perfil !==
+            "ALUNO"
+        ) {
+
+            return false;
+        }
+
+        const jaPossuiAluno =
+            alunos.some(
+                aluno =>
+                    aluno.usuario
+                        ?.idUsuario ===
+                    usuario.idUsuario
+            );
+
+        return !jaPossuiAluno;
+    });
+}
+
+
+// =========================
+// PREENCHER SELECT ALUNO
+// =========================
+
+function preencherSelectAluno() {
+
+    alunoUsuario.innerHTML = `
+        <option value="">
+            Selecione um usuário aluno
+        </option>
+    `;
+
+    const disponiveis =
+        obterUsuariosAlunosDisponiveis();
+
+    if (disponiveis.length === 0) {
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+        option.value =
+            "";
+
+        option.textContent =
+            "Nenhum usuário ALUNO disponível";
+
+        alunoUsuario.appendChild(
+            option
+        );
+
+        alunoUsuario.disabled =
+            true;
+
+        return;
+    }
+
+    alunoUsuario.disabled =
+        false;
+
+    disponiveis.forEach(usuario => {
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+        option.value =
+            usuario.idUsuario;
+
+        option.textContent =
+            `${usuario.nome} - ${usuario.email}`;
+
+        alunoUsuario.appendChild(
+            option
+        );
+    });
+}
+
+
+function abrirModalAluno() {
+
+    formAluno.reset();
+
+    mensagemAluno.textContent =
+        "";
+
+    mensagemAluno.className =
+        "mensagem-formulario";
+
+    preencherSelectAluno();
+
+    modalAluno.classList.add(
+        "ativo"
+    );
+}
+
+function fecharModalAluno() {
+
+    modalAluno.classList.remove(
+        "ativo"
+    );
+
+    formAluno.reset();
+
+    mensagemAluno.textContent =
+        "";
+
+    mensagemAluno.className =
+        "mensagem-formulario";
+}
 
 // =========================
 // ABRIR NOVO PROFESSOR
@@ -1311,6 +1472,15 @@ function fecharModalProfessor() {
         "mensagem-formulario";
 }
 
+botaoAbrirAluno.addEventListener(
+    "click",
+    abrirModalAluno
+);
+
+botaoFecharAluno.addEventListener(
+    "click",
+    fecharModalAluno
+);
 
 botaoAbrirProfessor.addEventListener(
     "click",
@@ -1338,6 +1508,127 @@ modalProfessor.addEventListener(
     }
 );
 
+formAluno.addEventListener(
+    "submit",
+    async function (event) {
+
+        event.preventDefault();
+
+        mensagemAluno.className =
+            "mensagem-formulario";
+
+        mensagemAluno.textContent =
+            "Salvando aluno...";
+
+        const idUsuario =
+            Number(
+                alunoUsuario.value
+            );
+
+        const matricula =
+            alunoMatricula
+                .value
+                .trim();
+
+        if (!idUsuario) {
+
+            mensagemAluno.className =
+                "mensagem-formulario erro";
+
+            mensagemAluno.textContent =
+                "Selecione um usuário aluno.";
+
+            return;
+        }
+
+        if (!matricula) {
+
+            mensagemAluno.className =
+                "mensagem-formulario erro";
+
+            mensagemAluno.textContent =
+                "Informe a matrícula do aluno.";
+
+            return;
+        }
+
+        const dados = {
+
+            matricula:
+            matricula,
+
+            usuario: {
+
+                idUsuario:
+                idUsuario
+            }
+        };
+
+        try {
+
+            const response =
+                await requisicaoAutenticada(
+                    "/alunos",
+                    {
+                        method:
+                            "POST",
+
+                        body:
+                            JSON.stringify(
+                                dados
+                            )
+                    }
+                );
+
+            if (!response) {
+                return;
+            }
+
+            const resposta =
+                await lerJsonSeguro(
+                    response
+                );
+
+            if (!response.ok) {
+
+                mensagemAluno.className =
+                    "mensagem-formulario erro";
+
+                mensagemAluno.textContent =
+                    resposta?.mensagem ??
+                    "Não foi possível cadastrar o aluno.";
+
+                return;
+            }
+
+            mensagemAluno.className =
+                "mensagem-formulario sucesso";
+
+            mensagemAluno.textContent =
+                "Aluno cadastrado com sucesso!";
+
+            await carregarAlunos();
+
+            setTimeout(
+                fecharModalAluno,
+                900
+            );
+
+        } catch (erro) {
+
+            console.error(
+                "Erro ao cadastrar aluno:",
+                erro
+            );
+
+            mensagemAluno.className =
+                "mensagem-formulario erro";
+
+            mensagemAluno.textContent =
+                "Erro ao conectar com o servidor.";
+        }
+    }
+);
 
 // =========================
 // CADASTRAR PROFESSOR
@@ -3110,11 +3401,19 @@ async function carregarAlunos() {
 
             alunos = [];
 
+            montarTabelaAlunos(
+                alunos
+            );
+
             return;
         }
 
         alunos =
             await response.json();
+
+        montarTabelaAlunos(
+            alunos
+        );
 
     } catch (erro) {
 
@@ -3124,13 +3423,100 @@ async function carregarAlunos() {
         );
 
         alunos = [];
+
+        montarTabelaAlunos(
+            alunos
+        );
     }
 }
 
+function montarTabelaAlunos(dados) {
 
-// =========================
-// CARREGAR MATRÍCULAS
-// =========================
+    const listaAlunos =
+        document.getElementById(
+            "listaAlunos"
+        );
+
+    if (!listaAlunos) {
+        return;
+    }
+
+    if (
+        !dados ||
+        dados.length === 0
+    ) {
+
+        listaAlunos.innerHTML =
+            "Nenhum aluno cadastrado.";
+
+        return;
+    }
+
+    let html = `
+        <div class="tabela-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Matrícula</th>
+                        <th>Nome</th>
+                        <th>E-mail</th>
+                        <th>Ações</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+    `;
+
+    dados.forEach(aluno => {
+
+        html += `
+            <tr>
+
+                <td>
+                    ${aluno.idAluno}
+                </td>
+
+                <td>
+                    ${aluno.matricula}
+                </td>
+
+                <td>
+                    ${aluno.usuario?.nome ?? "-"}
+                </td>
+
+                <td>
+                    ${aluno.usuario?.email ?? "-"}
+                </td>
+
+                <td>
+                    <button
+                        type="button"
+                        class="botao-perigo"
+                        onclick="excluirAluno(${aluno.idAluno})">
+                        Excluir
+                    </button>
+                </td>
+
+            </tr>
+        `;
+    });
+
+    html += `
+                </tbody>
+
+            </table>
+
+        </div>
+    `;
+
+    listaAlunos.innerHTML =
+        html;
+}
 
 async function carregarMatriculas() {
 
@@ -3175,11 +3561,6 @@ async function carregarMatriculas() {
             "Erro ao conectar com o servidor.";
     }
 }
-
-
-// =========================
-// TABELA DE MATRÍCULAS
-// =========================
 
 function montarTabelaMatriculas(
     dados
@@ -3322,11 +3703,6 @@ function montarTabelaMatriculas(
         html;
 }
 
-
-// =========================
-// SELECTS DA NOVA MATRÍCULA
-// =========================
-
 function preencherSelectsMatricula() {
 
     matriculaAluno.innerHTML = `
@@ -3392,11 +3768,6 @@ function preencherSelectsMatricula() {
     );
 }
 
-
-// =========================
-// ABRIR NOVA MATRÍCULA
-// =========================
-
 function abrirModalMatricula() {
 
     formMatricula.reset();
@@ -3419,11 +3790,6 @@ function abrirModalMatricula() {
     );
 }
 
-
-// =========================
-// FECHAR NOVA MATRÍCULA
-// =========================
-
 function fecharModalMatricula() {
 
     modalMatricula.classList.remove(
@@ -3438,11 +3804,6 @@ function fecharModalMatricula() {
     mensagemMatricula.className =
         "mensagem-formulario";
 }
-
-
-// =========================
-// SALVAR NOVA MATRÍCULA
-// =========================
 
 formMatricula.addEventListener(
     "submit",
@@ -3618,11 +3979,6 @@ formMatricula.addEventListener(
     }
 );
 
-
-// =========================
-// ABRIR EDITAR MATRÍCULA
-// =========================
-
 function abrirModalEditarMatricula(
     idMatricula
 ) {
@@ -3682,11 +4038,6 @@ function abrirModalEditarMatricula(
         "ativo"
     );
 }
-
-
-// =========================
-// FECHAR EDITAR MATRÍCULA
-// =========================
 
 function fecharModalEditarMatricula() {
 
@@ -3931,6 +4282,7 @@ async function excluirMatricula(
                 );
 
             alert(
+                resposta?.mensagem ??
                 resposta?.erro ??
                 resposta?.message ??
                 "Não foi possível excluir a matrícula."
@@ -3962,11 +4314,6 @@ async function excluirMatricula(
         );
     }
 }
-
-
-// =========================
-// EVENTOS DOS MODAIS
-// =========================
 
 botaoAbrirMatricula.addEventListener(
     "click",
@@ -4015,9 +4362,88 @@ modalEditarMatricula.addEventListener(
     }
 );
 
-// =========================
-// NOTAS
-// =========================
+async function excluirAluno(
+    idAluno
+) {
+
+    const aluno =
+        alunos.find(
+            item =>
+                item.idAluno ===
+                idAluno
+        );
+
+    if (!aluno) {
+
+        alert(
+            "Aluno não encontrado."
+        );
+
+        return;
+    }
+
+    const nomeAluno =
+        aluno.usuario?.nome ??
+        "Aluno";
+
+    const confirmou =
+        confirm(
+            `Deseja excluir o cadastro acadêmico de ${nomeAluno}?`
+        );
+
+    if (!confirmou) {
+        return;
+    }
+
+    try {
+
+        const response =
+            await requisicaoAutenticada(
+                `/alunos/${idAluno}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+        if (!response) {
+            return;
+        }
+
+        if (!response.ok) {
+
+            const resposta =
+                await lerJsonSeguro(
+                    response
+                );
+
+            alert(
+                resposta?.erro ??
+                resposta?.mensagem ??
+                resposta?.message ??
+                "Não foi possível excluir o aluno."
+            );
+
+            return;
+        }
+
+        alert(
+            "Aluno excluído com sucesso."
+        );
+
+        await carregarAlunos();
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao excluir aluno:",
+            erro
+        );
+
+        alert(
+            "Erro ao conectar com o servidor."
+        );
+    }
+}
 
 async function carregarNotas() {
 

@@ -24,11 +24,6 @@ public class MatriculaController {
                 matriculaService;
     }
 
-    // =========================
-    // CADASTRAR MATRÍCULA
-    // ADMIN
-    // =========================
-
     @PostMapping
     public Matricula criar(
             @RequestBody Matricula matricula,
@@ -41,22 +36,12 @@ public class MatriculaController {
                 );
     }
 
-    // =========================
-    // LISTAR TODAS AS MATRÍCULAS
-    // ADMIN / PROFESSOR
-    // =========================
-
     @GetMapping
     public List<Matricula> listar() {
 
         return matriculaService
                 .listar();
     }
-
-    // =========================
-    // LISTAR MINHAS MATRÍCULAS
-    // ALUNO
-    // =========================
 
     @GetMapping("/minhas")
     public List<MatriculaAlunoDTO> listarMinhasMatriculas(
@@ -70,11 +55,6 @@ public class MatriculaController {
                         email
                 );
     }
-
-    // =========================
-    // LISTAR MATRÍCULAS DA TURMA
-    // PROFESSOR
-    // =========================
 
     @GetMapping("/turma/{idTurma}")
     public List<Matricula> listarPorTurma(
@@ -91,11 +71,6 @@ public class MatriculaController {
                 );
     }
 
-    // =========================
-    // ATUALIZAR MATRÍCULA
-    // ADMIN
-    // =========================
-
     @PutMapping("/{id}")
     public Matricula atualizar(
             @PathVariable Integer id,
@@ -109,11 +84,6 @@ public class MatriculaController {
                         authentication.getName()
                 );
     }
-
-    // =========================
-    // EXCLUIR MATRÍCULA
-    // ADMIN
-    // =========================
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluir(
@@ -129,10 +99,6 @@ public class MatriculaController {
                 .noContent()
                 .build();
     }
-
-    // =========================
-    // BUSCAR MATRÍCULA POR ID
-    // =========================
 
     @GetMapping("/{id}")
     public ResponseEntity<Matricula> buscarPorId(

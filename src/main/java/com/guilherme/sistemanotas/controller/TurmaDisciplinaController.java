@@ -23,11 +23,6 @@ public class TurmaDisciplinaController {
                 turmaDisciplinaService;
     }
 
-    // =========================
-    // LISTAR MINHAS DISCIPLINAS
-    // PROFESSOR
-    // =========================
-
     @GetMapping("/minhas")
     public List<TurmaDisciplina> listarMinhas(
             Authentication authentication) {
@@ -37,11 +32,6 @@ public class TurmaDisciplinaController {
                         authentication.getName()
                 );
     }
-
-    // =========================
-    // CRIAR VÍNCULO
-    // ADMIN
-    // =========================
 
     @PostMapping
     public TurmaDisciplina criar(
@@ -55,22 +45,12 @@ public class TurmaDisciplinaController {
                 );
     }
 
-    // =========================
-    // LISTAR TODOS
-    // ADMIN
-    // =========================
-
     @GetMapping
     public List<TurmaDisciplina> listar() {
 
         return turmaDisciplinaService
                 .listar();
     }
-
-    // =========================
-    // ALTERAR PROFESSOR
-    // ADMIN
-    // =========================
 
     @PutMapping("/{id}/professor")
     public TurmaDisciplina atualizarProfessor(
@@ -85,10 +65,6 @@ public class TurmaDisciplinaController {
                         authentication.getName()
                 );
     }
-
-    // =========================
-    // BUSCAR POR ID
-    // =========================
 
     @GetMapping("/{id:\\d+}")
     public ResponseEntity<TurmaDisciplina> buscarPorId(
@@ -109,11 +85,6 @@ public class TurmaDisciplinaController {
                 .notFound()
                 .build();
     }
-
-    // =========================
-// EXCLUIR VÍNCULO
-// ADMIN
-// =========================
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluir(

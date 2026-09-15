@@ -23,10 +23,6 @@ public class TurmaController {
                 turmaService;
     }
 
-    // =========================
-    // CADASTRAR
-    // =========================
-
     @PostMapping
     public Turma criar(
             @Valid
@@ -37,19 +33,11 @@ public class TurmaController {
         );
     }
 
-    // =========================
-    // LISTAR
-    // =========================
-
     @GetMapping
     public List<Turma> listar() {
 
         return turmaService.listar();
     }
-
-    // =========================
-    // BUSCAR POR ID
-    // =========================
 
     @GetMapping("/{id}")
     public ResponseEntity<Turma> buscarPorId(
@@ -72,10 +60,6 @@ public class TurmaController {
                 .build();
     }
 
-    // =========================
-    // ATUALIZAR
-    // =========================
-
     @PutMapping("/{id}")
     public ResponseEntity<Turma> atualizar(
             @PathVariable Integer id,
@@ -94,10 +78,6 @@ public class TurmaController {
                 atualizada
         );
     }
-
-    // =========================
-    // EXCLUIR
-    // =========================
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluir(

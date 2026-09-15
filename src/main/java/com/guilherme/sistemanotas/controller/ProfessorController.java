@@ -24,10 +24,6 @@ public class ProfessorController {
                 professorService;
     }
 
-    // =========================
-    // CADASTRAR PROFESSOR
-    // =========================
-
     @PostMapping
     public Professor criar(
             @RequestBody Professor professor,
@@ -39,19 +35,11 @@ public class ProfessorController {
         );
     }
 
-    // =========================
-    // LISTAR PROFESSORES
-    // =========================
-
     @GetMapping
     public List<Professor> listar() {
 
         return professorService.listar();
     }
-
-    // =========================
-    // BUSCAR POR ID
-    // =========================
 
     @GetMapping("/{id}")
     public ResponseEntity<Professor> buscarPorId(
@@ -74,10 +62,6 @@ public class ProfessorController {
                 .build();
     }
 
-    // =========================
-    // ATUALIZAR PROFESSOR
-    // =========================
-
     @PutMapping("/{id}")
     public ResponseEntity<Professor> atualizar(
             @PathVariable Integer id,
@@ -96,10 +80,6 @@ public class ProfessorController {
                 professorAtualizado
         );
     }
-
-    // =========================
-    // EXCLUIR PROFESSOR
-    // =========================
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluir(

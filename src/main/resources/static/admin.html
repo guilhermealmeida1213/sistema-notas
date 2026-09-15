@@ -78,6 +78,14 @@
 
       </button>
 
+      <button
+              class="menu-item"
+              data-secao="alunos"
+              type="button">
+
+        Alunos
+
+      </button>
 
       <button
               class="menu-item"
@@ -308,6 +316,44 @@
 
         <div id="listaUsuarios">
           Carregando usuários...
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+     ALUNOS
+     ========================= -->
+
+    <section
+            id="alunos"
+            class="secao">
+
+      <div class="cabecalho-secao">
+
+        <h2>
+          Alunos
+        </h2>
+
+
+        <button
+                id="botaoAbrirAluno"
+                class="botao-primario"
+                type="button">
+
+          + Novo aluno
+
+        </button>
+
+      </div>
+
+
+      <div class="painel">
+
+        <div id="listaAlunos">
+          Carregando alunos...
         </div>
 
       </div>
@@ -1205,6 +1251,89 @@
               class="botao-primario botao-salvar">
 
         Salvar alterações
+
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
+
+<!-- =========================================================
+     MODAL - NOVO ALUNO
+     ========================================================= -->
+
+<div
+        id="modalAluno"
+        class="modal">
+
+  <div class="modal-conteudo">
+
+    <div class="modal-cabecalho">
+
+      <h3>
+        Novo aluno
+      </h3>
+
+      <button
+              id="botaoFecharAluno"
+              class="botao-fechar"
+              type="button">
+        ×
+      </button>
+
+    </div>
+
+
+    <form id="formAluno">
+
+      <div class="campo-formulario">
+
+        <label for="alunoUsuario">
+          Usuário
+        </label>
+
+        <select
+                id="alunoUsuario"
+                required>
+
+          <option value="">
+            Selecione um usuário aluno
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="campo-formulario">
+
+        <label for="alunoMatricula">
+          Matrícula
+        </label>
+
+        <input
+                type="text"
+                id="alunoMatricula"
+                maxlength="20"
+                placeholder="Ex.: 2026099"
+                required>
+
+      </div>
+
+
+      <p
+              id="mensagemAluno"
+              class="mensagem-formulario">
+      </p>
+
+
+      <button
+              type="submit"
+              class="botao-primario botao-salvar">
+
+        Salvar aluno
 
       </button>
 
