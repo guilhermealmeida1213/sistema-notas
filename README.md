@@ -1,201 +1,406 @@
-# Sistema de Notas e Faltas
+Sistema de Notas e Faltas com Cibersegurança
 
-Sistema acadêmico desenvolvido para gerenciamento de **notas, faltas, matrículas, turmas e disciplinas**, com controle de acesso baseado em perfis, autenticação via JWT, auditoria de alterações e um assistente inteligente para consulta do desempenho acadêmico.
+Sistema web acadêmico desenvolvido para gerenciamento de usuários, alunos, professores, turmas, disciplinas, matrículas, notas e faltas, com controle de acesso, auditoria, recuperação de senha e assistente acadêmico com Inteligência Artificial.
 
-O projeto foi desenvolvido como parte do curso de **Análise e Desenvolvimento de Sistemas**, buscando aplicar conceitos de desenvolvimento backend, banco de dados, segurança de aplicações e tecnologias emergentes.
+O projeto foi desenvolvido no curso de Análise e Desenvolvimento de Sistemas (ADS), na disciplina de Tecnologias Emergentes, com foco em desenvolvimento web, segurança de aplicações, banco de dados e uso de IA.
 
----
+Funcionalidades
 
-## Funcionalidades
+Aluno
 
-O sistema possui três perfis de acesso:
+Consulta suas próprias informações acadêmicas
 
-### Aluno
+Consulta notas e médias
 
-- Consulta suas matrículas
-- Consulta suas notas
-- Consulta suas faltas
-- Visualiza médias por disciplina
-- Visualiza resumo acadêmico
-- Consulta frequência
-- Verifica sua situação acadêmica
-- Utiliza o assistente inteligente para consultar seu desempenho
+Consulta faltas e frequência
 
-### Professor
+Visualiza sua situação acadêmica
 
-- Consulta alunos matriculados em suas próprias turmas
-- Consulta suas turmas e disciplinas
-- Lança notas nas disciplinas pelas quais é responsável
-- Corrige notas
-- Registra faltas
-- Corrige faltas
-- Acessa informações acadêmicas relacionadas às suas próprias turmas
+Consulta suas matrículas
 
-### Administrador
+Utiliza o Assistente Acadêmico para perguntas sobre seu desempenho
 
-- Gerencia usuários
-- Gerencia alunos e professores
-- Gerencia turmas e disciplinas
-- Gerencia matrículas
-- Define professores responsáveis pelas disciplinas
-- Consulta notas e faltas
-- Lança e corrige a avaliação integrada (AVI)
-- Consulta registros de auditoria
+Professor
 
----
+Consulta suas próprias turmas e disciplinas
 
-## Assistente Inteligente
+Consulta alunos relacionados às suas turmas
 
-O sistema possui um assistente que permite ao aluno realizar perguntas relacionadas ao próprio desempenho acadêmico.
+Lança notas
+
+Corrige notas permitidas pelo sistema
+
+Registra faltas
+
+Corrige faltas
+
+Trabalha somente com as disciplinas e turmas pelas quais é responsável
+
+Administrador
+
+Gerencia usuários
+
+Ativa e desativa usuários
+
+Gerencia alunos
+
+Gerencia professores
+
+Gerencia turmas
+
+Gerencia disciplinas
+
+Gerencia matrículas
+
+Vincula professores às disciplinas
+
+Consulta notas e faltas
+
+Lança e gerencia a avaliação AVI conforme as regras do sistema
+
+Consulta registros de auditoria
+
+Segurança
+
+A segurança é uma parte central do projeto.
+
+Entre os mecanismos implementados estão:
+
+Autenticação baseada em JWT
+
+Senhas protegidas com BCrypt
+
+Controle de acesso baseado em perfis
+
+Perfis de ALUNO, PROFESSOR e ADMINISTRADOR
+
+Validação de autorização nas operações acadêmicas
+
+Professor limitado às suas próprias turmas e disciplinas
+
+Aluno limitado aos próprios dados acadêmicos
+
+Controle de usuário ativo/inativo
+
+Validação contra operações não autorizadas
+
+Proteção contra exclusão de registros vinculados
+
+Auditoria de ações relevantes
+
+Tratamento centralizado de exceções
+
+Configurações sensíveis por variáveis de ambiente
+
+Quando um usuário é desativado, o acesso é bloqueado e o histórico acadêmico não é apagado.
+
+Assistente Acadêmico com IA
+
+O sistema possui um Assistente Acadêmico que permite ao aluno realizar perguntas sobre seu próprio desempenho.
 
 Exemplos:
 
-```text
 Como estão minhas notas?
 
 Quantas faltas eu tenho?
 
-Qual matéria preciso melhorar?
+Qual matéria está com a menor nota?
 
-Qual minha média em Técnicas de Programação?
+Qual disciplina precisa de mais atenção?
 
-Qual minha frequência em Tecnologias Emergentes?
+Qual minha média em determinada disciplina?
 
-Estou aprovado em Governança?
+Como está minha frequência?
 
-Me explica como estou indo neste semestre e onde preciso prestar mais atenção.
-```
+O projeto inicialmente utilizava Ollama, mas a implementação atual utiliza a NVIDIA API.
 
-O assistente utiliza os dados acadêmicos do próprio aluno para fornecer respostas contextualizadas sobre notas, faltas, frequência e desempenho.
+Tecnologia utilizada
 
-A integração com inteligência artificial é realizada utilizando um modelo executado localmente por meio do **Ollama**.
+Serviço: NvidiaAiService
 
----
+API: NVIDIA
 
-## Segurança
+Modelo: openai/gpt-oss-20b
 
-A aplicação possui mecanismos de segurança para proteger os dados acadêmicos e controlar o acesso aos recursos.
+Endpoint: https://integrate.api.nvidia.com/v1/chat/completions
 
-Entre eles:
+Autenticação: Bearer Token por variável de ambiente
 
-- Autenticação utilizando JWT
-- Senhas armazenadas utilizando hash com BCrypt
-- Controle de acesso baseado em perfis
-- Separação entre permissões de ALUNO, PROFESSOR e ADMINISTRADOR
-- Validação de autorização nas operações acadêmicas
-- Professor só pode alterar notas e faltas relacionadas às disciplinas pelas quais é responsável
-- Aluno acessa somente seus próprios dados acadêmicos
-- Proteção contra exclusão indevida de registros vinculados
-- Auditoria de alterações
-- Tratamento centralizado de exceções
-- Credenciais e segredos configurados por variáveis de ambiente
+A integração utiliza configurações como:
 
----
+temperature: 0.2
 
-## Avaliações
+top_p: 0.7
 
-O sistema trabalha com diferentes tipos de avaliação:
+max_tokens: 1024
 
-- **AVC**
-- **AVG**
-- **AVI**
+stream: false
 
-A AVI é uma avaliação integrada e possui regras específicas de acesso administrativo.
+reasoning_effort: low
 
-O sistema também aplica validações para impedir situações inválidas, como:
+O Assistente Acadêmico não deve inventar informações acadêmicas.
 
-- Notas fora do intervalo permitido
-- Determinadas avaliações duplicadas
-- Alterações não autorizadas
-- Professor alterando dados de disciplinas pelas quais não é responsável
+Os cálculos importantes de média, situação e frequência são realizados pelo Java. A IA recebe os dados acadêmicos fornecidos pelo sistema e auxilia na interpretação e apresentação das informações.
 
----
+Segurança da IA
 
-## Desempenho Acadêmico
+O assistente possui regras para impedir, entre outras situações:
 
-A aplicação consolida informações acadêmicas para apresentar:
+exposição de prompts ou instruções internas;
 
-- Média por disciplina
-- Quantidade de faltas
-- Frequência
-- Situação acadêmica
-- Disciplinas que precisam de maior atenção
+exposição de credenciais ou tokens;
 
-Essas informações também podem ser utilizadas pelo assistente inteligente para responder às perguntas do aluno.
+alteração de notas ou faltas;
 
----
+acesso a dados de outros alunos;
 
-## Auditoria
+tentativa de elevação de privilégio;
 
-Alterações importantes realizadas no sistema podem ser registradas para permitir rastreabilidade.
+invenção de notas, faltas, médias ou critérios acadêmicos.
 
-A auditoria auxilia na identificação de mudanças realizadas em informações acadêmicas, aumentando a segurança e a confiabilidade do sistema.
+Recuperação de senha
 
-O acesso aos registros de auditoria é restrito ao perfil de administrador.
+O sistema possui fluxo de recuperação de senha por e-mail.
 
----
+Tecnologias utilizadas:
 
-## Tecnologias utilizadas
+Resend
 
-### Backend
+Token de recuperação armazenado no banco
 
-- Java 21
-- Spring Boot
-- Spring Web MVC
-- Spring Data JPA
-- Hibernate
-- Spring Security
-- JWT
-- BCrypt
-- Maven
+Link de recuperação com validade limitada
 
-### Banco de Dados
+Uso único do token
 
-- MySQL
+As configurações de e-mail são realizadas por variáveis de ambiente.
 
-### Frontend
+Para desenvolvimento/testes, pode ser utilizado um remetente compatível com a configuração da conta Resend.
 
-- HTML
-- CSS
-- JavaScript
+Avaliações e desempenho acadêmico
 
-### Inteligência Artificial
+O sistema trabalha com avaliações como:
 
-- Ollama
-- Modelo de linguagem executado localmente
+AVC
 
-### Documentação e desenvolvimento
+AVG
 
-- Swagger / OpenAPI
-- IntelliJ IDEA
-- Git
-- GitHub
+AVI
 
----
+Existem validações para evitar operações inválidas, incluindo duplicidade de avaliações e alterações não autorizadas.
 
-## Arquitetura
+O sistema calcula e apresenta informações como:
 
-O backend utiliza uma arquitetura organizada em camadas:
+média por disciplina;
 
-```text
-Interface Web
-     |
-     v
-Controller
-     |
-     v
-Service
-     |
-     v
-Repository
-     |
-     v
+faltas;
+
+frequência;
+
+situação acadêmica;
+
+desempenho nas avaliações;
+
+disciplina que precisa de maior atenção.
+
+A lógica acadêmica permanece no backend Java, evitando que a IA seja responsável por cálculos críticos.
+
+Matrículas
+
+O relacionamento acadêmico principal é:
+
+Aluno
+|
+v
+Matrícula
+|
+v
+Turma
+
+A matrícula possui informações como:
+
+aluno;
+
+turma;
+
+data da matrícula;
+
+status;
+
+semestre do aluno.
+
+Status utilizados pelo sistema incluem:
+
+ATIVA
+
+TRANCADA
+
+CANCELADA
+
+CONCLUIDA
+
+As operações acadêmicas atuais consideram as regras de matrícula implementadas pelo sistema.
+
+Turmas e disciplinas
+
+O sistema relaciona:
+
+Turma
+|
+v
+TurmaDisciplina
+|
++---- Disciplina
+|
++---- Professor
+
+Esse relacionamento permite determinar qual professor é responsável por determinada disciplina em uma turma.
+
+Auditoria
+
+O sistema possui um módulo de auditoria para registrar ações relevantes.
+
+A auditoria contribui para:
+
+rastreabilidade;
+
+identificação de alterações;
+
+acompanhamento de operações administrativas;
+
+aumento da segurança e confiabilidade do sistema.
+
+O acesso aos registros de auditoria é restrito conforme as permissões do sistema.
+
+Filtros e pesquisas
+
+O frontend possui filtros para facilitar a consulta dos dados.
+
+Alunos
+
+matrícula;
+
+nome;
+
+e-mail.
+
+Professores
+
+registro;
+
+nome;
+
+e-mail.
+
+Matrículas
+
+matrícula/aluno;
+
+turma;
+
+status.
+
+Turmas
+
+nome;
+
+ano;
+
+semestre.
+
+Disciplinas
+
+nome.
+
+Vínculos
+
+turma;
+
+disciplina;
+
+professor;
+
+registro.
+
+Tecnologias utilizadas
+
+Backend
+
+Java 21
+
+Spring Boot 4.1.1
+
+Spring Web MVC
+
+Spring Data JPA
+
+Hibernate
+
+Spring Security
+
+JWT
+
+BCrypt
+
+Maven
+
+Banco de dados
+
 MySQL
-```
 
-O projeto também utiliza componentes organizados em:
+MySQL Workbench
 
-```text
+Frontend
+
+HTML
+
+CSS
+
+JavaScript
+
+Inteligência Artificial
+
+NVIDIA API
+
+openai/gpt-oss-20b
+
+E-mail
+
+Resend
+
+Documentação e desenvolvimento
+
+Swagger / OpenAPI
+
+IntelliJ IDEA
+
+Git
+
+GitHub
+
+Deploy
+
+Render
+
+Arquitetura
+
+O backend segue uma organização em camadas:
+
+Interface Web
+|
+v
+Controller
+|
+v
+Service
+|
+v
+Repository
+|
+v
+MySQL
+
+A estrutura principal do backend é organizada em componentes como:
+
 config/
 controller/
 dto/
@@ -204,145 +409,125 @@ initializer/
 model/
 repository/
 service/
-```
 
-Essa separação busca manter as responsabilidades organizadas e facilitar a manutenção e evolução da aplicação.
+O frontend utiliza HTML, CSS e JavaScript, consumindo a API REST protegida pela autenticação.
 
----
+Configuração
 
-## Configuração
+As informações sensíveis não devem ser armazenadas diretamente no código-fonte.
 
-As informações sensíveis não ficam armazenadas diretamente no código-fonte.
-
-A aplicação utiliza variáveis de ambiente para configurações que não devem ser publicadas no repositório.
+A aplicação utiliza variáveis de ambiente.
 
 Principais variáveis:
 
-```text
 DB_URL
 DB_USERNAME
 DB_PASSWORD
 JWT_SECRET
 DEMO_DATA_ENABLED
-```
+APP_BASE_URL
+RESEND_API_KEY
+MAIL_FROM
+NVIDIA_API_KEY
 
-A configuração do Spring Boot utiliza essas variáveis da seguinte forma:
+Exemplo de configuração:
 
-```properties
 spring.datasource.url=${DB_URL:jdbc:mysql://localhost:3306/mydb}
 spring.datasource.username=${DB_USERNAME:root}
 spring.datasource.password=${DB_PASSWORD}
 
+spring.jpa.hibernate.ddl-auto=validate
+spring.jpa.show-sql=false
+spring.jpa.open-in-view=false
+
 jwt.secret=${JWT_SECRET}
 
 demo.data.enabled=${DEMO_DATA_ENABLED:false}
-```
 
-Nunca publique senhas reais, tokens ou chaves JWT no repositório.
+app.base-url=${APP_BASE_URL:http://localhost:8080}
 
----
+resend.api.key=${RESEND_API_KEY}
+app.mail.from=${MAIL_FROM:onboarding@resend.dev}
 
-## Executando o projeto
+nvidia.api.key=${NVIDIA_API_KEY}
 
-### Pré-requisitos
+Nunca publique senhas, tokens JWT ou chaves de API no repositório.
 
-Para executar o sistema, é necessário possuir:
+Executando o projeto
 
-- Java 21
-- MySQL
-- Maven ou Maven Wrapper
-- Ollama
-- Modelo de IA utilizado pelo assistente instalado localmente
+Pré-requisitos
 
----
+Java 21
 
-### Banco de Dados
+MySQL
+
+Maven ou Maven Wrapper
+
+Conta/configuração da NVIDIA API para utilizar o assistente
+
+Conta/configuração do Resend para utilizar a recuperação de senha
+
+Banco de dados
 
 O projeto utiliza MySQL.
 
-Por padrão, a aplicação está preparada para utilizar:
+Configuração padrão para desenvolvimento:
 
-```text
 jdbc:mysql://localhost:3306/mydb
-```
 
-A URL, usuário e senha podem ser configurados através das variáveis de ambiente:
+As informações de conexão podem ser alteradas pelas variáveis:
 
-```text
 DB_URL
 DB_USERNAME
 DB_PASSWORD
-```
 
----
+Chave JWT
 
-### JWT
+Configure uma chave segura na variável:
 
-Também é necessário configurar uma chave para geração e validação dos tokens JWT:
-
-```text
 JWT_SECRET
-```
 
-A chave deve ser mantida fora do código-fonte e não deve ser publicada no GitHub.
+A chave não deve ser publicada no código-fonte.
 
----
+NVIDIA API
 
-### Assistente Inteligente
+Configure a chave da NVIDIA na variável:
 
-Para utilizar o assistente inteligente, o Ollama deve estar instalado e executando localmente.
+NVIDIA_API_KEY
 
-O modelo utilizado pela aplicação também precisa estar disponível no Ollama.
+A chave deve permanecer fora do código-fonte.
 
-Caso o projeto esteja configurado para utilizar o modelo `qwen3:1.7b`, ele pode ser instalado com:
+Resend
 
-```bash
-ollama pull qwen3:1.7b
-```
+Configure:
 
-O Ollama deve estar em execução antes de utilizar as funcionalidades do assistente.
+RESEND_API_KEY
+MAIL_FROM
 
----
-
-### Iniciando a aplicação
+Iniciando a aplicação
 
 No Windows:
 
-```bash
 mvnw.cmd spring-boot:run
-```
 
-Em Linux ou macOS:
+No Linux ou macOS:
 
-```bash
 ./mvnw spring-boot:run
-```
 
-Após a inicialização, a aplicação estará disponível por padrão em:
+Após a inicialização, a aplicação fica disponível, por padrão, em:
 
-```text
 http://localhost:8080
-```
 
----
-
-## Swagger / OpenAPI
+Swagger / OpenAPI
 
 A API possui documentação interativa utilizando Swagger/OpenAPI.
 
-Com a aplicação em execução, a interface pode ser acessada em:
+Com a aplicação em execução:
 
-```text
 http://localhost:8080/swagger-ui/index.html
-```
 
-A documentação permite visualizar e explorar os endpoints disponíveis na API.
+Estrutura do projeto
 
----
-
-## Estrutura do projeto
-
-```text
 src/
 ├── main/
 │   ├── java/
@@ -359,60 +544,144 @@ src/
 │   └── resources/
 │       ├── static/
 │       │   ├── css/
-│       │   └── js/
+│       │   ├── js/
+│       │   └── *.html
 │       └── application.properties
 │
 └── test/
-```
 
----
+Controle de acesso
 
-## Controle de Acesso
+Perfil
 
-O sistema utiliza três perfis principais:
+Principais permissões
 
-| Perfil | Principais permissões |
-| --- | --- |
-| ALUNO | Consultar seus próprios dados acadêmicos e utilizar o assistente |
-| PROFESSOR | Consultar suas turmas e gerenciar notas e faltas das disciplinas sob sua responsabilidade |
-| ADMINISTRADOR | Gerenciar informações acadêmicas, usuários, vínculos e auditorias |
+ALUNO
 
-Além da verificação do perfil, algumas operações possuem validações de propriedade dos dados.
+Consultar os próprios dados acadêmicos e utilizar o assistente
 
-Por exemplo, possuir o perfil `PROFESSOR` não significa que o usuário pode alterar qualquer nota do sistema. O professor deve estar vinculado à disciplina correspondente.
+PROFESSOR
 
----
+Consultar suas turmas e gerenciar notas e faltas das disciplinas sob sua responsabilidade
 
-## Principais Regras de Negócio
+ADMINISTRADOR
 
-Entre as regras implementadas no sistema estão:
+Gerenciar usuários, dados acadêmicos, vínculos, avaliações administrativas e auditoria
 
-- Aluno acessa somente seus próprios dados acadêmicos
-- Professor gerencia notas e faltas somente das disciplinas sob sua responsabilidade
-- Administrador possui acesso às operações administrativas
-- AVI possui regras específicas de gerenciamento
-- Notas devem respeitar os valores permitidos pelo sistema
-- Avaliações duplicadas são validadas
-- Usuários não podem possuir registros acadêmicos incompatíveis com seus perfis
-- Registros vinculados possuem proteção contra exclusões indevidas
-- Alterações relevantes podem gerar registros de auditoria
+Além do perfil, algumas operações verificam a propriedade ou o vínculo do recurso.
 
----
+Por exemplo, possuir o perfil PROFESSOR não significa que o usuário pode alterar qualquer nota do sistema. O professor precisa estar relacionado à disciplina e à turma correspondente.
 
-## Objetivo do projeto
+Principais regras de negócio
+
+Entre as regras implementadas estão:
+
+Aluno acessa somente seus próprios dados acadêmicos.
+
+Professor trabalha somente com suas turmas e disciplinas.
+
+Administrador possui acesso às operações administrativas.
+
+Avaliações duplicadas são validadas.
+
+Notas devem respeitar os valores permitidos pelo sistema.
+
+Usuários devem possuir perfis compatíveis com seus registros acadêmicos.
+
+Registros vinculados possuem proteção contra exclusões indevidas.
+
+Alterações relevantes podem gerar registros de auditoria.
+
+Usuários inativos não podem utilizar o sistema.
+
+O histórico acadêmico permanece mesmo quando o acesso de um usuário é desativado.
+
+Testes de segurança realizados
+
+Foram realizados testes envolvendo:
+
+autenticação;
+
+autorização por perfil;
+
+acesso de professor às próprias turmas;
+
+tentativa de professor acessar turma de outro professor;
+
+acesso administrativo à AVI;
+
+bloqueio de operações não permitidas ao professor;
+
+tentativa de lançamento de avaliação duplicada;
+
+acesso do aluno somente aos próprios dados;
+
+tentativas de prompt injection no assistente;
+
+tentativa de acesso a dados de outro usuário;
+
+tentativa de elevação de privilégio;
+
+tentativa de obtenção de credenciais.
+
+Exemplos de respostas de segurança validadas:
+
+Professor tentando acessar recurso não permitido
+→ HTTP 403
+
+AVI duplicada
+→ HTTP 409
+
+Objetivo do projeto
 
 O objetivo é desenvolver uma aplicação acadêmica que vá além do simples cadastro de notas e faltas.
 
-O sistema combina:
+O projeto combina:
 
-**gestão acadêmica + segurança + controle de acesso + análise de desempenho + assistente inteligente.**
+gestão acadêmica + segurança + controle de acesso + auditoria + análise de desempenho + Inteligência Artificial.
 
-O projeto também serve como aplicação prática dos conhecimentos adquiridos durante a graduação em Análise e Desenvolvimento de Sistemas, incluindo desenvolvimento backend, modelagem de banco de dados, APIs REST, segurança de aplicações e tecnologias emergentes.
+A aplicação também serve como projeto prático para aplicar conhecimentos de:
 
----
+programação Java;
 
-## Autores
+desenvolvimento web;
 
-**Guilherme Almeida, Lidiane Marcelino e Daniel Lima**
+APIs REST;
+
+banco de dados;
+
+arquitetura em camadas;
+
+autenticação e autorização;
+
+segurança de aplicações;
+
+integração com serviços externos;
+
+Inteligência Artificial.
+
+Escopo
+
+O sistema foi desenvolvido com foco nas necessidades acadêmicas definidas para o projeto.
+
+Funcionalidades adicionais, como grade horária e relatórios de IA para professores, foram consideradas sugestões e não fazem parte do escopo atual da aplicação.
+
+A prioridade nesta etapa final é:
+
+FUNCIONAR
+↓
+ESTAR SEGURO
+↓
+ESTAR ORGANIZADO
+↓
+ESTAR DOCUMENTADO
+↓
+ESTAR PRONTO PARA APRESENTAR
+
+Autores
+
+Guilherme Almeida da Silva Santos
+Daniel Lima da Silva
+Lidiane Marcelino da Silva
 
 Estudantes de Análise e Desenvolvimento de Sistemas.

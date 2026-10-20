@@ -293,88 +293,32 @@ public class UsuarioService {
     }
 
     // =========================
-    // EXCLUIR USUÁRIO
+    // DESATIVAR / REATIVAR USUÁRIO
     // =========================
 
     @Transactional
-    public boolean excluir(
-            Integer id,
-            String emailAdministrador) {
-
-        Usuario usuario =
-                usuarioRepository
-                        .findById(id)
-                        .orElse(null);
-
-        if (usuario == null) {
-
-            return false;
+    public Optional<Usuario> desativar(Integer id, String emailAdministrador) {
+        Usuario usuario = usuarioRepository.findById(id).orElse(null);
+        if (usuario == null) return Optional.empty();
+        if (usuario.getEmail().equalsIgnoreCase(emailAdministrador)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Você não pode desativar o próprio usuário");
         }
+        if (Boolean.FALSE.equals(usuario.getAtivo())) return Optional.of(usuario);
+        usuario.setAtivo(false);
+        Usuario salvo = usuarioRepository.save(usuario);
+        auditoriaService.registrar(emailAdministrador, "DESATIVACAO_USUARIO", "Usuário " + salvo.getNome() + " (" + salvo.getEmail() + ") foi desativado");
+        return Optional.of(salvo);
+    }
 
-        // =========================
-        // BLOQUEAR AUTOEXCLUSÃO
-        // =========================
-
-        if (usuario.getEmail()
-                .equalsIgnoreCase(
-                        emailAdministrador
-                )) {
-
-            throw new ResponseStatusException(
-                    HttpStatus.FORBIDDEN,
-                    "Você não pode excluir o próprio usuário"
-            );
-        }
-
-        boolean possuiAlunoVinculado =
-                alunoRepository
-                        .findByUsuario_Email(
-                                usuario.getEmail()
-                        )
-                        .isPresent();
-
-        boolean possuiProfessorVinculado =
-                professorRepository
-                        .findByUsuario_Email(
-                                usuario.getEmail()
-                        )
-                        .isPresent();
-
-        if (possuiAlunoVinculado ||
-                possuiProfessorVinculado) {
-
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT,
-                    "Não é possível excluir um usuário que possui vínculo acadêmico"
-            );
-        }
-
-        String emailUsuarioExcluido =
-                usuario.getEmail();
-
-        String nomeUsuarioExcluido =
-                usuario.getNome();
-
-        String perfilUsuarioExcluido =
-                usuario.getPerfil().name();
-
-        usuarioRepository.delete(
-                usuario
-        );
-
-        auditoriaService.registrar(
-                emailAdministrador,
-                "EXCLUSAO_USUARIO",
-                "Usuário "
-                        + nomeUsuarioExcluido
-                        + " ("
-                        + emailUsuarioExcluido
-                        + "), perfil "
-                        + perfilUsuarioExcluido
-                        + ", foi excluído"
-        );
-
-        return true;
+    @Transactional
+    public Optional<Usuario> reativar(Integer id, String emailAdministrador) {
+        Usuario usuario = usuarioRepository.findById(id).orElse(null);
+        if (usuario == null) return Optional.empty();
+        if (Boolean.TRUE.equals(usuario.getAtivo())) return Optional.of(usuario);
+        usuario.setAtivo(true);
+        Usuario salvo = usuarioRepository.save(usuario);
+        auditoriaService.registrar(emailAdministrador, "REATIVACAO_USUARIO", "Usuário " + salvo.getNome() + " (" + salvo.getEmail() + ") foi reativado");
+        return Optional.of(salvo);
     }
 
     // =========================
@@ -398,6 +342,10 @@ public class UsuarioService {
 
         Usuario usuario =
                 usuarioEncontrado.get();
+
+        if (Boolean.FALSE.equals(usuario.getAtivo())) {
+            return Optional.empty();
+        }
 
         if (passwordEncoder.matches(
                 senha,

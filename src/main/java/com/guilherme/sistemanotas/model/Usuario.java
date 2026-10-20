@@ -38,6 +38,9 @@ public class Usuario {
     @Column(nullable = false, length = 20)
     private PerfilUsuario perfil;
 
+    @Column(nullable = false)
+    private Boolean ativo = true;
+
     // =========================
     // CONSTRUTOR VAZIO
     // =========================
@@ -88,4 +91,8 @@ public class Usuario {
     public void setPerfil(PerfilUsuario perfil) {
         this.perfil = perfil;
     }
+
+    public Boolean getAtivo() { return ativo; }
+
+    public void setAtivo(Boolean ativo) { this.ativo = ativo; }
 }

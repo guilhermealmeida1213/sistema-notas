@@ -1,59 +1,25 @@
-# =========================
-# MAVEN
-# =========================
-target/
+# Maven
+/target/
 
-# =========================
-# INTELLIJ IDEA
-# =========================
+# IDEs
 .idea/
-*.iws
 *.iml
+*.iws
 *.ipr
-
-# =========================
-# STS / ECLIPSE
-# =========================
-.apt_generated/
-.classpath
-.factorypath
-.project
-.settings/
-.springBeans
-.sts4-cache/
-
-# =========================
-# NETBEANS
-# =========================
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-
-# =========================
-# VS CODE
-# =========================
 .vscode/
 
-# =========================
-# SEGREDOS / AMBIENTE
-# =========================
+# Segredos e configurações locais
 .env
 .env.*
 application-local.properties
 
-# =========================
-# LOGS / TEMPORÁRIOS
-# =========================
+# Logs, históricos de requisições e temporários
 *.log
 erro.txt
+requests.http
+http-client.private.env.json
+http-requests-log.http
 
-# =========================
-# SISTEMA OPERACIONAL
-# =========================
+# Sistema operacional
 .DS_Store
 Thumbs.db
-
-requests.http

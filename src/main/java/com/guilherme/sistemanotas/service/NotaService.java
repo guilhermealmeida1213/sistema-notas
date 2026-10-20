@@ -22,6 +22,8 @@ import com.guilherme.sistemanotas.repository.NotaRepository;
 import com.guilherme.sistemanotas.repository.ProfessorRepository;
 import com.guilherme.sistemanotas.repository.TurmaDisciplinaRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -62,9 +64,6 @@ public class NotaService {
         this.auditoriaService = auditoriaService;
     }
 
-    // =========================
-    // CADASTRAR AVC / AVG
-    // =========================
 
     @Transactional
     public Nota salvar(
@@ -135,6 +134,8 @@ public class NotaService {
                                 )
                         );
 
+        validarMatriculaAtiva(matricula);
+
         TurmaDisciplina turmaDisciplina =
                 turmaDisciplinaRepository
                         .findById(idTurmaDisciplina)
@@ -150,18 +151,12 @@ public class NotaService {
                 turmaDisciplina
         );
 
-        // =========================
-        // PRIMEIRO VALIDA PERMISSÃO
-        // =========================
 
         validarProfessorResponsavel(
                 turmaDisciplina,
                 emailUsuario
         );
 
-        // =========================
-        // DEPOIS VERIFICA DUPLICIDADE
-        // =========================
 
         boolean avaliacaoJaExiste =
                 notaRepository
@@ -208,9 +203,6 @@ public class NotaService {
         return notaSalva;
     }
 
-    // =========================
-    // LANÇAR AVI INTEGRADA
-    // =========================
 
     @Transactional
     public List<Nota> lancarAvi(
@@ -254,6 +246,8 @@ public class NotaService {
                                         "Matrícula não encontrada"
                                 )
                         );
+
+        validarMatriculaAtiva(matricula);
 
         Integer idTurma =
                 matricula
@@ -341,10 +335,6 @@ public class NotaService {
         return notasAvi;
     }
 
-    // =========================
-    // ATUALIZAR AVI INTEGRADA
-    // ADMIN
-    // =========================
 
     @Transactional
     public List<Nota> atualizarAviIntegrada(
@@ -369,6 +359,8 @@ public class NotaService {
                                         "Matrícula não encontrada"
                                 )
                         );
+
+        validarMatriculaAtiva(matricula);
 
         if (dados == null ||
                 dados.getValor() == null) {
@@ -461,10 +453,6 @@ public class NotaService {
         return notasAtualizadas;
     }
 
-    // =========================
-    // LISTAR TODAS AS NOTAS
-    // ADMIN
-    // =========================
 
     public List<NotaAdminDTO> listar() {
 
@@ -524,9 +512,6 @@ public class NotaService {
         return notasDTO;
     }
 
-    // =========================
-    // BUSCAR NOTA POR ID
-    // =========================
 
     public Optional<Nota> buscarPorId(
             Integer id) {
@@ -536,9 +521,6 @@ public class NotaService {
         );
     }
 
-    // =========================
-    // ATUALIZAR NOTA AVC / AVG
-    // =========================
 
     @Transactional
     public Nota atualizar(
@@ -555,6 +537,8 @@ public class NotaService {
                                         "Nota não encontrada"
                                 )
                         );
+
+        validarMatriculaAtiva(nota.getMatricula());
 
         if (nota.getTipoAvaliacao() ==
                 TipoAvaliacao.AVI) {
@@ -627,10 +611,6 @@ public class NotaService {
         return notaAtualizada;
     }
 
-    // =========================
-    // LISTAR MINHAS NOTAS
-    // ALUNO
-    // =========================
 
     public List<NotaAlunoDTO> listarMinhasNotas(
             String email) {
@@ -680,9 +660,6 @@ public class NotaService {
         return notasDTO;
     }
 
-    // =========================
-    // CALCULAR MINHAS MÉDIAS
-    // =========================
 
     public List<MediaDisciplinaDTO> calcularMinhasMedias(
             String email) {
@@ -794,9 +771,6 @@ public class NotaService {
         return medias;
     }
 
-    // =========================
-// RESUMO COMPLETO
-// =========================
 
     public List<ResumoDisciplinaDTO> gerarMeuResumo(
             String email) {
@@ -901,18 +875,12 @@ public class NotaService {
                 String situacaoNota;
                 String situacaoFrequencia;
 
-                // =========================
-                // SITUAÇÃO DA FREQUÊNCIA
-                // =========================
 
                 situacaoFrequencia =
                         calcularSituacaoFrequencia(
                                 frequencia
                         );
 
-                // =========================
-                // SITUAÇÃO DAS NOTAS
-                // =========================
 
                 if (possuiTodasAsNotas(
                         avc,
@@ -971,9 +939,6 @@ public class NotaService {
         return resumos;
     }
 
-    // =========================
-    // NOTAS DAS TURMAS DO PROFESSOR
-    // =========================
 
     public List<NotaProfessorDTO> listarNotasDasMinhasTurmas(
             String email) {
@@ -1031,9 +996,6 @@ public class NotaService {
         return notasDTO;
     }
 
-    // =========================
-    // MÉTODOS AUXILIARES
-    // =========================
 
     private Aluno buscarAlunoPorEmail(
             String email) {
@@ -1077,11 +1039,8 @@ public class NotaService {
                 avi != null;
     }
 
-    // =========================
-    // REGRA DE MÉDIA
-    // =========================
 
-     BigDecimal calcularMediaUnisa(
+    BigDecimal calcularMediaUnisa(
             BigDecimal avc,
             BigDecimal avg,
             BigDecimal avi) {
@@ -1134,9 +1093,6 @@ public class NotaService {
                 );
     }
 
-    // =========================
-    // REGRA DE FREQUÊNCIA
-    // =========================
 
     private BigDecimal calcularFrequencia(
             Integer cargaHoraria,
@@ -1189,9 +1145,6 @@ public class NotaService {
                 );
     }
 
-    // =========================
-// SITUAÇÃO DA NOTA
-// =========================
 
     private String calcularSituacaoNota(
             BigDecimal media) {
@@ -1207,9 +1160,6 @@ public class NotaService {
     }
 
 
-    // =========================
-    // SITUAÇÃO DA FREQUÊNCIA
-    // =========================
 
     private String calcularSituacaoFrequencia(
             BigDecimal frequencia) {
@@ -1224,9 +1174,6 @@ public class NotaService {
         return "REPROVADO POR FALTA";
     }
 
-    // =========================
-    // SITUAÇÃO FINAL
-    // =========================
 
     private String calcularSituacaoFinal(
             BigDecimal media,
@@ -1262,9 +1209,6 @@ public class NotaService {
         return "REPROVADO POR NOTA E FALTA";
     }
 
-    // =========================
-    // VALIDAÇÕES
-    // =========================
 
     private void validarValorNota(
             BigDecimal valor) {
@@ -1308,48 +1252,72 @@ public class NotaService {
         }
     }
 
+    private void validarMatriculaAtiva(Matricula matricula) {
+        if (matricula.getStatus() == null || !"ATIVA".equalsIgnoreCase(matricula.getStatus().trim())) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "A matrícula precisa estar ATIVA para realizar esta operação"
+            );
+        }
+    }
+
     private void validarProfessorResponsavel(
             TurmaDisciplina turmaDisciplina,
             String emailUsuario) {
 
-        Optional<Professor> professorAutenticado =
-                professorRepository
-                        .findByUsuario_Email(
-                                emailUsuario
+        Authentication authentication =
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Usuário não autenticado"
+            );
+        }
+
+        boolean administrador =
+                authentication
+                        .getAuthorities()
+                        .stream()
+                        .anyMatch(authority ->
+                                authority.getAuthority().equals("ROLE_ADMINISTRADOR")
                         );
 
-        if (professorAutenticado.isPresent()) {
+        if (administrador) {
+            return;
+        }
 
-            if (turmaDisciplina.getProfessor() == null ||
-                    turmaDisciplina
-                            .getProfessor()
-                            .getIdProfessor() == null) {
+        Professor professorAutenticado =
+                professorRepository
+                        .findByUsuario_Email(emailUsuario)
+                        .orElseThrow(() ->
+                                new ResponseStatusException(
+                                        HttpStatus.FORBIDDEN,
+                                        "Professor autenticado não encontrado"
+                                )
+                        );
 
-                throw new ResponseStatusException(
-                        HttpStatus.BAD_REQUEST,
-                        "Turma/Disciplina não possui professor responsável"
-                );
-            }
+        if (turmaDisciplina.getProfessor() == null ||
+                turmaDisciplina.getProfessor().getIdProfessor() == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Turma/Disciplina não possui professor responsável"
+            );
+        }
 
-            Integer idProfessorAutenticado =
-                    professorAutenticado
-                            .get()
-                            .getIdProfessor();
+        Integer idProfessorAutenticado =
+                professorAutenticado.getIdProfessor();
 
-            Integer idProfessorResponsavel =
-                    turmaDisciplina
-                            .getProfessor()
-                            .getIdProfessor();
+        Integer idProfessorResponsavel =
+                turmaDisciplina.getProfessor().getIdProfessor();
 
-            if (!idProfessorAutenticado.equals(
-                    idProfessorResponsavel
-            )) {
-
-                throw new ResponseStatusException(
-                        HttpStatus.FORBIDDEN,
-                        "Professor não possui permissão para lançar ou alterar nota nesta disciplina"
-                );
-            }
+        if (!idProfessorAutenticado.equals(idProfessorResponsavel)) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "Professor não possui permissão para lançar ou alterar nota nesta disciplina"
+            );
         }
     }
 }

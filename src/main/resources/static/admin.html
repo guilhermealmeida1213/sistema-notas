@@ -3,19 +3,19 @@
 
 <head>
 
-  <meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-  <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0">
 
-  <title>
-    Sistema Acadêmico | Administrador
-  </title>
+    <title>
+        Sistema Acadêmico | Administrador
+    </title>
 
-  <link
-          rel="stylesheet"
-          href="/css/admin.css">
+    <link
+            rel="stylesheet"
+            href="/css/admin.css">
 
 </head>
 
@@ -29,977 +29,1460 @@
         aria-label="Abrir menu"
         aria-expanded="false">
 
-  ☰
+    ☰
 
 </button>
 
 <div class="layout">
 
 
-  <!-- =========================
-       MENU LATERAL
-       ========================= -->
+    <!-- =========================
+         MENU LATERAL
+         ========================= -->
 
-  <aside
-          class="sidebar"
-          id="sidebarAdmin">
+    <aside
+            class="sidebar"
+            id="sidebarAdmin">
 
-    <div class="logo">
+        <div class="logo">
 
-      <h2>
-        Sistema Acadêmico
-      </h2>
+            <h2>
+                Sistema Acadêmico
+            </h2>
 
-      <span>
+            <span>
         Portal do Administrador
       </span>
 
+        </div>
+
+
+        <nav>
+
+            <button
+                    class="menu-item ativo"
+                    data-secao="inicio"
+                    type="button">
+
+                Início
+
+            </button>
+
+
+            <button
+                    class="menu-item"
+                    data-secao="usuarios"
+                    type="button">
+
+                Usuários
+
+            </button>
+
+            <button
+                    class="menu-item"
+                    data-secao="alunos"
+                    type="button">
+
+                Alunos
+
+            </button>
+
+            <button
+                    class="menu-item"
+                    data-secao="professores"
+                    type="button">
+
+                Professores
+
+            </button>
+
+
+            <button
+                    class="menu-item"
+                    data-secao="vinculos"
+                    type="button">
+
+                Turmas e Disciplinas
+
+            </button>
+
+
+            <button
+                    class="menu-item"
+                    data-secao="matriculas"
+                    type="button">
+
+                Matrículas
+
+            </button>
+
+
+            <button
+                    class="menu-item"
+                    data-secao="notas"
+                    type="button">
+
+                Notas
+
+            </button>
+
+
+            <button
+                    class="menu-item"
+                    data-secao="faltas"
+                    type="button">
+
+                Faltas
+
+            </button>
+
+
+            <button
+                    class="menu-item"
+                    data-secao="auditorias"
+                    type="button">
+
+                Auditoria
+
+            </button>
+
+        </nav>
+
+
+        <button
+                id="botaoSair"
+                class="botao-sair"
+                type="button">
+
+            Sair
+
+        </button>
+
+    </aside>
+
+
+    <div
+            id="overlayMenuAdmin"
+            class="overlay-menu">
     </div>
 
 
-    <nav>
-
-      <button
-              class="menu-item ativo"
-              data-secao="inicio"
-              type="button">
-
-        Início
-
-      </button>
-
-
-      <button
-              class="menu-item"
-              data-secao="usuarios"
-              type="button">
-
-        Usuários
-
-      </button>
-
-      <button
-              class="menu-item"
-              data-secao="alunos"
-              type="button">
-
-        Alunos
-
-      </button>
-
-      <button
-              class="menu-item"
-              data-secao="professores"
-              type="button">
-
-        Professores
-
-      </button>
-
-
-      <button
-              class="menu-item"
-              data-secao="vinculos"
-              type="button">
-
-        Turmas e Disciplinas
-
-      </button>
-
-
-      <button
-              class="menu-item"
-              data-secao="matriculas"
-              type="button">
-
-        Matrículas
-
-      </button>
-
-
-      <button
-              class="menu-item"
-              data-secao="notas"
-              type="button">
-
-        Notas
-
-      </button>
-
-
-      <button
-              class="menu-item"
-              data-secao="faltas"
-              type="button">
-
-        Faltas
-
-      </button>
-
-
-      <button
-              class="menu-item"
-              data-secao="auditorias"
-              type="button">
-
-        Auditoria
-
-      </button>
-
-    </nav>
-
-
-    <button
-            id="botaoSair"
-            class="botao-sair"
-            type="button">
-
-      Sair
-
-    </button>
-
-  </aside>
-
-
-  <div
-          id="overlayMenuAdmin"
-          class="overlay-menu">
-  </div>
-
-
-  <!-- =========================
-       CONTEÚDO PRINCIPAL
-       ========================= -->
-
-  <main class="conteudo">
-
-
     <!-- =========================
-         CABEÇALHO
+         CONTEÚDO PRINCIPAL
          ========================= -->
 
-    <header class="topo">
-
-      <div>
-
-        <p class="saudacao">
-          Bem-vindo ao portal administrativo
-        </p>
-
-        <h1>
-          Administração do sistema
-        </h1>
-
-      </div>
+    <main class="conteudo">
 
 
-      <div class="usuario">
-        Administrador
-      </div>
+        <!-- =========================
+             CABEÇALHO
+             ========================= -->
 
-    </header>
+        <header class="topo">
 
+            <div>
 
-    <!-- =========================
-         INÍCIO
-         ========================= -->
+                <p class="saudacao">
+                    Bem-vindo ao portal administrativo
+                </p>
 
-    <section
-            id="inicio"
-            class="secao ativa">
+                <h1>
+                    Administração do sistema
+                </h1>
 
-      <h2>
-        Visão geral
-      </h2>
-
-
-      <div class="cards">
+            </div>
 
 
-        <article class="card">
+            <div class="usuario">
+                Administrador
+            </div>
+
+        </header>
+
+
+        <!-- =========================
+             INÍCIO
+             ========================= -->
+
+        <section
+                id="inicio"
+                class="secao ativa">
+
+            <h2>
+                Visão geral
+            </h2>
+
+
+            <div class="cards">
+
+
+                <article class="card">
 
           <span>
             Usuários
           </span>
 
-          <strong id="totalUsuarios">
-            --
-          </strong>
+                    <strong id="totalUsuarios">
+                        --
+                    </strong>
 
-        </article>
+                </article>
 
 
-        <article class="card">
+                <article class="card">
 
           <span>
             Professores
           </span>
 
-          <strong id="totalProfessores">
-            --
-          </strong>
+                    <strong id="totalProfessores">
+                        --
+                    </strong>
 
-        </article>
+                </article>
 
 
-        <article class="card">
+                <article class="card">
 
           <span>
             Notas
           </span>
 
-          <strong id="totalNotas">
-            --
-          </strong>
+                    <strong id="totalNotas">
+                        --
+                    </strong>
 
-        </article>
+                </article>
 
 
-        <article class="card">
+                <article class="card">
 
           <span>
             Faltas
           </span>
 
-          <strong id="totalFaltas">
-            --
-          </strong>
+                    <strong id="totalFaltas">
+                        --
+                    </strong>
 
-        </article>
+                </article>
 
-      </div>
-
-
-      <div class="painel">
-
-        <h3>
-          Administração acadêmica
-        </h3>
-
-        <p id="mensagemInicio">
-          Carregando informações do sistema...
-        </p>
-
-      </div>
-
-    </section>
+            </div>
 
 
-    <!-- =========================
-         USUÁRIOS
+            <div class="painel">
+
+                <h3>
+                    Administração acadêmica
+                </h3>
+
+                <p id="mensagemInicio">
+                    Carregando informações do sistema...
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             USUÁRIOS
+             ========================= -->
+
+        <section
+                id="usuarios"
+                class="secao">
+
+            <div class="cabecalho-secao">
+
+                <h2>
+                    Usuários
+                </h2>
+
+
+                <button
+                        id="botaoAbrirUsuario"
+                        class="botao-primario"
+                        type="button">
+
+                    + Novo usuário
+
+                </button>
+
+            </div>
+
+            <div class="painel painel-filtros">
+
+                <div class="cabecalho-filtros">
+
+                    <div>
+
+                        <h3>
+                            Filtros
+                        </h3>
+
+                        <p>
+                            Localize usuários por nome, e-mail, perfil ou status.
+                        </p>
+
+                    </div>
+
+                    <button
+                            id="limparFiltrosUsuarios"
+                            class="botao-limpar-filtros"
+                            type="button">
+
+                        Limpar filtros
+
+                    </button>
+
+                </div>
+
+                <div class="grade-filtros grade-filtros-faltas">
+
+                    <div class="campo-filtro">
+
+                        <label for="filtroUsuarioBusca">
+                            Nome ou e-mail
+                        </label>
+
+                        <input
+                                type="text"
+                                id="filtroUsuarioBusca"
+                                placeholder="Digite o nome ou e-mail"
+                                autocomplete="off">
+
+                    </div>
+
+                    <div class="campo-filtro">
+
+                        <label for="filtroUsuarioPerfil">
+                            Perfil
+                        </label>
+
+                        <select id="filtroUsuarioPerfil">
+
+                            <option value="">
+                                Todos os perfis
+                            </option>
+
+                            <option value="ALUNO">
+                                Aluno
+                            </option>
+
+                            <option value="PROFESSOR">
+                                Professor
+                            </option>
+
+                            <option value="ADMINISTRADOR">
+                                Administrador
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="campo-filtro">
+
+                        <label for="filtroUsuarioStatus">
+                            Status
+                        </label>
+
+                        <select id="filtroUsuarioStatus">
+
+                            <option value="">
+                                Todos os status
+                            </option>
+
+                            <option value="ATIVO">
+                                Ativo
+                            </option>
+
+                            <option value="INATIVO">
+                                Inativo
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <p
+                        id="contadorUsuarios"
+                        class="contador-registros">
+                </p>
+
+            </div>
+
+
+            <div class="painel">
+
+                <div id="listaUsuarios">
+                    Carregando usuários...
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+         ALUNOS
          ========================= -->
 
-    <section
-            id="usuarios"
-            class="secao">
+        <section
+                id="alunos"
+                class="secao">
 
-      <div class="cabecalho-secao">
+            <div class="cabecalho-secao">
 
-        <h2>
-          Usuários
-        </h2>
+                <div>
+
+                    <h2>
+                        Alunos
+                    </h2>
+
+                    <p>
+                        Consulte os alunos cadastrados no sistema.
+                    </p>
+
+                </div>
+
+                <button
+                        id="botaoAbrirAluno"
+                        class="botao-primario"
+                        type="button">
+
+                    + Novo aluno
+
+                </button>
+
+            </div>
+
+            <div class="painel painel-filtros">
+
+                <div class="cabecalho-filtros">
+
+                    <div>
+
+                        <h3>
+                            Buscar aluno
+                        </h3>
+
+                        <p>
+                            Localize pelo número da matrícula, nome ou e-mail.
+                        </p>
+
+                    </div>
+
+                    <button
+                            id="limparFiltrosAlunos"
+                            class="botao-limpar-filtros"
+                            type="button">
+
+                        Limpar busca
+
+                    </button>
+
+                </div>
+
+                <div class="grade-filtros">
+
+                    <div class="campo-filtro">
+
+                        <label for="filtroAlunoBusca">
+                            Matrícula, nome ou e-mail
+                        </label>
+
+                        <input
+                                type="text"
+                                id="filtroAlunoBusca"
+                                placeholder="Ex.: 2026001 ou Guilherme"
+                                autocomplete="off">
+
+                    </div>
+
+                </div>
+
+                <p
+                        id="contadorAlunos"
+                        class="contador-registros">
+                </p>
+
+            </div>
+
+            <div class="painel">
+
+                <div id="listaAlunos">
+                    Carregando alunos...
+                </div>
+
+            </div>
+
+        </section>
 
 
-        <button
-                id="botaoAbrirUsuario"
-                class="botao-primario"
-                type="button">
-
-          + Novo usuário
-
-        </button>
-
-      </div>
-
-
-      <div class="painel">
-
-        <div id="listaUsuarios">
-          Carregando usuários...
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- =========================
-     ALUNOS
-     ========================= -->
-
-    <section
-            id="alunos"
-            class="secao">
-
-      <div class="cabecalho-secao">
-
-        <h2>
-          Alunos
-        </h2>
-
-
-        <button
-                id="botaoAbrirAluno"
-                class="botao-primario"
-                type="button">
-
-          + Novo aluno
-
-        </button>
-
-      </div>
-
-
-      <div class="painel">
-
-        <div id="listaAlunos">
-          Carregando alunos...
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- =========================
+        <!-- =========================
          PROFESSORES
          ========================= -->
 
-    <section
-            id="professores"
-            class="secao">
+        <section
+                id="professores"
+                class="secao">
 
-      <div class="cabecalho-secao">
+            <div class="cabecalho-secao">
 
-        <h2>
-          Professores
-        </h2>
+                <div>
+
+                    <h2>
+                        Professores
+                    </h2>
+
+                    <p>
+                        Consulte os professores cadastrados no sistema.
+                    </p>
+
+                </div>
+
+                <button
+                        id="botaoAbrirProfessor"
+                        class="botao-primario"
+                        type="button">
+
+                    + Novo professor
+
+                </button>
+
+            </div>
+
+            <div class="painel painel-filtros">
+
+                <div class="cabecalho-filtros">
+
+                    <div>
+
+                        <h3>
+                            Buscar professor
+                        </h3>
+
+                        <p>
+                            Localize pelo registro, nome ou e-mail.
+                        </p>
+
+                    </div>
+
+                    <button
+                            id="limparFiltrosProfessores"
+                            class="botao-limpar-filtros"
+                            type="button">
+
+                        Limpar busca
+
+                    </button>
+
+                </div>
+
+                <div class="grade-filtros">
+
+                    <div class="campo-filtro">
+
+                        <label for="filtroProfessorBusca">
+                            Registro, nome ou e-mail
+                        </label>
+
+                        <input
+                                type="text"
+                                id="filtroProfessorBusca"
+                                placeholder="Ex.: PROF0001 ou Rafael"
+                                autocomplete="off">
+
+                    </div>
+
+                </div>
+
+                <p
+                        id="contadorProfessores"
+                        class="contador-registros">
+                </p>
+
+            </div>
+
+            <div class="painel">
+
+                <div id="listaProfessores">
+                    Carregando professores...
+                </div>
+
+            </div>
+
+        </section>
 
 
-        <button
-                id="botaoAbrirProfessor"
-                class="botao-primario"
-                type="button">
+        <!-- =========================
+             TURMAS / DISCIPLINAS
+             ========================= -->
 
-          + Novo professor
-
-        </button>
-
-      </div>
+        <section
+                id="vinculos"
+                class="secao">
 
 
-      <div class="painel">
+            <div class="cabecalho-secao">
 
-        <div id="listaProfessores">
-          Carregando professores...
+                <h2>
+                    Turmas, disciplinas e professores
+                </h2>
+
+
+                <div>
+
+                    <button
+                            id="botaoAbrirTurma"
+                            class="botao-primario"
+                            type="button">
+
+                        + Nova turma
+
+                    </button>
+
+
+                    <button
+                            id="botaoAbrirDisciplina"
+                            class="botao-primario"
+                            type="button">
+
+                        + Nova disciplina
+
+                    </button>
+
+
+                    <button
+                            id="botaoAbrirVinculo"
+                            class="botao-primario"
+                            type="button">
+
+                        + Novo vínculo
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        <!-- TURMAS CADASTRADAS -->
+
+        <div class="painel">
+
+            <div class="cabecalho-filtros">
+
+                <div>
+
+                    <h3>
+                        Turmas cadastradas
+                    </h3>
+
+                    <p>
+                        Localize uma turma pelo nome, ano ou semestre.
+                    </p>
+
+                </div>
+
+                <button
+                        id="limparFiltroTurmas"
+                        class="botao-limpar-filtros"
+                        type="button">
+
+                    Limpar busca
+
+                </button>
+
+            </div>
+
+            <div class="grade-filtros">
+
+                <div class="campo-filtro">
+
+                    <label for="filtroTurmaBusca">
+                        Buscar turma
+                    </label>
+
+                    <input
+                            type="text"
+                            id="filtroTurmaBusca"
+                            placeholder="Ex.: 4ADS-A ou 2026"
+                            autocomplete="off">
+
+                </div>
+
+            </div>
+
+            <p
+                    id="contadorTurmas"
+                    class="contador-registros">
+            </p>
+
+            <div id="listaTurmas">
+                Carregando turmas...
+            </div>
+
         </div>
 
-      </div>
 
-    </section>
+        <!-- DISCIPLINAS CADASTRADAS -->
 
+        <div class="painel">
 
-    <!-- =========================
-         TURMAS / DISCIPLINAS
-         ========================= -->
+            <div class="cabecalho-filtros">
 
-    <section
-            id="vinculos"
-            class="secao">
+                <div>
 
+                    <h3>
+                        Disciplinas cadastradas
+                    </h3>
 
-      <div class="cabecalho-secao">
+                    <p>
+                        Localize uma disciplina pelo nome.
+                    </p>
 
-        <h2>
-          Turmas, disciplinas e professores
-        </h2>
+                </div>
 
+                <button
+                        id="limparFiltroDisciplinas"
+                        class="botao-limpar-filtros"
+                        type="button">
 
-        <div>
+                    Limpar busca
 
-          <button
-                  id="botaoAbrirTurma"
-                  class="botao-primario"
-                  type="button">
+                </button>
 
-            + Nova turma
+            </div>
 
-          </button>
+            <div class="grade-filtros">
 
+                <div class="campo-filtro">
 
-          <button
-                  id="botaoAbrirDisciplina"
-                  class="botao-primario"
-                  type="button">
+                    <label for="filtroDisciplinaBusca">
+                        Buscar disciplina
+                    </label>
 
-            + Nova disciplina
+                    <input
+                            type="text"
+                            id="filtroDisciplinaBusca"
+                            placeholder="Ex.: Técnicas de Programação"
+                            autocomplete="off">
 
-          </button>
+                </div>
 
+            </div>
 
-          <button
-                  id="botaoAbrirVinculo"
-                  class="botao-primario"
-                  type="button">
+            <p
+                    id="contadorDisciplinas"
+                    class="contador-registros">
+            </p>
 
-            + Novo vínculo
-
-          </button>
+            <div id="listaDisciplinas">
+                Carregando disciplinas...
+            </div>
 
         </div>
 
-      </div>
+
+        <!-- VÍNCULOS ACADÊMICOS -->
+
+        <div class="painel">
+
+            <div class="cabecalho-filtros">
+
+                <div>
+
+                    <h3>
+                        Vínculos acadêmicos
+                    </h3>
+
+                    <p>
+                        Localize vínculos por turma, disciplina, professor ou registro.
+                    </p>
+
+                </div>
+
+                <button
+                        id="limparFiltrosVinculos"
+                        class="botao-limpar-filtros"
+                        type="button">
+
+                    Limpar filtros
+
+                </button>
+
+            </div>
+
+            <div class="grade-filtros">
+
+                <div class="campo-filtro">
+
+                    <label for="filtroVinculoTurma">
+                        Turma
+                    </label>
+
+                    <select id="filtroVinculoTurma">
+
+                        <option value="">
+                            Todas as turmas
+                        </option>
+
+                    </select>
+
+                </div>
 
 
-      <!-- TURMAS CADASTRADAS -->
+                <div class="campo-filtro">
 
-      <div class="painel">
+                    <label for="filtroVinculoDisciplina">
+                        Disciplina
+                    </label>
 
-        <h3>
-          Turmas cadastradas
-        </h3>
+                    <select id="filtroVinculoDisciplina">
 
-        <div id="listaTurmas">
-          Carregando turmas...
+                        <option value="">
+                            Todas as disciplinas
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="campo-filtro">
+
+                    <label for="filtroVinculoProfessor">
+                        Professor ou registro
+                    </label>
+
+                    <input
+                            type="text"
+                            id="filtroVinculoProfessor"
+                            placeholder="Ex.: Rafael ou PROF0001"
+                            autocomplete="off">
+
+                </div>
+
+            </div>
+
+            <p
+                    id="contadorVinculos"
+                    class="contador-registros">
+            </p>
+
+            <div id="listaVinculos">
+                Carregando vínculos...
+            </div>
+
         </div>
 
-      </div>
+        </section>>
 
-
-      <!-- DISCIPLINAS CADASTRADAS -->
-
-      <div class="painel">
-
-        <h3>
-          Disciplinas cadastradas
-        </h3>
-
-        <div id="listaDisciplinas">
-          Carregando disciplinas...
-        </div>
-
-      </div>
-
-
-      <!-- VÍNCULOS ACADÊMICOS -->
-
-      <div class="painel">
-
-        <h3>
-          Vínculos acadêmicos
-        </h3>
-
-        <div id="listaVinculos">
-          Carregando vínculos...
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- =========================
+        <!-- =========================
          MATRÍCULAS
          ========================= -->
 
-    <section
-            id="matriculas"
-            class="secao">
+        <section
+                id="matriculas"
+                class="secao">
 
-      <div class="cabecalho-secao">
+            <div class="cabecalho-secao">
 
-        <div>
+                <div>
 
-          <h2>
-            Matrículas
-          </h2>
+                    <h2>
+                        Matrículas
+                    </h2>
 
-          <p>
-            Gerencie os vínculos dos alunos com as turmas.
-          </p>
+                    <p>
+                        Gerencie os vínculos dos alunos com as turmas.
+                    </p>
 
-        </div>
+                </div>
 
+                <button
+                        id="botaoAbrirMatricula"
+                        class="botao-primario"
+                        type="button">
 
-        <button
-                id="botaoAbrirMatricula"
-                class="botao-primario"
-                type="button">
+                    + Nova matrícula
 
-          + Nova matrícula
+                </button>
 
-        </button>
+            </div>
 
-      </div>
+            <div class="painel painel-filtros">
 
+                <div class="cabecalho-filtros">
 
-      <div class="painel">
+                    <div>
 
-        <div id="listaMatriculas">
-          Carregando matrículas...
-        </div>
+                        <h3>
+                            Filtros
+                        </h3>
 
-      </div>
+                        <p>
+                            Localize matrículas por aluno, número da matrícula,
+                            turma ou status.
+                        </p>
 
-    </section>
+                    </div>
 
+                    <button
+                            id="limparFiltrosMatriculas"
+                            class="botao-limpar-filtros"
+                            type="button">
 
-    <!-- =========================
-         NOTAS
-         ========================= -->
+                        Limpar filtros
 
-    <section
-            id="notas"
-            class="secao">
+                    </button>
 
-      <div class="cabecalho-secao">
+                </div>
 
-        <div>
+                <div class="grade-filtros">
 
-          <h2>
-            Notas
-          </h2>
+                    <div class="campo-filtro">
 
-          <p>
-            Consulte as avaliações e gerencie a AVI integrada.
-          </p>
+                        <label for="filtroMatriculaBusca">
+                            Matrícula ou aluno
+                        </label>
 
-        </div>
+                        <input
+                                type="text"
+                                id="filtroMatriculaBusca"
+                                placeholder="Ex.: 2026001 ou Guilherme"
+                                autocomplete="off">
 
+                    </div>
 
-        <button
-                id="botaoAbrirAvi"
-                class="botao-primario"
-                type="button">
+                    <div class="campo-filtro">
 
-          + Lançar AVI
+                        <label for="filtroMatriculaTurma">
+                            Turma
+                        </label>
 
-        </button>
+                        <select id="filtroMatriculaTurma">
 
-      </div>
+                            <option value="">
+                                Todas as turmas
+                            </option>
 
+                        </select>
 
-      <div class="painel painel-filtros">
+                    </div>
 
-        <div class="cabecalho-filtros">
+                    <div class="campo-filtro">
 
-          <div>
+                        <label for="filtroMatriculaStatus">
+                            Status
+                        </label>
 
-            <h3>
-              Filtros
-            </h3>
+                        <select id="filtroMatriculaStatus">
 
-            <p>
-              Filtre as notas por turma, disciplina, aluno,
-              professor ou avaliação.
-            </p>
+                            <option value="">
+                                Todos os status
+                            </option>
 
-          </div>
+                            <option value="ATIVA">
+                                Ativa
+                            </option>
 
+                            <option value="TRANCADA">
+                                Trancada
+                            </option>
 
-          <button
-                  id="limparFiltrosNotas"
-                  class="botao-limpar-filtros"
-                  type="button">
+                            <option value="CANCELADA">
+                                Cancelada
+                            </option>
 
-            Limpar filtros
+                            <option value="CONCLUIDA">
+                                Concluída
+                            </option>
 
-          </button>
+                        </select>
 
-        </div>
+                    </div>
 
+                </div>
 
-        <div class="grade-filtros grade-filtros-notas">
+                <p
+                        id="contadorMatriculas"
+                        class="contador-registros">
+                </p>
 
+            </div>
 
-          <div class="campo-filtro">
+            <div class="painel">
 
-            <label for="filtroNotaTurma">
-              Turma
-            </label>
+                <div id="listaMatriculas">
+                    Carregando matrículas...
+                </div>
 
-            <select id="filtroNotaTurma">
+            </div>
 
-              <option value="">
-                Todas as turmas
-              </option>
+        </section>
 
-            </select>
 
-          </div>
+        <!-- =========================
+             NOTAS
+             ========================= -->
 
+        <section
+                id="notas"
+                class="secao">
 
-          <div class="campo-filtro">
+            <div class="cabecalho-secao">
 
-            <label for="filtroNotaDisciplina">
-              Disciplina
-            </label>
+                <div>
 
-            <select id="filtroNotaDisciplina">
+                    <h2>
+                        Notas
+                    </h2>
 
-              <option value="">
-                Todas as disciplinas
-              </option>
+                    <p>
+                        Consulte as avaliações e gerencie a AVI integrada.
+                    </p>
 
-            </select>
+                </div>
 
-          </div>
 
+                <button
+                        id="botaoAbrirAvi"
+                        class="botao-primario"
+                        type="button">
 
-          <div class="campo-filtro">
+                    + Lançar AVI
 
-            <label for="filtroNotaAluno">
-              Aluno
-            </label>
+                </button>
 
-            <select id="filtroNotaAluno">
+            </div>
 
-              <option value="">
-                Todos os alunos
-              </option>
 
-            </select>
+            <div class="painel painel-filtros">
 
-          </div>
+                <div class="cabecalho-filtros">
 
+                    <div>
 
-          <div class="campo-filtro">
+                        <h3>
+                            Filtros
+                        </h3>
 
-            <label for="filtroNotaProfessor">
-              Professor
-            </label>
+                        <p>
+                            Filtre as notas por turma, disciplina, aluno,
+                            professor ou avaliação.
+                        </p>
 
-            <select id="filtroNotaProfessor">
+                    </div>
 
-              <option value="">
-                Todos os professores
-              </option>
 
-            </select>
+                    <button
+                            id="limparFiltrosNotas"
+                            class="botao-limpar-filtros"
+                            type="button">
 
-          </div>
+                        Limpar filtros
 
+                    </button>
 
-          <div class="campo-filtro">
+                </div>
 
-            <label for="filtroNotaAvaliacao">
-              Avaliação
-            </label>
 
-            <select id="filtroNotaAvaliacao">
+                <div class="grade-filtros grade-filtros-notas">
 
-              <option value="">
-                Todas as avaliações
-              </option>
 
-              <option value="AVC">
-                AVC
-              </option>
+                    <div class="campo-filtro">
 
-              <option value="AVG">
-                AVG
-              </option>
+                        <label for="filtroNotaTurma">
+                            Turma
+                        </label>
 
-              <option value="AVI">
-                AVI
-              </option>
+                        <select id="filtroNotaTurma">
 
-            </select>
+                            <option value="">
+                                Todas as turmas
+                            </option>
 
-          </div>
+                        </select>
 
-        </div>
+                    </div>
 
 
-        <p
-                id="contadorNotas"
-                class="contador-registros">
-        </p>
+                    <div class="campo-filtro">
 
-      </div>
+                        <label for="filtroNotaDisciplina">
+                            Disciplina
+                        </label>
 
+                        <select id="filtroNotaDisciplina">
 
-      <div class="painel">
+                            <option value="">
+                                Todas as disciplinas
+                            </option>
 
-        <div id="listaNotas">
-          Carregando notas...
-        </div>
+                        </select>
 
-      </div>
+                    </div>
 
-    </section>
 
+                    <div class="campo-filtro">
 
-    <!-- =========================
-         FALTAS
-         ========================= -->
+                        <label for="filtroNotaAluno">
+                            Aluno
+                        </label>
 
-    <section
-            id="faltas"
-            class="secao">
+                        <select id="filtroNotaAluno">
 
-      <h2>
-        Faltas
-      </h2>
+                            <option value="">
+                                Todos os alunos
+                            </option>
 
+                        </select>
 
-      <div class="painel painel-filtros">
+                    </div>
 
-        <div class="cabecalho-filtros">
 
-          <div>
+                    <div class="campo-filtro">
 
-            <h3>
-              Filtros
-            </h3>
+                        <label for="filtroNotaProfessor">
+                            Professor
+                        </label>
 
-            <p>
-              Filtre as faltas por turma, disciplina,
-              aluno ou professor.
-            </p>
+                        <select id="filtroNotaProfessor">
 
-          </div>
+                            <option value="">
+                                Todos os professores
+                            </option>
 
+                        </select>
 
-          <button
-                  id="limparFiltrosFaltas"
-                  class="botao-limpar-filtros"
-                  type="button">
+                    </div>
 
-            Limpar filtros
 
-          </button>
+                    <div class="campo-filtro">
 
-        </div>
+                        <label for="filtroNotaAvaliacao">
+                            Avaliação
+                        </label>
 
+                        <select id="filtroNotaAvaliacao">
 
-        <div class="grade-filtros grade-filtros-faltas">
+                            <option value="">
+                                Todas as avaliações
+                            </option>
 
+                            <option value="AVC">
+                                AVC
+                            </option>
 
-          <div class="campo-filtro">
+                            <option value="AVG">
+                                AVG
+                            </option>
 
-            <label for="filtroFaltaTurma">
-              Turma
-            </label>
+                            <option value="AVI">
+                                AVI
+                            </option>
 
-            <select id="filtroFaltaTurma">
+                        </select>
 
-              <option value="">
-                Todas as turmas
-              </option>
+                    </div>
 
-            </select>
+                </div>
 
-          </div>
 
+                <p
+                        id="contadorNotas"
+                        class="contador-registros">
+                </p>
 
-          <div class="campo-filtro">
+            </div>
 
-            <label for="filtroFaltaDisciplina">
-              Disciplina
-            </label>
 
-            <select id="filtroFaltaDisciplina">
+            <div class="painel">
 
-              <option value="">
-                Todas as disciplinas
-              </option>
+                <div id="listaNotas">
+                    Carregando notas...
+                </div>
 
-            </select>
+            </div>
 
-          </div>
+        </section>
 
 
-          <div class="campo-filtro">
+        <!-- =========================
+             FALTAS
+             ========================= -->
 
-            <label for="filtroFaltaAluno">
-              Aluno
-            </label>
+        <section
+                id="faltas"
+                class="secao">
 
-            <select id="filtroFaltaAluno">
+            <h2>
+                Faltas
+            </h2>
 
-              <option value="">
-                Todos os alunos
-              </option>
 
-            </select>
+            <div class="painel painel-filtros">
 
-          </div>
+                <div class="cabecalho-filtros">
 
+                    <div>
 
-          <div class="campo-filtro">
+                        <h3>
+                            Filtros
+                        </h3>
 
-            <label for="filtroFaltaProfessor">
-              Professor
-            </label>
+                        <p>
+                            Filtre as faltas por turma, disciplina,
+                            aluno ou professor.
+                        </p>
 
-            <select id="filtroFaltaProfessor">
+                    </div>
 
-              <option value="">
-                Todos os professores
-              </option>
 
-            </select>
+                    <button
+                            id="limparFiltrosFaltas"
+                            class="botao-limpar-filtros"
+                            type="button">
 
-          </div>
+                        Limpar filtros
 
-        </div>
+                    </button>
 
+                </div>
 
-        <p
-                id="contadorFaltas"
-                class="contador-registros">
-        </p>
 
-      </div>
+                <div class="grade-filtros grade-filtros-faltas">
 
 
-      <div class="painel">
+                    <div class="campo-filtro">
 
-        <div id="listaFaltas">
-          Carregando faltas...
-        </div>
+                        <label for="filtroFaltaTurma">
+                            Turma
+                        </label>
 
-      </div>
+                        <select id="filtroFaltaTurma">
 
-    </section>
+                            <option value="">
+                                Todas as turmas
+                            </option>
 
+                        </select>
 
-    <!-- =========================
-         AUDITORIA
-         ========================= -->
+                    </div>
 
-    <section
-            id="auditorias"
-            class="secao">
 
-      <h2>
-        Auditoria
-      </h2>
+                    <div class="campo-filtro">
 
+                        <label for="filtroFaltaDisciplina">
+                            Disciplina
+                        </label>
 
-      <div class="painel painel-filtros">
+                        <select id="filtroFaltaDisciplina">
 
-        <div class="cabecalho-filtros">
+                            <option value="">
+                                Todas as disciplinas
+                            </option>
 
-          <div>
+                        </select>
 
-            <h3>
-              Filtros
-            </h3>
+                    </div>
 
-            <p>
-              Consulte os registros por usuário, ação,
-              descrição ou data.
-            </p>
 
-          </div>
+                    <div class="campo-filtro">
 
+                        <label for="filtroFaltaAluno">
+                            Aluno
+                        </label>
 
-          <button
-                  id="limparFiltrosAuditoria"
-                  class="botao-limpar-filtros"
-                  type="button">
+                        <select id="filtroFaltaAluno">
 
-            Limpar filtros
+                            <option value="">
+                                Todos os alunos
+                            </option>
 
-          </button>
+                        </select>
 
-        </div>
+                    </div>
 
 
-        <div class="grade-filtros grade-filtros-auditoria">
+                    <div class="campo-filtro">
 
+                        <label for="filtroFaltaProfessor">
+                            Professor
+                        </label>
 
-          <div class="campo-filtro">
+                        <select id="filtroFaltaProfessor">
 
-            <label for="filtroAuditoriaUsuario">
-              Usuário
-            </label>
+                            <option value="">
+                                Todos os professores
+                            </option>
 
-            <select id="filtroAuditoriaUsuario">
+                        </select>
 
-              <option value="">
-                Todos os usuários
-              </option>
+                    </div>
 
-            </select>
+                </div>
 
-          </div>
 
+                <p
+                        id="contadorFaltas"
+                        class="contador-registros">
+                </p>
 
-          <div class="campo-filtro">
+            </div>
 
-            <label for="filtroAuditoriaAcao">
-              Ação
-            </label>
 
-            <select id="filtroAuditoriaAcao">
+            <div class="painel">
 
-              <option value="">
-                Todas as ações
-              </option>
+                <div id="listaFaltas">
+                    Carregando faltas...
+                </div>
 
-            </select>
+            </div>
 
-          </div>
+        </section>
 
 
-          <div class="campo-filtro">
+        <!-- =========================
+             AUDITORIA
+             ========================= -->
 
-            <label for="filtroAuditoriaDescricao">
-              Descrição
-            </label>
+        <section
+                id="auditorias"
+                class="secao">
 
-            <input
-                    type="text"
-                    id="filtroAuditoriaDescricao"
-                    placeholder="Buscar na descrição">
+            <h2>
+                Auditoria
+            </h2>
 
-          </div>
 
+            <div class="painel painel-filtros">
 
-          <div class="campo-filtro">
+                <div class="cabecalho-filtros">
 
-            <label for="filtroAuditoriaData">
-              Data
-            </label>
+                    <div>
 
-            <input
-                    type="date"
-                    id="filtroAuditoriaData">
+                        <h3>
+                            Filtros
+                        </h3>
 
-          </div>
+                        <p>
+                            Consulte os registros por usuário, ação,
+                            descrição ou data.
+                        </p>
 
-        </div>
+                    </div>
 
 
-        <p
-                id="contadorAuditorias"
-                class="contador-registros">
-        </p>
+                    <button
+                            id="limparFiltrosAuditoria"
+                            class="botao-limpar-filtros"
+                            type="button">
 
-      </div>
+                        Limpar filtros
 
+                    </button>
 
-      <div class="painel">
+                </div>
 
-        <div id="listaAuditorias">
-          Carregando registros de auditoria...
-        </div>
 
+                <div class="grade-filtros grade-filtros-auditoria">
 
-        <div
-                id="paginacaoAuditorias"
-                class="paginacao">
-        </div>
 
-      </div>
+                    <div class="campo-filtro">
 
-    </section>
+                        <label for="filtroAuditoriaUsuario">
+                            Usuário
+                        </label>
 
+                        <select id="filtroAuditoriaUsuario">
 
-  </main>
+                            <option value="">
+                                Todos os usuários
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="campo-filtro">
+
+                        <label for="filtroAuditoriaAcao">
+                            Ação
+                        </label>
+
+                        <select id="filtroAuditoriaAcao">
+
+                            <option value="">
+                                Todas as ações
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="campo-filtro">
+
+                        <label for="filtroAuditoriaDescricao">
+                            Descrição
+                        </label>
+
+                        <input
+                                type="text"
+                                id="filtroAuditoriaDescricao"
+                                placeholder="Buscar na descrição">
+
+                    </div>
+
+
+                    <div class="campo-filtro">
+
+                        <label for="filtroAuditoriaData">
+                            Data
+                        </label>
+
+                        <input
+                                type="date"
+                                id="filtroAuditoriaData">
+
+                    </div>
+
+                </div>
+
+
+                <p
+                        id="contadorAuditorias"
+                        class="contador-registros">
+                </p>
+
+            </div>
+
+
+            <div class="painel">
+
+                <div id="listaAuditorias">
+                    Carregando registros de auditoria...
+                </div>
+
+
+                <div
+                        id="paginacaoAuditorias"
+                        class="paginacao">
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
 
 </div>
 
@@ -1012,120 +1495,120 @@
         id="modalUsuario"
         class="modal">
 
-  <div class="modal-conteudo">
+    <div class="modal-conteudo">
 
-    <div class="modal-cabecalho">
+        <div class="modal-cabecalho">
 
-      <h3>
-        Novo usuário
-      </h3>
+            <h3>
+                Novo usuário
+            </h3>
 
-      <button
-              id="botaoFecharUsuario"
-              class="botao-fechar"
-              type="button">
-        ×
-      </button>
+            <button
+                    id="botaoFecharUsuario"
+                    class="botao-fechar"
+                    type="button">
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="formUsuario">
+
+            <div class="campo-formulario">
+
+                <label for="usuarioNome">
+                    Nome
+                </label>
+
+                <input
+                        type="text"
+                        id="usuarioNome"
+                        maxlength="100"
+                        required>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="usuarioEmail">
+                    E-mail
+                </label>
+
+                <input
+                        type="email"
+                        id="usuarioEmail"
+                        maxlength="100"
+                        required>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="usuarioSenha">
+                    Senha
+                </label>
+
+                <input
+                        type="password"
+                        id="usuarioSenha"
+                        minlength="6"
+                        maxlength="255"
+                        required>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="usuarioPerfil">
+                    Perfil
+                </label>
+
+                <select
+                        id="usuarioPerfil"
+                        required>
+
+                    <option value="">
+                        Selecione
+                    </option>
+
+                    <option value="ALUNO">
+                        Aluno
+                    </option>
+
+                    <option value="PROFESSOR">
+                        Professor
+                    </option>
+
+                    <option value="ADMINISTRADOR">
+                        Administrador
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <p
+                    id="mensagemUsuario"
+                    class="mensagem-formulario">
+            </p>
+
+
+            <button
+                    type="submit"
+                    class="botao-primario botao-salvar">
+
+                Salvar usuário
+
+            </button>
+
+        </form>
 
     </div>
-
-
-    <form id="formUsuario">
-
-      <div class="campo-formulario">
-
-        <label for="usuarioNome">
-          Nome
-        </label>
-
-        <input
-                type="text"
-                id="usuarioNome"
-                maxlength="100"
-                required>
-
-      </div>
-
-
-      <div class="campo-formulario">
-
-        <label for="usuarioEmail">
-          E-mail
-        </label>
-
-        <input
-                type="email"
-                id="usuarioEmail"
-                maxlength="100"
-                required>
-
-      </div>
-
-
-      <div class="campo-formulario">
-
-        <label for="usuarioSenha">
-          Senha
-        </label>
-
-        <input
-                type="password"
-                id="usuarioSenha"
-                minlength="6"
-                maxlength="255"
-                required>
-
-      </div>
-
-
-      <div class="campo-formulario">
-
-        <label for="usuarioPerfil">
-          Perfil
-        </label>
-
-        <select
-                id="usuarioPerfil"
-                required>
-
-          <option value="">
-            Selecione
-          </option>
-
-          <option value="ALUNO">
-            Aluno
-          </option>
-
-          <option value="PROFESSOR">
-            Professor
-          </option>
-
-          <option value="ADMINISTRADOR">
-            Administrador
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <p
-              id="mensagemUsuario"
-              class="mensagem-formulario">
-      </p>
-
-
-      <button
-              type="submit"
-              class="botao-primario botao-salvar">
-
-        Salvar usuário
-
-      </button>
-
-    </form>
-
-  </div>
 
 </div>
 
@@ -1138,125 +1621,125 @@
         id="modalEditarUsuario"
         class="modal">
 
-  <div class="modal-conteudo">
+    <div class="modal-conteudo">
 
-    <div class="modal-cabecalho">
+        <div class="modal-cabecalho">
 
-      <h3>
-        Editar usuário
-      </h3>
+            <h3>
+                Editar usuário
+            </h3>
 
-      <button
-              id="botaoFecharEditarUsuario"
-              class="botao-fechar"
-              type="button">
-        ×
-      </button>
+            <button
+                    id="botaoFecharEditarUsuario"
+                    class="botao-fechar"
+                    type="button">
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="formEditarUsuario">
+
+            <input
+                    type="hidden"
+                    id="editarUsuarioId">
+
+
+            <div class="campo-formulario">
+
+                <label for="editarUsuarioNome">
+                    Nome
+                </label>
+
+                <input
+                        type="text"
+                        id="editarUsuarioNome"
+                        maxlength="100"
+                        required>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="editarUsuarioEmail">
+                    E-mail
+                </label>
+
+                <input
+                        type="email"
+                        id="editarUsuarioEmail"
+                        maxlength="100"
+                        required>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="editarUsuarioPerfil">
+                    Perfil
+                </label>
+
+                <select
+                        id="editarUsuarioPerfil"
+                        required>
+
+                    <option value="">
+                        Selecione
+                    </option>
+
+                    <option value="ALUNO">
+                        Aluno
+                    </option>
+
+                    <option value="PROFESSOR">
+                        Professor
+                    </option>
+
+                    <option value="ADMINISTRADOR">
+                        Administrador
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="editarUsuarioSenha">
+                    Nova senha
+                </label>
+
+                <input
+                        type="password"
+                        id="editarUsuarioSenha"
+                        minlength="6"
+                        maxlength="255"
+                        placeholder="Deixe em branco para manter a senha atual">
+
+            </div>
+
+
+            <p
+                    id="mensagemEditarUsuario"
+                    class="mensagem-formulario">
+            </p>
+
+
+            <button
+                    type="submit"
+                    class="botao-primario botao-salvar">
+
+                Salvar alterações
+
+            </button>
+
+        </form>
 
     </div>
-
-
-    <form id="formEditarUsuario">
-
-      <input
-              type="hidden"
-              id="editarUsuarioId">
-
-
-      <div class="campo-formulario">
-
-        <label for="editarUsuarioNome">
-          Nome
-        </label>
-
-        <input
-                type="text"
-                id="editarUsuarioNome"
-                maxlength="100"
-                required>
-
-      </div>
-
-
-      <div class="campo-formulario">
-
-        <label for="editarUsuarioEmail">
-          E-mail
-        </label>
-
-        <input
-                type="email"
-                id="editarUsuarioEmail"
-                maxlength="100"
-                required>
-
-      </div>
-
-
-      <div class="campo-formulario">
-
-        <label for="editarUsuarioPerfil">
-          Perfil
-        </label>
-
-        <select
-                id="editarUsuarioPerfil"
-                required>
-
-          <option value="">
-            Selecione
-          </option>
-
-          <option value="ALUNO">
-            Aluno
-          </option>
-
-          <option value="PROFESSOR">
-            Professor
-          </option>
-
-          <option value="ADMINISTRADOR">
-            Administrador
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <div class="campo-formulario">
-
-        <label for="editarUsuarioSenha">
-          Nova senha
-        </label>
-
-        <input
-                type="password"
-                id="editarUsuarioSenha"
-                minlength="6"
-                maxlength="255"
-                placeholder="Deixe em branco para manter a senha atual">
-
-      </div>
-
-
-      <p
-              id="mensagemEditarUsuario"
-              class="mensagem-formulario">
-      </p>
-
-
-      <button
-              type="submit"
-              class="botao-primario botao-salvar">
-
-        Salvar alterações
-
-      </button>
-
-    </form>
-
-  </div>
 
 </div>
 
@@ -1268,78 +1751,78 @@
         id="modalAluno"
         class="modal">
 
-  <div class="modal-conteudo">
+    <div class="modal-conteudo">
 
-    <div class="modal-cabecalho">
+        <div class="modal-cabecalho">
 
-      <h3>
-        Novo aluno
-      </h3>
+            <h3>
+                Novo aluno
+            </h3>
 
-      <button
-              id="botaoFecharAluno"
-              class="botao-fechar"
-              type="button">
-        ×
-      </button>
+            <button
+                    id="botaoFecharAluno"
+                    class="botao-fechar"
+                    type="button">
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="formAluno">
+
+            <div class="campo-formulario">
+
+                <label for="alunoUsuario">
+                    Usuário
+                </label>
+
+                <select
+                        id="alunoUsuario"
+                        required>
+
+                    <option value="">
+                        Selecione um usuário aluno
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="alunoMatricula">
+                    Matrícula
+                </label>
+
+                <input
+                        type="text"
+                        id="alunoMatricula"
+                        maxlength="20"
+                        placeholder="Ex.: 2026099"
+                        required>
+
+            </div>
+
+
+            <p
+                    id="mensagemAluno"
+                    class="mensagem-formulario">
+            </p>
+
+
+            <button
+                    type="submit"
+                    class="botao-primario botao-salvar">
+
+                Salvar aluno
+
+            </button>
+
+        </form>
 
     </div>
-
-
-    <form id="formAluno">
-
-      <div class="campo-formulario">
-
-        <label for="alunoUsuario">
-          Usuário
-        </label>
-
-        <select
-                id="alunoUsuario"
-                required>
-
-          <option value="">
-            Selecione um usuário aluno
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <div class="campo-formulario">
-
-        <label for="alunoMatricula">
-          Matrícula
-        </label>
-
-        <input
-                type="text"
-                id="alunoMatricula"
-                maxlength="20"
-                placeholder="Ex.: 2026099"
-                required>
-
-      </div>
-
-
-      <p
-              id="mensagemAluno"
-              class="mensagem-formulario">
-      </p>
-
-
-      <button
-              type="submit"
-              class="botao-primario botao-salvar">
-
-        Salvar aluno
-
-      </button>
-
-    </form>
-
-  </div>
 
 </div>
 
@@ -1352,78 +1835,78 @@
         id="modalProfessor"
         class="modal">
 
-  <div class="modal-conteudo">
+    <div class="modal-conteudo">
 
-    <div class="modal-cabecalho">
+        <div class="modal-cabecalho">
 
-      <h3>
-        Novo professor
-      </h3>
+            <h3>
+                Novo professor
+            </h3>
 
-      <button
-              id="botaoFecharProfessor"
-              class="botao-fechar"
-              type="button">
-        ×
-      </button>
+            <button
+                    id="botaoFecharProfessor"
+                    class="botao-fechar"
+                    type="button">
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="formProfessor">
+
+            <div class="campo-formulario">
+
+                <label for="professorUsuario">
+                    Usuário
+                </label>
+
+                <select
+                        id="professorUsuario"
+                        required>
+
+                    <option value="">
+                        Selecione um usuário professor
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="professorRegistro">
+                    Registro
+                </label>
+
+                <input
+                        type="text"
+                        id="professorRegistro"
+                        maxlength="20"
+                        placeholder="Ex.: PROF003"
+                        required>
+
+            </div>
+
+
+            <p
+                    id="mensagemProfessor"
+                    class="mensagem-formulario">
+            </p>
+
+
+            <button
+                    type="submit"
+                    class="botao-primario botao-salvar">
+
+                Salvar professor
+
+            </button>
+
+        </form>
 
     </div>
-
-
-    <form id="formProfessor">
-
-      <div class="campo-formulario">
-
-        <label for="professorUsuario">
-          Usuário
-        </label>
-
-        <select
-                id="professorUsuario"
-                required>
-
-          <option value="">
-            Selecione um usuário professor
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <div class="campo-formulario">
-
-        <label for="professorRegistro">
-          Registro
-        </label>
-
-        <input
-                type="text"
-                id="professorRegistro"
-                maxlength="20"
-                placeholder="Ex.: PROF003"
-                required>
-
-      </div>
-
-
-      <p
-              id="mensagemProfessor"
-              class="mensagem-formulario">
-      </p>
-
-
-      <button
-              type="submit"
-              class="botao-primario botao-salvar">
-
-        Salvar professor
-
-      </button>
-
-    </form>
-
-  </div>
 
 </div>
 
@@ -1436,77 +1919,77 @@
         id="modalEditarProfessor"
         class="modal">
 
-  <div class="modal-conteudo">
+    <div class="modal-conteudo">
 
-    <div class="modal-cabecalho">
+        <div class="modal-cabecalho">
 
-      <h3>
-        Editar professor
-      </h3>
+            <h3>
+                Editar professor
+            </h3>
 
-      <button
-              id="botaoFecharEditarProfessor"
-              class="botao-fechar"
-              type="button">
-        ×
-      </button>
+            <button
+                    id="botaoFecharEditarProfessor"
+                    class="botao-fechar"
+                    type="button">
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="formEditarProfessor">
+
+            <input
+                    type="hidden"
+                    id="editarProfessorId">
+
+
+            <div class="campo-formulario">
+
+                <label for="editarProfessorNome">
+                    Professor
+                </label>
+
+                <input
+                        type="text"
+                        id="editarProfessorNome"
+                        disabled>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="editarProfessorRegistro">
+                    Registro
+                </label>
+
+                <input
+                        type="text"
+                        id="editarProfessorRegistro"
+                        maxlength="20"
+                        required>
+
+            </div>
+
+
+            <p
+                    id="mensagemEditarProfessor"
+                    class="mensagem-formulario">
+            </p>
+
+
+            <button
+                    type="submit"
+                    class="botao-primario botao-salvar">
+
+                Salvar alterações
+
+            </button>
+
+        </form>
 
     </div>
-
-
-    <form id="formEditarProfessor">
-
-      <input
-              type="hidden"
-              id="editarProfessorId">
-
-
-      <div class="campo-formulario">
-
-        <label for="editarProfessorNome">
-          Professor
-        </label>
-
-        <input
-                type="text"
-                id="editarProfessorNome"
-                disabled>
-
-      </div>
-
-
-      <div class="campo-formulario">
-
-        <label for="editarProfessorRegistro">
-          Registro
-        </label>
-
-        <input
-                type="text"
-                id="editarProfessorRegistro"
-                maxlength="20"
-                required>
-
-      </div>
-
-
-      <p
-              id="mensagemEditarProfessor"
-              class="mensagem-formulario">
-      </p>
-
-
-      <button
-              type="submit"
-              class="botao-primario botao-salvar">
-
-        Salvar alterações
-
-      </button>
-
-    </form>
-
-  </div>
 
 </div>
 
@@ -1519,102 +2002,102 @@
         id="modalTurma"
         class="modal">
 
-  <div class="modal-conteudo">
+    <div class="modal-conteudo">
 
-    <div class="modal-cabecalho">
+        <div class="modal-cabecalho">
 
-      <h3>
-        Nova turma
-      </h3>
+            <h3>
+                Nova turma
+            </h3>
 
-      <button
-              id="botaoFecharTurma"
-              class="botao-fechar"
-              type="button">
-        ×
-      </button>
+            <button
+                    id="botaoFecharTurma"
+                    class="botao-fechar"
+                    type="button">
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="formTurma">
+
+            <div class="campo-formulario">
+
+                <label for="turmaNome">
+                    Nome da turma
+                </label>
+
+                <input
+                        type="text"
+                        id="turmaNome"
+                        maxlength="50"
+                        placeholder="Ex.: 4ADS B"
+                        required>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="turmaSemestre">
+                    Semestre
+                </label>
+
+                <select
+                        id="turmaSemestre"
+                        required>
+
+                    <option value="">
+                        Selecione
+                    </option>
+
+                    <option value="1">
+                        1º semestre
+                    </option>
+
+                    <option value="2">
+                        2º semestre
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="turmaAno">
+                    Ano
+                </label>
+
+                <input
+                        type="number"
+                        id="turmaAno"
+                        min="2000"
+                        placeholder="Ex.: 2026"
+                        required>
+
+            </div>
+
+
+            <p
+                    id="mensagemTurma"
+                    class="mensagem-formulario">
+            </p>
+
+
+            <button
+                    type="submit"
+                    class="botao-primario botao-salvar">
+
+                Salvar turma
+
+            </button>
+
+        </form>
 
     </div>
-
-
-    <form id="formTurma">
-
-      <div class="campo-formulario">
-
-        <label for="turmaNome">
-          Nome da turma
-        </label>
-
-        <input
-                type="text"
-                id="turmaNome"
-                maxlength="50"
-                placeholder="Ex.: 4ADS B"
-                required>
-
-      </div>
-
-
-      <div class="campo-formulario">
-
-        <label for="turmaSemestre">
-          Semestre
-        </label>
-
-        <select
-                id="turmaSemestre"
-                required>
-
-          <option value="">
-            Selecione
-          </option>
-
-          <option value="1">
-            1º semestre
-          </option>
-
-          <option value="2">
-            2º semestre
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <div class="campo-formulario">
-
-        <label for="turmaAno">
-          Ano
-        </label>
-
-        <input
-                type="number"
-                id="turmaAno"
-                min="2000"
-                placeholder="Ex.: 2026"
-                required>
-
-      </div>
-
-
-      <p
-              id="mensagemTurma"
-              class="mensagem-formulario">
-      </p>
-
-
-      <button
-              type="submit"
-              class="botao-primario botao-salvar">
-
-        Salvar turma
-
-      </button>
-
-    </form>
-
-  </div>
 
 </div>
 
@@ -1627,101 +2110,101 @@
         id="modalEditarTurma"
         class="modal">
 
-  <div class="modal-conteudo">
+    <div class="modal-conteudo">
 
-    <div class="modal-cabecalho">
+        <div class="modal-cabecalho">
 
-      <h3>
-        Editar turma
-      </h3>
+            <h3>
+                Editar turma
+            </h3>
 
-      <button
-              id="botaoFecharEditarTurma"
-              class="botao-fechar"
-              type="button">
-        ×
-      </button>
+            <button
+                    id="botaoFecharEditarTurma"
+                    class="botao-fechar"
+                    type="button">
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="formEditarTurma">
+
+            <input
+                    type="hidden"
+                    id="editarTurmaId">
+
+
+            <div class="campo-formulario">
+
+                <label for="editarTurmaNome">
+                    Nome
+                </label>
+
+                <input
+                        type="text"
+                        id="editarTurmaNome"
+                        maxlength="50"
+                        required>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="editarTurmaSemestre">
+                    Semestre
+                </label>
+
+                <select
+                        id="editarTurmaSemestre"
+                        required>
+
+                    <option value="1">
+                        1º semestre
+                    </option>
+
+                    <option value="2">
+                        2º semestre
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="editarTurmaAno">
+                    Ano
+                </label>
+
+                <input
+                        type="number"
+                        id="editarTurmaAno"
+                        min="2000"
+                        required>
+
+            </div>
+
+
+            <p
+                    id="mensagemEditarTurma"
+                    class="mensagem-formulario">
+            </p>
+
+
+            <button
+                    type="submit"
+                    class="botao-primario botao-salvar">
+
+                Salvar alterações
+
+            </button>
+
+        </form>
 
     </div>
-
-
-    <form id="formEditarTurma">
-
-      <input
-              type="hidden"
-              id="editarTurmaId">
-
-
-      <div class="campo-formulario">
-
-        <label for="editarTurmaNome">
-          Nome
-        </label>
-
-        <input
-                type="text"
-                id="editarTurmaNome"
-                maxlength="50"
-                required>
-
-      </div>
-
-
-      <div class="campo-formulario">
-
-        <label for="editarTurmaSemestre">
-          Semestre
-        </label>
-
-        <select
-                id="editarTurmaSemestre"
-                required>
-
-          <option value="1">
-            1º semestre
-          </option>
-
-          <option value="2">
-            2º semestre
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <div class="campo-formulario">
-
-        <label for="editarTurmaAno">
-          Ano
-        </label>
-
-        <input
-                type="number"
-                id="editarTurmaAno"
-                min="2000"
-                required>
-
-      </div>
-
-
-      <p
-              id="mensagemEditarTurma"
-              class="mensagem-formulario">
-      </p>
-
-
-      <button
-              type="submit"
-              class="botao-primario botao-salvar">
-
-        Salvar alterações
-
-      </button>
-
-    </form>
-
-  </div>
 
 </div>
 
@@ -1734,75 +2217,75 @@
         id="modalDisciplina"
         class="modal">
 
-  <div class="modal-conteudo">
+    <div class="modal-conteudo">
 
-    <div class="modal-cabecalho">
+        <div class="modal-cabecalho">
 
-      <h3>
-        Nova disciplina
-      </h3>
+            <h3>
+                Nova disciplina
+            </h3>
 
-      <button
-              id="botaoFecharDisciplina"
-              class="botao-fechar"
-              type="button">
-        ×
-      </button>
+            <button
+                    id="botaoFecharDisciplina"
+                    class="botao-fechar"
+                    type="button">
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="formDisciplina">
+
+            <div class="campo-formulario">
+
+                <label for="disciplinaNome">
+                    Nome da disciplina
+                </label>
+
+                <input
+                        type="text"
+                        id="disciplinaNome"
+                        maxlength="100"
+                        placeholder="Ex.: Segurança da Informação"
+                        required>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="disciplinaCargaHoraria">
+                    Carga horária
+                </label>
+
+                <input
+                        type="number"
+                        id="disciplinaCargaHoraria"
+                        min="1"
+                        placeholder="Ex.: 80"
+                        required>
+
+            </div>
+
+
+            <p
+                    id="mensagemDisciplina"
+                    class="mensagem-formulario">
+            </p>
+
+
+            <button
+                    type="submit"
+                    class="botao-primario botao-salvar">
+
+                Salvar disciplina
+
+            </button>
+
+        </form>
 
     </div>
-
-
-    <form id="formDisciplina">
-
-      <div class="campo-formulario">
-
-        <label for="disciplinaNome">
-          Nome da disciplina
-        </label>
-
-        <input
-                type="text"
-                id="disciplinaNome"
-                maxlength="100"
-                placeholder="Ex.: Segurança da Informação"
-                required>
-
-      </div>
-
-
-      <div class="campo-formulario">
-
-        <label for="disciplinaCargaHoraria">
-          Carga horária
-        </label>
-
-        <input
-                type="number"
-                id="disciplinaCargaHoraria"
-                min="1"
-                placeholder="Ex.: 80"
-                required>
-
-      </div>
-
-
-      <p
-              id="mensagemDisciplina"
-              class="mensagem-formulario">
-      </p>
-
-
-      <button
-              type="submit"
-              class="botao-primario botao-salvar">
-
-        Salvar disciplina
-
-      </button>
-
-    </form>
-
-  </div>
 
 </div>
 
@@ -1815,78 +2298,78 @@
         id="modalEditarDisciplina"
         class="modal">
 
-  <div class="modal-conteudo">
+    <div class="modal-conteudo">
 
-    <div class="modal-cabecalho">
+        <div class="modal-cabecalho">
 
-      <h3>
-        Editar disciplina
-      </h3>
+            <h3>
+                Editar disciplina
+            </h3>
 
-      <button
-              id="botaoFecharEditarDisciplina"
-              class="botao-fechar"
-              type="button">
-        ×
-      </button>
+            <button
+                    id="botaoFecharEditarDisciplina"
+                    class="botao-fechar"
+                    type="button">
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="formEditarDisciplina">
+
+            <input
+                    type="hidden"
+                    id="editarDisciplinaId">
+
+
+            <div class="campo-formulario">
+
+                <label for="editarDisciplinaNome">
+                    Nome
+                </label>
+
+                <input
+                        type="text"
+                        id="editarDisciplinaNome"
+                        maxlength="100"
+                        required>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="editarDisciplinaCargaHoraria">
+                    Carga horária
+                </label>
+
+                <input
+                        type="number"
+                        id="editarDisciplinaCargaHoraria"
+                        min="1"
+                        required>
+
+            </div>
+
+
+            <p
+                    id="mensagemEditarDisciplina"
+                    class="mensagem-formulario">
+            </p>
+
+
+            <button
+                    type="submit"
+                    class="botao-primario botao-salvar">
+
+                Salvar alterações
+
+            </button>
+
+        </form>
 
     </div>
-
-
-    <form id="formEditarDisciplina">
-
-      <input
-              type="hidden"
-              id="editarDisciplinaId">
-
-
-      <div class="campo-formulario">
-
-        <label for="editarDisciplinaNome">
-          Nome
-        </label>
-
-        <input
-                type="text"
-                id="editarDisciplinaNome"
-                maxlength="100"
-                required>
-
-      </div>
-
-
-      <div class="campo-formulario">
-
-        <label for="editarDisciplinaCargaHoraria">
-          Carga horária
-        </label>
-
-        <input
-                type="number"
-                id="editarDisciplinaCargaHoraria"
-                min="1"
-                required>
-
-      </div>
-
-
-      <p
-              id="mensagemEditarDisciplina"
-              class="mensagem-formulario">
-      </p>
-
-
-      <button
-              type="submit"
-              class="botao-primario botao-salvar">
-
-        Salvar alterações
-
-      </button>
-
-    </form>
-
-  </div>
 
 </div>
 
@@ -1899,100 +2382,100 @@
         id="modalVinculo"
         class="modal">
 
-  <div class="modal-conteudo">
+    <div class="modal-conteudo">
 
-    <div class="modal-cabecalho">
+        <div class="modal-cabecalho">
 
-      <h3>
-        Novo vínculo acadêmico
-      </h3>
+            <h3>
+                Novo vínculo acadêmico
+            </h3>
 
-      <button
-              id="botaoFecharVinculo"
-              class="botao-fechar"
-              type="button">
-        ×
-      </button>
+            <button
+                    id="botaoFecharVinculo"
+                    class="botao-fechar"
+                    type="button">
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="formVinculo">
+
+            <div class="campo-formulario">
+
+                <label for="vinculoTurma">
+                    Turma
+                </label>
+
+                <select
+                        id="vinculoTurma"
+                        required>
+
+                    <option value="">
+                        Selecione a turma
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="vinculoDisciplina">
+                    Disciplina
+                </label>
+
+                <select
+                        id="vinculoDisciplina"
+                        required>
+
+                    <option value="">
+                        Selecione a disciplina
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="vinculoProfessor">
+                    Professor responsável
+                </label>
+
+                <select
+                        id="vinculoProfessor"
+                        required>
+
+                    <option value="">
+                        Selecione o professor
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <p
+                    id="mensagemVinculo"
+                    class="mensagem-formulario">
+            </p>
+
+
+            <button
+                    type="submit"
+                    class="botao-primario botao-salvar">
+
+                Criar vínculo
+
+            </button>
+
+        </form>
 
     </div>
-
-
-    <form id="formVinculo">
-
-      <div class="campo-formulario">
-
-        <label for="vinculoTurma">
-          Turma
-        </label>
-
-        <select
-                id="vinculoTurma"
-                required>
-
-          <option value="">
-            Selecione a turma
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <div class="campo-formulario">
-
-        <label for="vinculoDisciplina">
-          Disciplina
-        </label>
-
-        <select
-                id="vinculoDisciplina"
-                required>
-
-          <option value="">
-            Selecione a disciplina
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <div class="campo-formulario">
-
-        <label for="vinculoProfessor">
-          Professor responsável
-        </label>
-
-        <select
-                id="vinculoProfessor"
-                required>
-
-          <option value="">
-            Selecione o professor
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <p
-              id="mensagemVinculo"
-              class="mensagem-formulario">
-      </p>
-
-
-      <button
-              type="submit"
-              class="botao-primario botao-salvar">
-
-        Criar vínculo
-
-      </button>
-
-    </form>
-
-  </div>
 
 </div>
 
@@ -2005,95 +2488,95 @@
         id="modalTrocarProfessor"
         class="modal">
 
-  <div class="modal-conteudo">
+    <div class="modal-conteudo">
 
-    <div class="modal-cabecalho">
+        <div class="modal-cabecalho">
 
-      <h3>
-        Trocar professor responsável
-      </h3>
+            <h3>
+                Trocar professor responsável
+            </h3>
 
-      <button
-              id="botaoFecharTrocarProfessor"
-              class="botao-fechar"
-              type="button">
-        ×
-      </button>
+            <button
+                    id="botaoFecharTrocarProfessor"
+                    class="botao-fechar"
+                    type="button">
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="formTrocarProfessor">
+
+            <input
+                    type="hidden"
+                    id="trocarProfessorVinculoId">
+
+
+            <div class="campo-formulario">
+
+                <label for="trocarProfessorTurmaDisciplina">
+                    Turma / Disciplina
+                </label>
+
+                <input
+                        type="text"
+                        id="trocarProfessorTurmaDisciplina"
+                        disabled>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="trocarProfessorAtual">
+                    Professor atual
+                </label>
+
+                <input
+                        type="text"
+                        id="trocarProfessorAtual"
+                        disabled>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="trocarProfessorNovo">
+                    Novo professor
+                </label>
+
+                <select
+                        id="trocarProfessorNovo"
+                        required>
+
+                    <option value="">
+                        Selecione o novo professor
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <p
+                    id="mensagemTrocarProfessor"
+                    class="mensagem-formulario">
+            </p>
+
+
+            <button
+                    type="submit"
+                    class="botao-primario botao-salvar">
+
+                Salvar alteração
+
+            </button>
+
+        </form>
 
     </div>
-
-
-    <form id="formTrocarProfessor">
-
-      <input
-              type="hidden"
-              id="trocarProfessorVinculoId">
-
-
-      <div class="campo-formulario">
-
-        <label for="trocarProfessorTurmaDisciplina">
-          Turma / Disciplina
-        </label>
-
-        <input
-                type="text"
-                id="trocarProfessorTurmaDisciplina"
-                disabled>
-
-      </div>
-
-
-      <div class="campo-formulario">
-
-        <label for="trocarProfessorAtual">
-          Professor atual
-        </label>
-
-        <input
-                type="text"
-                id="trocarProfessorAtual"
-                disabled>
-
-      </div>
-
-
-      <div class="campo-formulario">
-
-        <label for="trocarProfessorNovo">
-          Novo professor
-        </label>
-
-        <select
-                id="trocarProfessorNovo"
-                required>
-
-          <option value="">
-            Selecione o novo professor
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <p
-              id="mensagemTrocarProfessor"
-              class="mensagem-formulario">
-      </p>
-
-
-      <button
-              type="submit"
-              class="botao-primario botao-salvar">
-
-        Salvar alteração
-
-      </button>
-
-    </form>
-
-  </div>
 
 </div>
 
@@ -2106,125 +2589,125 @@
         id="modalMatricula"
         class="modal">
 
-  <div class="modal-conteudo">
+    <div class="modal-conteudo">
 
-    <div class="modal-cabecalho">
+        <div class="modal-cabecalho">
 
-      <h3>
-        Nova matrícula
-      </h3>
+            <h3>
+                Nova matrícula
+            </h3>
 
-      <button
-              id="botaoFecharMatricula"
-              class="botao-fechar"
-              type="button">
-        ×
-      </button>
+            <button
+                    id="botaoFecharMatricula"
+                    class="botao-fechar"
+                    type="button">
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="formMatricula">
+
+            <div class="campo-formulario">
+
+                <label for="matriculaAluno">
+                    Aluno
+                </label>
+
+                <select
+                        id="matriculaAluno"
+                        required>
+
+                    <option value="">
+                        Selecione o aluno
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="matriculaTurma">
+                    Turma
+                </label>
+
+                <select
+                        id="matriculaTurma"
+                        required>
+
+                    <option value="">
+                        Selecione a turma
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="grupo-formulario">
+                <label for="matriculaSemestreAluno">
+                    Semestre do curso
+                </label>
+
+                <select id="matriculaSemestreAluno" required>
+                    <option value="">Selecione o semestre</option>
+                    <option value="1">1º semestre</option>
+                    <option value="2">2º semestre</option>
+                    <option value="3">3º semestre</option>
+                    <option value="4">4º semestre</option>
+                </select>
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="matriculaData">
+                    Data da matrícula
+                </label>
+
+                <input
+                        type="date"
+                        id="matriculaData"
+                        required>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="matriculaStatus">
+                    Status
+                </label>
+
+                <input
+                        type="text"
+                        id="matriculaStatus"
+                        maxlength="30"
+                        placeholder="Ex.: ATIVA"
+                        required>
+
+            </div>
+
+
+            <p
+                    id="mensagemMatricula"
+                    class="mensagem-formulario">
+            </p>
+
+
+            <button
+                    type="submit"
+                    class="botao-primario botao-salvar">
+
+                Salvar matrícula
+
+            </button>
+
+        </form>
 
     </div>
-
-
-    <form id="formMatricula">
-
-      <div class="campo-formulario">
-
-        <label for="matriculaAluno">
-          Aluno
-        </label>
-
-        <select
-                id="matriculaAluno"
-                required>
-
-          <option value="">
-            Selecione o aluno
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <div class="campo-formulario">
-
-        <label for="matriculaTurma">
-          Turma
-        </label>
-
-        <select
-                id="matriculaTurma"
-                required>
-
-          <option value="">
-            Selecione a turma
-          </option>
-
-        </select>
-
-      </div>
-
-      <div class="grupo-formulario">
-        <label for="matriculaSemestreAluno">
-          Semestre do curso
-        </label>
-
-        <select id="matriculaSemestreAluno" required>
-          <option value="">Selecione o semestre</option>
-          <option value="1">1º semestre</option>
-          <option value="2">2º semestre</option>
-          <option value="3">3º semestre</option>
-          <option value="4">4º semestre</option>
-        </select>
-      </div>
-
-
-      <div class="campo-formulario">
-
-        <label for="matriculaData">
-          Data da matrícula
-        </label>
-
-        <input
-                type="date"
-                id="matriculaData"
-                required>
-
-      </div>
-
-
-      <div class="campo-formulario">
-
-        <label for="matriculaStatus">
-          Status
-        </label>
-
-        <input
-                type="text"
-                id="matriculaStatus"
-                maxlength="30"
-                placeholder="Ex.: ATIVA"
-                required>
-
-      </div>
-
-
-      <p
-              id="mensagemMatricula"
-              class="mensagem-formulario">
-      </p>
-
-
-      <button
-              type="submit"
-              class="botao-primario botao-salvar">
-
-        Salvar matrícula
-
-      </button>
-
-    </form>
-
-  </div>
 
 </div>
 
@@ -2237,119 +2720,119 @@
         id="modalEditarMatricula"
         class="modal">
 
-  <div class="modal-conteudo">
+    <div class="modal-conteudo">
 
-    <div class="modal-cabecalho">
+        <div class="modal-cabecalho">
 
-      <h3>
-        Editar matrícula
-      </h3>
+            <h3>
+                Editar matrícula
+            </h3>
 
-      <button
-              id="botaoFecharEditarMatricula"
-              class="botao-fechar"
-              type="button">
-        ×
-      </button>
+            <button
+                    id="botaoFecharEditarMatricula"
+                    class="botao-fechar"
+                    type="button">
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="formEditarMatricula">
+
+            <input
+                    type="hidden"
+                    id="editarMatriculaId">
+
+
+            <div class="campo-formulario">
+
+                <label for="editarMatriculaAluno">
+                    Aluno
+                </label>
+
+                <input
+                        type="text"
+                        id="editarMatriculaAluno"
+                        disabled>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="editarMatriculaTurma">
+                    Turma
+                </label>
+
+                <input
+                        type="text"
+                        id="editarMatriculaTurma"
+                        disabled>
+
+            </div>
+
+            <div class="grupo-formulario">
+                <label for="editarMatriculaSemestreAluno">
+                    Semestre do curso
+                </label>
+
+                <select id="editarMatriculaSemestreAluno" required>
+                    <option value="">Selecione o semestre</option>
+                    <option value="1">1º semestre</option>
+                    <option value="2">2º semestre</option>
+                    <option value="3">3º semestre</option>
+                    <option value="4">4º semestre</option>
+                </select>
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="editarMatriculaData">
+                    Data da matrícula
+                </label>
+
+                <input
+                        type="date"
+                        id="editarMatriculaData"
+                        required>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="editarMatriculaStatus">
+                    Status
+                </label>
+
+                <input
+                        type="text"
+                        id="editarMatriculaStatus"
+                        maxlength="30"
+                        required>
+
+            </div>
+
+
+            <p
+                    id="mensagemEditarMatricula"
+                    class="mensagem-formulario">
+            </p>
+
+
+            <button
+                    type="submit"
+                    class="botao-primario botao-salvar">
+
+                Salvar alterações
+
+            </button>
+
+        </form>
 
     </div>
-
-
-    <form id="formEditarMatricula">
-
-      <input
-              type="hidden"
-              id="editarMatriculaId">
-
-
-      <div class="campo-formulario">
-
-        <label for="editarMatriculaAluno">
-          Aluno
-        </label>
-
-        <input
-                type="text"
-                id="editarMatriculaAluno"
-                disabled>
-
-      </div>
-
-
-      <div class="campo-formulario">
-
-        <label for="editarMatriculaTurma">
-          Turma
-        </label>
-
-        <input
-                type="text"
-                id="editarMatriculaTurma"
-                disabled>
-
-      </div>
-
-      <div class="grupo-formulario">
-        <label for="editarMatriculaSemestreAluno">
-          Semestre do curso
-        </label>
-
-        <select id="editarMatriculaSemestreAluno" required>
-          <option value="">Selecione o semestre</option>
-          <option value="1">1º semestre</option>
-          <option value="2">2º semestre</option>
-          <option value="3">3º semestre</option>
-          <option value="4">4º semestre</option>
-        </select>
-      </div>
-
-
-      <div class="campo-formulario">
-
-        <label for="editarMatriculaData">
-          Data da matrícula
-        </label>
-
-        <input
-                type="date"
-                id="editarMatriculaData"
-                required>
-
-      </div>
-
-
-      <div class="campo-formulario">
-
-        <label for="editarMatriculaStatus">
-          Status
-        </label>
-
-        <input
-                type="text"
-                id="editarMatriculaStatus"
-                maxlength="30"
-                required>
-
-      </div>
-
-
-      <p
-              id="mensagemEditarMatricula"
-              class="mensagem-formulario">
-      </p>
-
-
-      <button
-              type="submit"
-              class="botao-primario botao-salvar">
-
-        Salvar alterações
-
-      </button>
-
-    </form>
-
-  </div>
 
 </div>
 
@@ -2361,119 +2844,119 @@
         id="modalAvi"
         class="modal">
 
-  <div class="modal-conteudo">
+    <div class="modal-conteudo">
 
-    <div class="modal-cabecalho">
+        <div class="modal-cabecalho">
 
-      <h3>
-        Lançar AVI integrada
-      </h3>
+            <h3>
+                Lançar AVI integrada
+            </h3>
 
-      <button
-              id="botaoFecharAvi"
-              class="botao-fechar"
-              type="button">
-        ×
-      </button>
+            <button
+                    id="botaoFecharAvi"
+                    class="botao-fechar"
+                    type="button">
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="formAvi">
+
+            <div class="campo-formulario">
+
+                <label for="aviMatricula">
+                    Matrícula
+                </label>
+
+                <input
+                        type="text"
+                        id="aviMatricula"
+                        placeholder="Digite a matrícula do aluno"
+                        autocomplete="off"
+                        required>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="aviAlunoNome">
+                    Aluno
+                </label>
+
+                <input
+                        type="text"
+                        id="aviAlunoNome"
+                        disabled>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="aviTurmaNome">
+                    Turma
+                </label>
+
+                <input
+                        type="text"
+                        id="aviTurmaNome"
+                        disabled>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="aviValor">
+                    Nota AVI
+                </label>
+
+                <input
+                        type="number"
+                        id="aviValor"
+                        min="0"
+                        max="10"
+                        step="0.01"
+                        placeholder="Ex.: 8.50"
+                        required>
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="aviData">
+                    Data da avaliação
+                </label>
+
+                <input
+                        type="date"
+                        id="aviData"
+                        required>
+
+            </div>
+
+
+            <p
+                    id="mensagemAvi"
+                    class="mensagem-formulario">
+            </p>
+
+
+            <button
+                    type="submit"
+                    class="botao-primario botao-salvar">
+
+                Lançar AVI
+
+            </button>
+
+        </form>
 
     </div>
-
-
-    <form id="formAvi">
-
-      <div class="campo-formulario">
-
-        <label for="aviMatricula">
-          Matrícula
-        </label>
-
-        <input
-                type="text"
-                id="aviMatricula"
-                placeholder="Digite a matrícula do aluno"
-                autocomplete="off"
-                required>
-
-      </div>
-
-
-      <div class="campo-formulario">
-
-        <label for="aviAlunoNome">
-          Aluno
-        </label>
-
-        <input
-                type="text"
-                id="aviAlunoNome"
-                disabled>
-
-      </div>
-
-
-      <div class="campo-formulario">
-
-        <label for="aviTurmaNome">
-          Turma
-        </label>
-
-        <input
-                type="text"
-                id="aviTurmaNome"
-                disabled>
-
-      </div>
-
-
-      <div class="campo-formulario">
-
-        <label for="aviValor">
-          Nota AVI
-        </label>
-
-        <input
-                type="number"
-                id="aviValor"
-                min="0"
-                max="10"
-                step="0.01"
-                placeholder="Ex.: 8.50"
-                required>
-
-      </div>
-
-
-      <div class="campo-formulario">
-
-        <label for="aviData">
-          Data da avaliação
-        </label>
-
-        <input
-                type="date"
-                id="aviData"
-                required>
-
-      </div>
-
-
-      <p
-              id="mensagemAvi"
-              class="mensagem-formulario">
-      </p>
-
-
-      <button
-              type="submit"
-              class="botao-primario botao-salvar">
-
-        Lançar AVI
-
-      </button>
-
-    </form>
-
-  </div>
 
 </div>
 

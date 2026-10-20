@@ -51,9 +51,6 @@ public class FaltaService {
         this.auditoriaService = auditoriaService;
     }
 
-    // =========================
-    // CADASTRAR FALTA
-    // =========================
 
     @Transactional
     public Falta salvar(
@@ -123,6 +120,8 @@ public class FaltaService {
                                 )
                         );
 
+        validarMatriculaAtiva(matricula);
+
         validarMesmaTurma(
                 matricula,
                 turmaDisciplina
@@ -162,9 +161,6 @@ public class FaltaService {
         return faltaSalva;
     }
 
-    // =========================
-    // ATUALIZAR FALTA
-    // =========================
 
     @Transactional
     public Falta atualizar(
@@ -182,8 +178,8 @@ public class FaltaService {
                                 )
                         );
 
-        // IMPORTANTE:
-        // autorização antes de qualquer alteração
+        validarMatriculaAtiva(falta.getMatricula());
+
         validarProfessorResponsavel(
                 falta.getTurmaDisciplina(),
                 emailUsuario
@@ -249,10 +245,6 @@ public class FaltaService {
         return faltaAtualizada;
     }
 
-    // =========================
-    // LISTAR TODAS AS FALTAS
-    // ADMIN
-    // =========================
 
     public List<FaltaAdminDTO> listar() {
 
@@ -317,9 +309,6 @@ public class FaltaService {
         return faltasDTO;
     }
 
-    // =========================
-    // BUSCAR FALTA POR ID
-    // =========================
 
     public Optional<Falta> buscarPorId(
             Integer id) {
@@ -329,10 +318,6 @@ public class FaltaService {
         );
     }
 
-    // =========================
-    // LISTAR MINHAS FALTAS
-    // ALUNO
-    // =========================
 
     public List<FaltaAlunoDTO> listarMinhasFaltas(
             String email) {
@@ -388,10 +373,6 @@ public class FaltaService {
         return faltasDTO;
     }
 
-    // =========================
-    // LISTAR FALTAS DAS MINHAS TURMAS
-    // PROFESSOR
-    // =========================
 
     public List<FaltaProfessorDTO> listarFaltasDasMinhasTurmas(
             String email) {
@@ -454,9 +435,15 @@ public class FaltaService {
         return faltasDTO;
     }
 
-    // =========================
-    // VALIDAR MESMA TURMA
-    // =========================
+
+    private void validarMatriculaAtiva(Matricula matricula) {
+        if (matricula.getStatus() == null || !"ATIVA".equalsIgnoreCase(matricula.getStatus().trim())) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "A matrícula precisa estar ATIVA para realizar esta operação"
+            );
+        }
+    }
 
     private void validarMesmaTurma(
             Matricula matricula,
@@ -483,9 +470,6 @@ public class FaltaService {
         }
     }
 
-    // =========================
-    // VALIDAR PROFESSOR / ADMIN
-    // =========================
 
     private void validarProfessorResponsavel(
             TurmaDisciplina turmaDisciplina,
@@ -515,13 +499,10 @@ public class FaltaService {
                                         .equals("ROLE_ADMINISTRADOR")
                         );
 
-        // Administrador pode realizar a operação
         if (administrador) {
             return;
         }
 
-        // Se não é administrador, obrigatoriamente
-        // precisa existir como professor.
         Professor professorAutenticado =
                 professorRepository
                         .findByUsuario_Email(emailUsuario)

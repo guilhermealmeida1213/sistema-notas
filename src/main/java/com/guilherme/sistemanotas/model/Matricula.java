@@ -17,23 +17,17 @@ public class Matricula {
     private Integer idMatricula;
 
     @ManyToOne
-    @JoinColumn(
-            name = "aluno_id_aluno",
-            nullable = false
-    )
+    @JoinColumn(name = "aluno_id_aluno", nullable = false)
     private Aluno aluno;
 
     @ManyToOne
-    @JoinColumn(
-            name = "turma_id_turma",
-            nullable = false
-    )
+    @JoinColumn(name = "turma_id_turma", nullable = false)
     private Turma turma;
 
     @Column(name = "data_matricula", nullable = false)
     private LocalDate dataMatricula;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private String status;
 
     @NotNull(message = "Semestre do aluno é obrigatório")
@@ -45,51 +39,16 @@ public class Matricula {
     public Matricula() {
     }
 
-    public Integer getIdMatricula() {
-        return idMatricula;
-    }
-
-    public void setIdMatricula(Integer idMatricula) {
-        this.idMatricula = idMatricula;
-    }
-
-    public Aluno getAluno() {
-        return aluno;
-    }
-
-    public void setAluno(Aluno aluno) {
-        this.aluno = aluno;
-    }
-
-    public Turma getTurma() {
-        return turma;
-    }
-
-    public void setTurma(Turma turma) {
-        this.turma = turma;
-    }
-
-    public LocalDate getDataMatricula() {
-        return dataMatricula;
-    }
-
-    public void setDataMatricula(LocalDate dataMatricula) {
-        this.dataMatricula = dataMatricula;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Integer getSemestreAluno() {
-        return semestreAluno;
-    }
-
-    public void setSemestreAluno(Integer semestreAluno) {
-        this.semestreAluno = semestreAluno;
-    }
+    public Integer getIdMatricula() { return idMatricula; }
+    public void setIdMatricula(Integer idMatricula) { this.idMatricula = idMatricula; }
+    public Aluno getAluno() { return aluno; }
+    public void setAluno(Aluno aluno) { this.aluno = aluno; }
+    public Turma getTurma() { return turma; }
+    public void setTurma(Turma turma) { this.turma = turma; }
+    public LocalDate getDataMatricula() { return dataMatricula; }
+    public void setDataMatricula(LocalDate dataMatricula) { this.dataMatricula = dataMatricula; }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+    public Integer getSemestreAluno() { return semestreAluno; }
+    public void setSemestreAluno(Integer semestreAluno) { this.semestreAluno = semestreAluno; }
 }

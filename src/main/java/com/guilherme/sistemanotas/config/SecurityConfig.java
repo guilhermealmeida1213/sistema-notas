@@ -34,9 +34,6 @@ public class SecurityConfig {
                                 )
                         )
 
-                        // =========================
-                        // ERROS DE SEGURANÇA
-                        // =========================
                         .exceptionHandling(exception -> exception
 
                                 .authenticationEntryPoint(
@@ -62,19 +59,12 @@ public class SecurityConfig {
 
                         .authorizeHttpRequests(auth -> auth
 
-                                // =========================
-                                // SWAGGER / OPENAPI
-                                // =========================
                                 .requestMatchers(
                                         "/swagger-ui/**",
                                         "/swagger-ui.html",
                                         "/v3/api-docs/**"
                                 ).permitAll()
 
-
-                                // =========================
-                                // FRONTEND PÚBLICO
-                                // =========================
                                 .requestMatchers(
                                         HttpMethod.GET,
                                         "/",
@@ -93,27 +83,27 @@ public class SecurityConfig {
                                         "/js/**"
                                 ).permitAll()
 
-
-                                // =========================
-                                // ERROS
-                                // =========================
                                 .requestMatchers(
                                         "/error"
                                 ).permitAll()
 
-
-                                // =========================
-                                // LOGIN API
-                                // =========================
                                 .requestMatchers(
                                         HttpMethod.POST,
                                         "/usuarios/login"
                                 ).permitAll()
 
+                                .requestMatchers(
+                                        HttpMethod.POST,
+                                        "/senha/esqueci",
+                                        "/senha/redefinir"
+                                ).permitAll()
 
-                                // =========================
-                                // USUÁRIOS
-                                // =========================
+                                .requestMatchers(
+                                        HttpMethod.GET,
+                                        "/esqueci-senha.html",
+                                        "/redefinir-senha.html"
+                                ).permitAll()
+
                                 .requestMatchers(
                                         HttpMethod.POST,
                                         "/usuarios"
@@ -134,10 +124,6 @@ public class SecurityConfig {
                                         "/usuarios/**"
                                 ).hasRole("ADMINISTRADOR")
 
-
-                                // =========================
-                                // ALUNOS
-                                // =========================
                                 .requestMatchers(
                                         HttpMethod.POST,
                                         "/alunos"
@@ -148,10 +134,11 @@ public class SecurityConfig {
                                         "/alunos/**"
                                 ).hasRole("ADMINISTRADOR")
 
+                                .requestMatchers(
+                                        HttpMethod.DELETE,
+                                        "/alunos/**"
+                                ).hasRole("ADMINISTRADOR")
 
-                                // =========================
-                                // PROFESSORES
-                                // =========================
                                 .requestMatchers(
                                         HttpMethod.POST,
                                         "/professores"
@@ -172,10 +159,6 @@ public class SecurityConfig {
                                         "/professores/**"
                                 ).hasRole("ADMINISTRADOR")
 
-
-                                // =========================
-                                // DISCIPLINAS
-                                // =========================
                                 .requestMatchers(
                                         HttpMethod.POST,
                                         "/disciplinas"
@@ -200,10 +183,6 @@ public class SecurityConfig {
                                         "ADMINISTRADOR"
                                 )
 
-
-                                // =========================
-                                // TURMAS
-                                // =========================
                                 .requestMatchers(
                                         HttpMethod.POST,
                                         "/turmas"
@@ -228,10 +207,6 @@ public class SecurityConfig {
                                         "ADMINISTRADOR"
                                 )
 
-
-                                // =========================
-                                // TURMA + DISCIPLINA
-                                // =========================
                                 .requestMatchers(
                                         HttpMethod.GET,
                                         "/turmas-disciplinas/minhas"
@@ -257,10 +232,6 @@ public class SecurityConfig {
                                         "/turmas-disciplinas/**"
                                 ).hasRole("ADMINISTRADOR")
 
-
-                                // =========================
-                                // MATRÍCULAS
-                                // =========================
                                 .requestMatchers(
                                         HttpMethod.GET,
                                         "/matriculas/minhas"
@@ -291,10 +262,6 @@ public class SecurityConfig {
                                         "/matriculas/**"
                                 ).hasRole("ADMINISTRADOR")
 
-
-                                // =========================
-                                // NOTAS
-                                // =========================
                                 .requestMatchers(
                                         HttpMethod.GET,
                                         "/notas/minhas"
@@ -351,10 +318,6 @@ public class SecurityConfig {
                                         "/notas/id/**"
                                 ).hasRole("ADMINISTRADOR")
 
-
-                                // =========================
-                                // FALTAS
-                                // =========================
                                 .requestMatchers(
                                         HttpMethod.GET,
                                         "/faltas/minhas"
@@ -391,28 +354,16 @@ public class SecurityConfig {
                                         "/faltas/id/**"
                                 ).hasRole("ADMINISTRADOR")
 
-
-                                // =========================
-                                // ASSISTENTE
-                                // =========================
                                 .requestMatchers(
                                         HttpMethod.POST,
                                         "/assistente/perguntar"
                                 ).hasRole("ALUNO")
 
-
-                                // =========================
-                                // AUDITORIA
-                                // =========================
                                 .requestMatchers(
                                         HttpMethod.GET,
                                         "/auditorias"
                                 ).hasRole("ADMINISTRADOR")
 
-
-                                // =========================
-                                // REGRA FINAL
-                                // =========================
                                 .anyRequest().authenticated()
                         )
 
@@ -424,11 +375,6 @@ public class SecurityConfig {
                 return http.build();
         }
 
-
-        // =========================
-        // RESPOSTA PADRONIZADA
-        // 401 / 403
-        // =========================
         private void escreverErroSeguranca(
                 HttpServletResponse response,
                 int status,

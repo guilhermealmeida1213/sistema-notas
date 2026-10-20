@@ -1,20 +1,35 @@
 package com.guilherme.sistemanotas.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
-public class OllamaService {
+public class NvidiaAiService {
 
     private final RestClient restClient;
 
-    public OllamaService() {
+    public NvidiaAiService(
+            @Value("${nvidia.api.key}") String apiKey) {
 
         this.restClient =
                 RestClient.builder()
-                        .baseUrl("http://localhost:11434")
+                        .baseUrl("https://integrate.api.nvidia.com/v1")
+                        .defaultHeader(
+                                "Authorization",
+                                "Bearer " + apiKey
+                        )
+                        .defaultHeader(
+                                "Content-Type",
+                                "application/json"
+                        )
+                        .defaultHeader(
+                                "Accept",
+                                "application/json"
+                        )
                         .build();
     }
 
@@ -88,7 +103,7 @@ public class OllamaService {
                 - Para perguntas sobre aprovação, reprovação ou risco,
                   utilize a situação geral calculada pelo sistema.
                 - Diferencie reprovação por nota de reprovação por frequência.
-                
+
                 ORIENTAÇÃO ACADÊMICA:
                 - Quando o aluno perguntar o que deve priorizar, onde deve focar,
                   como melhorar ou o que precisa de mais atenção, priorize primeiro
@@ -112,7 +127,7 @@ public class OllamaService {
                   é um problema.
                 - Não invente conteúdos específicos da disciplina.
                 - Sugestões de estudo devem ser gerais e baseadas nos dados disponíveis.
-                
+
                 RESPOSTA:
                 - Responda sempre em português do Brasil.
                 - Seja claro, curto e objetivo.
@@ -139,15 +154,24 @@ public class OllamaService {
 
         Map<String, Object> corpo =
                 Map.of(
-                        "model", "qwen3:1.7b",
-                        "prompt", prompt,
-                        "stream", false
+                        "model", "openai/gpt-oss-20b",
+                        "messages", List.of(
+                                Map.of(
+                                        "role", "user",
+                                        "content", prompt
+                                )
+                        ),
+                        "temperature", 0.2,
+                        "top_p", 0.7,
+                        "max_tokens", 1024,
+                        "stream", false,
+                        "reasoning_effort", "low"
                 );
 
         Map resposta =
                 restClient
                         .post()
-                        .uri("/api/generate")
+                        .uri("/chat/completions")
                         .body(corpo)
                         .retrieve()
                         .body(Map.class);
@@ -155,30 +179,57 @@ public class OllamaService {
         if (resposta == null) {
 
             throw new RuntimeException(
-                    "O Ollama não retornou uma resposta"
+                    "A NVIDIA não retornou uma resposta"
             );
         }
 
-        Object respostaGerada =
-                resposta.get("response");
+        Object choicesObject =
+                resposta.get("choices");
 
-        if (respostaGerada == null) {
+        if (!(choicesObject instanceof List<?> choices)
+                || choices.isEmpty()) {
 
             throw new RuntimeException(
-                    "Resposta do Ollama em formato inesperado"
+                    "Resposta da NVIDIA em formato inesperado"
+            );
+        }
+
+        Object primeiroChoice =
+                choices.get(0);
+
+        if (!(primeiroChoice instanceof Map<?, ?> choice)) {
+
+            throw new RuntimeException(
+                    "Resposta da NVIDIA em formato inesperado"
+            );
+        }
+
+        Object messageObject =
+                choice.get("message");
+
+        if (!(messageObject instanceof Map<?, ?> message)) {
+
+            throw new RuntimeException(
+                    "Mensagem da NVIDIA em formato inesperado"
+            );
+        }
+
+        Object content =
+                message.get("content");
+
+        if (content == null) {
+
+            throw new RuntimeException(
+                    "A NVIDIA não retornou conteúdo"
             );
         }
 
         return limparResposta(
-                respostaGerada
+                content
                         .toString()
                         .trim()
         );
     }
-
-    // =========================
-    // LIMPAR RESPOSTA
-    // =========================
 
     private String limparResposta(
             String resposta) {

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Acadêmico | Redefinir senha</title>
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+<main class="login-container">
+    <section class="login-card">
+        <div class="login-header">
+            <h1>Nova senha</h1>
+            <p>Crie uma nova senha com pelo menos 8 caracteres.</p>
+        </div>
+        <form id="redefinirForm">
+            <div class="campo">
+                <label for="novaSenha">Nova senha</label>
+                <input type="password" id="novaSenha" autocomplete="new-password" minlength="8" maxlength="72" required>
+            </div>
+            <div class="campo">
+                <label for="confirmarSenha">Confirmar nova senha</label>
+                <input type="password" id="confirmarSenha" autocomplete="new-password" minlength="8" maxlength="72" required>
+            </div>
+            <p id="mensagem" class="mensagem-erro"></p>
+            <button type="submit" id="botaoSalvar">Salvar nova senha</button>
+        </form>
+        <a class="link-secundario" href="/login.html">Voltar para o login</a>
+    </section>
+</main>
+<script src="/js/redefinir-senha.js"></script>
+</body>
+</html>

@@ -894,3 +894,88 @@ td {
         padding: 16px;
     }
 }
+/* =========================
+   ACABAMENTO VISUAL FINAL
+   ========================= */
+
+body {
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    line-height: 1.5;
+}
+
+.sidebar {
+    background: linear-gradient(180deg, #111827 0%, #172033 100%);
+    padding-top: 30px;
+}
+
+.logo h2 {
+    letter-spacing: -0.3px;
+}
+
+.menu-item,
+.botao-sair,
+.botao-primario,
+.botao-secundario,
+.botao-editar {
+    transition: background-color .18s ease, border-color .18s ease, transform .18s ease, box-shadow .18s ease;
+}
+
+.menu-item.ativo {
+    box-shadow: 0 5px 14px rgba(37, 99, 235, .22);
+}
+
+.menu-item:hover,
+.botao-sair:hover,
+.botao-primario:hover,
+.botao-secundario:hover,
+.botao-editar:hover {
+    transform: translateY(-1px);
+}
+
+.conteudo {
+    padding-top: 36px;
+}
+
+.topo h1 {
+    letter-spacing: -0.6px;
+}
+
+.usuario {
+    border: 1px solid #e5e7eb;
+}
+
+.card,
+.painel {
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, .055);
+}
+
+.card strong {
+    color: #111827;
+    letter-spacing: -0.5px;
+}
+
+.cabecalho-secao .botao-primario {
+    box-shadow: 0 6px 14px rgba(37, 99, 235, .18);
+}
+
+.cabecalho-secao .botao-primario::first-letter {
+    font-weight: 900;
+}
+
+.painel,
+.card {
+    transition: box-shadow .18s ease, border-color .18s ease;
+}
+
+.painel:hover,
+.card:hover {
+    border-color: #dbe3f0;
+    box-shadow: 0 10px 28px rgba(15, 23, 42, .07);
+}
+
+@media (max-width: 650px) {
+    .conteudo {
+        padding-top: 24px;
+    }
+}

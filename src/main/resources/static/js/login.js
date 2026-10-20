@@ -77,6 +77,11 @@ loginForm.addEventListener(
             );
 
             localStorage.setItem(
+                "idUsuario",
+                dados.idUsuario
+            );
+
+            localStorage.setItem(
                 "perfil",
                 dados.perfil
             );

@@ -1082,13 +1082,13 @@ public class DemoDataInitializer implements CommandLineRunner {
          */
 
         double valorSeguro =
-            Math.max(
-                0.0,
-                Math.min(
-                        10.0,
-                        valor
-                )
-            );
+                Math.max(
+                        0.0,
+                        Math.min(
+                                10.0,
+                                valor
+                        )
+                );
 
         return BigDecimal
                 .valueOf(valorSeguro)

@@ -96,24 +96,14 @@ public class UsuarioController {
                 .build();
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluir(
-            @PathVariable Integer id,
-            Authentication authentication) {
+    @PutMapping("/{id}/desativar")
+    public ResponseEntity<Usuario> desativar(@PathVariable Integer id, Authentication authentication) {
+        return usuarioService.desativar(id, authentication.getName()).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
-        if (usuarioService.excluir(
-                id,
-                authentication.getName()
-        )) {
-
-            return ResponseEntity
-                    .noContent()
-                    .build();
-        }
-
-        return ResponseEntity
-                .notFound()
-                .build();
+    @PutMapping("/{id}/reativar")
+    public ResponseEntity<Usuario> reativar(@PathVariable Integer id, Authentication authentication) {
+        return usuarioService.reativar(id, authentication.getName()).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping("/login")

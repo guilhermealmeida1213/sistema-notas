@@ -11,14 +11,14 @@ import java.util.List;
 public class AssistenteService {
 
     private final NotaService notaService;
-    private final OllamaService ollamaService;
+    private final NvidiaAiService nvidiaAiService;
 
     public AssistenteService(
             NotaService notaService,
-            OllamaService ollamaService) {
+            NvidiaAiService nvidiaAiService) {
 
         this.notaService = notaService;
-        this.ollamaService = ollamaService;
+        this.nvidiaAiService = nvidiaAiService;
     }
 
     // =========================
@@ -70,7 +70,7 @@ public class AssistenteService {
 
         // ==================================================
         // RESPOSTAS DETERMINÍSTICAS
-        // NÃO PASSAM PELO OLLAMA
+        // NÃO PASSAM PELA NVIDIA
         // ==================================================
 
         if (
@@ -115,7 +115,7 @@ public class AssistenteService {
         try {
 
             resposta =
-                    ollamaService
+                    nvidiaAiService
                             .perguntar(
                                     contexto,
                                     pergunta
@@ -207,6 +207,42 @@ public class AssistenteService {
                 existeProblemaNota &&
                         existeProblemaFrequencia
         ) {
+
+            ResumoDisciplinaDTO prioritario =
+                    encontrarDisciplinaPrioritaria(
+                            resumos
+                    );
+
+            if (prioritario != null) {
+
+                String resposta =
+                        "A disciplina que mais precisa de atenção é "
+                                + prioritario.getDisciplina()
+                                + ", porque sua situação é "
+                                + formatarTexto(
+                                prioritario.getSituacao()
+                        )
+                                + ". Sua média é "
+                                + formatarNota(
+                                prioritario.getMedia()
+                        )
+                                + ".";
+
+                String menorAvaliacao =
+                        identificarMenorAvaliacao(
+                                prioritario
+                        );
+
+                if (menorAvaliacao != null) {
+
+                    resposta +=
+                            " A avaliação com menor desempenho é "
+                                    + menorAvaliacao
+                                    + ".";
+                }
+
+                return resposta;
+            }
 
             return "Seu desempenho precisa de atenção tanto nas notas quanto na frequência.";
         }
