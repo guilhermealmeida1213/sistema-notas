@@ -1,24 +1,16 @@
-# =========================
-# ETAPA 1 - BUILD
-# =========================
-FROM eclipse-temurin:21-jdk AS build
-
+# Etapa 1: Compilação do projeto com Maven e Java 21
+FROM maven:3.9-eclipse-temurin-21-alpine AS build
 WORKDIR /app
-
 COPY . .
+RUN mvn clean package -DskipTests
 
-RUN chmod +x mvnw
-RUN ./mvnw clean package -DskipTests
-
-# =========================
-# ETAPA 2 - EXECUÇÃO
-# =========================
-FROM eclipse-temurin:21-jre
-
+# Etapa 2: Execução com imagem leve do Java 21
+FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 
-COPY --from=build /app/target/sistema-notas-0.0.1-SNAPSHOT.jar app.jar
-
+# Porta padrão de execução
 EXPOSE 8080
 
+# Comando para iniciar a aplicação Spring Boot
 ENTRYPOINT ["java", "-jar", "app.jar"]
