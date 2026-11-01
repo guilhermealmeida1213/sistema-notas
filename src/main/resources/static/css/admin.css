@@ -1457,3 +1457,134 @@ th {
         box-shadow: 0 6px 16px rgba(0, 0, 0, .22);
     }
 }
+
+/* =========================================
+   AJUSTES RESPONSIVOS — PORTAL ADMINISTRATIVO
+   ========================================= */
+
+@media (max-width: 768px) {
+
+    /* Botões de criação com espaçamento adequado */
+    #vinculos .cabecalho-secao > div:last-child {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        width: 100%;
+    }
+
+    #vinculos .cabecalho-secao > div:last-child > button {
+        width: 100%;
+        margin: 0;
+    }
+
+    /* Evita rolagem horizontal duplicada */
+    #listaUsuarios,
+    #listaAlunos,
+    #listaProfessores,
+    #listaTurmas,
+    #listaDisciplinas,
+    #listaVinculos,
+    #listaMatriculas,
+    #listaNotas,
+    #listaFaltas,
+    #listaAuditorias {
+        overflow: visible !important;
+    }
+
+    /* Rolagem fica dentro da tabela */
+    .tabela-container {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        overflow-x: auto !important;
+        overflow-y: hidden;
+        overscroll-behavior-x: contain;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+    }
+
+    .tabela-container table {
+        width: max-content;
+        min-width: 100%;
+        table-layout: auto;
+    }
+
+    /* Evita que as colunas fiquem espremidas */
+    .tabela-container th,
+    .tabela-container td {
+        white-space: nowrap;
+    }
+
+    /* Preserva os botões de ação na mesma linha */
+    .tabela-container td:last-child {
+        min-width: max-content;
+        white-space: nowrap;
+    }
+
+    .tabela-container td:last-child > button {
+        display: inline-flex;
+        width: auto !important;
+        min-width: max-content;
+        max-width: none;
+        margin: 2px 8px 2px 0;
+        white-space: nowrap;
+        vertical-align: middle;
+        flex: 0 0 auto;
+    }
+}
+
+/* Ajustes para celulares menores */
+@media (max-width: 480px) {
+
+    .tabela-container th,
+    .tabela-container td {
+        padding: 10px 8px;
+        font-size: 13px;
+    }
+
+    .tabela-container td:last-child > button {
+        padding: 7px 10px;
+        font-size: 13px;
+    }
+}
+
+/* Histórico de responsáveis por turma e disciplina */
+.historico-professores-vinculo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 220px;
+    overflow-y: auto;
+    padding: 8px;
+    border: 1px solid var(--cor-borda, #d8dee8);
+    border-radius: 10px;
+    background: var(--cor-fundo-secundario, #f8fafc);
+}
+
+.historico-professor-item {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 10px 12px;
+    border: 1px solid var(--cor-borda, #d8dee8);
+    border-radius: 8px;
+    background: var(--cor-card, #ffffff);
+}
+
+.historico-professor-item small {
+    color: var(--cor-texto-secundario, #64748b);
+    line-height: 1.4;
+}
+
+.status-historico-atual {
+    align-self: flex-start;
+    margin-top: 3px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: #dcfce7;
+    color: #166534;
+    font-size: 12px;
+    font-weight: 600;
+}

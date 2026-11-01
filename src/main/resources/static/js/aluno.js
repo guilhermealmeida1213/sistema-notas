@@ -1,5 +1,16 @@
 const token = localStorage.getItem("token");
 const perfil = localStorage.getItem("perfil");
+// Escapa dados externos antes de inseri-los em HTML gerado por JavaScript.
+function escapeHtml(valor) {
+    return String(valor ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
+
+
 
 const menuItens = document.querySelectorAll(".menu-item");
 const secoes = document.querySelectorAll(".secao");
@@ -119,7 +130,8 @@ async function carregarResumo() {
         const resumos =
             await response.json();
 
-        montarResumo(resumos);
+        const ativos = resumos.filter(resumo => String(resumo.statusMatricula ?? "").toUpperCase() === "ATIVA");
+        montarResumo(ativos);
         montarTabelaNotas(resumos);
         montarTabelaFaltas(resumos);
 
@@ -261,6 +273,8 @@ function montarTabelaNotas(resumos) {
             <table>
                 <thead>
                     <tr>
+                        <th>Turma / período</th>
+                        <th>Status da matrícula</th>
                         <th>Disciplina</th>
                         <th>AVC</th>
                         <th>AVG</th>
@@ -277,7 +291,9 @@ function montarTabelaNotas(resumos) {
 
         html += `
             <tr>
-                <td>${resumo.disciplina}</td>
+                <td>${escapeHtml(`${resumo.turma ?? "--"} (${resumo.anoTurma ?? "--"}/${resumo.semestreTurma ?? "--"})`)}</td>
+                <td>${escapeHtml(resumo.statusMatricula ?? "--")}</td>
+                <td>${escapeHtml(resumo.disciplina)}</td>
 
                 <td>
                     ${formatarNota(resumo.avc)}
@@ -296,7 +312,7 @@ function montarTabelaNotas(resumos) {
                 </td>
 
                <td class="${classeSituacao(resumo.situacaoNota)}">
-                ${resumo.situacaoNota}
+                ${escapeHtml(resumo.situacaoNota)}
                </td>
             </tr>
         `;
@@ -332,7 +348,10 @@ function montarTabelaFaltas(resumos) {
             <table>
                 <thead>
                     <tr>
+                        <th>Turma / período</th>
+                        <th>Status da matrícula</th>
                         <th>Disciplina</th>
+                        <th>Aulas previstas</th>
                         <th>Faltas</th>
                         <th>Frequência</th>
                         <th>Situação</th>
@@ -346,18 +365,15 @@ function montarTabelaFaltas(resumos) {
 
         html += `
             <tr>
-                <td>${resumo.disciplina}</td>
-
-                <td>
-                    ${resumo.faltas}
-                </td>
-
-                <td>
-                    ${Number(resumo.frequencia).toFixed(2)}%
-                </td>
+                <td>${escapeHtml(`${resumo.turma ?? "--"} (${resumo.anoTurma ?? "--"}/${resumo.semestreTurma ?? "--"})`)}</td>
+                <td>${escapeHtml(resumo.statusMatricula ?? "--")}</td>
+                <td>${escapeHtml(resumo.disciplina)}</td>
+                <td>${resumo.aulasPrevistas ?? "Não configurado"}</td>
+                <td>${resumo.faltas ?? 0}</td>
+                <td>${resumo.frequencia == null ? "Não configurada" : `${Number(resumo.frequencia).toFixed(2)}%`}</td>
 
                 <td class="${classeSituacao(resumo.situacaoFrequencia)}">
-                    ${resumo.situacaoFrequencia}
+                    ${escapeHtml(resumo.situacaoFrequencia)}
                 </td>
             </tr>
         `;

@@ -3,6 +3,7 @@ package com.guilherme.sistemanotas.controller;
 import com.guilherme.sistemanotas.model.Aluno;
 import com.guilherme.sistemanotas.service.AlunoService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,8 +20,10 @@ public class AlunoController {
     }
 
     @PostMapping
-    public Aluno criar(@RequestBody Aluno aluno) {
-        return alunoService.salvar(aluno);
+    public Aluno criar(
+            @RequestBody Aluno aluno,
+            Authentication authentication) {
+        return alunoService.salvar(aluno, authentication.getName());
     }
 
     @GetMapping
@@ -47,9 +50,10 @@ public class AlunoController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluir(
-            @PathVariable Integer id) {
+            @PathVariable Integer id,
+            Authentication authentication) {
 
-        alunoService.excluir(id);
+        alunoService.excluir(id, authentication.getName());
 
         return ResponseEntity
                 .noContent()

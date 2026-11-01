@@ -4,6 +4,17 @@
 const token = localStorage.getItem("token");
 const perfil = localStorage.getItem("perfil");
 const idUsuarioLogado = Number(localStorage.getItem("idUsuario"));
+// Escapa dados externos antes de inseri-los em HTML gerado por JavaScript.
+function escapeHtml(valor) {
+    return String(valor ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
+
+
 
 if (!token || perfil !== "ADMINISTRADOR") {
     localStorage.clear();
@@ -135,6 +146,7 @@ const formVinculo = document.getElementById("formVinculo");
 const vinculoTurma = document.getElementById("vinculoTurma");
 const vinculoDisciplina = document.getElementById("vinculoDisciplina");
 const vinculoProfessor = document.getElementById("vinculoProfessor");
+const vinculoAulasPrevistas = document.getElementById("vinculoAulasPrevistas");
 const mensagemVinculo = document.getElementById("mensagemVinculo");
 
 // Modais - Trocar Professor
@@ -145,6 +157,8 @@ const trocarProfessorVinculoId = document.getElementById("trocarProfessorVinculo
 const trocarProfessorTurmaDisciplina = document.getElementById("trocarProfessorTurmaDisciplina");
 const trocarProfessorAtual = document.getElementById("trocarProfessorAtual");
 const trocarProfessorNovo = document.getElementById("trocarProfessorNovo");
+const trocarProfessorMotivo = document.getElementById("trocarProfessorMotivo");
+const historicoProfessoresVinculo = document.getElementById("historicoProfessoresVinculo");
 const mensagemTrocarProfessor = document.getElementById("mensagemTrocarProfessor");
 
 // Modais - Matrícula
@@ -302,11 +316,17 @@ function aplicarFiltrosUsuarios() {
 
     const usuariosFiltrados = usuarios.filter(usuario => {
         const nome = (usuario.nome || "").toLowerCase();
-        const email = (usuario.email || "").toLowerCase();
+        const alunoVinculado = alunos.find(
+            aluno => Number(aluno.usuario?.idUsuario) === Number(usuario.idUsuario)
+        );
+        const matricula = String(alunoVinculado?.matricula ?? "").toLowerCase();
+        const buscaMatricula = busca.replace(/\s+/g, "");
         const perfilUsuario = usuario.perfil || "";
         const statusUsuario = usuario.ativo === false ? "INATIVO" : "ATIVO";
 
-        const correspondeBusca = !busca || nome.includes(busca) || email.includes(busca);
+        const correspondeBusca = !busca ||
+            nome.includes(busca) ||
+            matricula.includes(buscaMatricula);
         const correspondePerfil = !perfilFiltro || perfilUsuario === perfilFiltro;
         const correspondeStatus = !status || statusUsuario === status;
 
@@ -356,19 +376,19 @@ function montarTabelaUsuarios(dados) {
         const proprioUsuario = usuario.idUsuario === idUsuarioLogado;
         html += `
             <tr>
-                <td>${usuario.idUsuario ?? "--"}</td>
-                <td>${usuario.nome ?? "--"}</td>
-                <td>${usuario.email ?? "--"}</td>
+                <td>${escapeHtml(usuario.idUsuario ?? "--")}</td>
+                <td>${escapeHtml(usuario.nome ?? "--")}</td>
+                <td>${escapeHtml(usuario.email ?? "--")}</td>
                 <td>${montarBadgePerfil(usuario.perfil)}</td>
                 <td>${usuario.ativo === false ? "Inativo" : "Ativo"}</td>
                 <td>
-                    <button type="button" class="botao-secundario" onclick="abrirModalEditarUsuario(${usuario.idUsuario})">
+                    <button type="button" class="botao-secundario" onclick="abrirModalEditarUsuario(${Number(usuario.idUsuario)})">
                         Editar
                     </button>
                     ${proprioUsuario ? `
                         <span title="Você não pode desativar o usuário da sessão atual">--</span>
                     ` : `
-                        <button type="button" class="${usuario.ativo === false ? "botao-secundario" : "botao-perigo"}" onclick="alterarStatusUsuario(${usuario.idUsuario},${usuario.ativo === false})">
+                        <button type="button" class="${usuario.ativo === false ? "botao-secundario" : "botao-perigo"}" onclick="alterarStatusUsuario(${Number(usuario.idUsuario)},${usuario.ativo === false})">
                             ${usuario.ativo === false ? "Reativar" : "Desativar"}
                         </button>
                     `}
@@ -616,13 +636,13 @@ function montarTabelaProfessores(dados) {
     dados.forEach(professor => {
         html += `
             <tr>
-                <td>${professor.idProfessor ?? "--"}</td>
-                <td>${professor.registro ?? "--"}</td>
-                <td>${professor.usuario?.nome ?? "--"}</td>
-                <td>${professor.usuario?.email ?? "--"}</td>
+                <td>${escapeHtml(professor.idProfessor ?? "--")}</td>
+                <td>${escapeHtml(professor.registro ?? "--")}</td>
+                <td>${escapeHtml(professor.usuario?.nome ?? "--")}</td>
+                <td>${escapeHtml(professor.usuario?.email ?? "--")}</td>
                 <td>
-                    <button type="button" class="botao-secundario" onclick="abrirModalEditarProfessor(${professor.idProfessor})">Editar</button>
-                    <button type="button" class="botao-perigo" onclick="excluirProfessor(${professor.idProfessor})">Excluir</button>
+                    <button type="button" class="botao-secundario" onclick="abrirModalEditarProfessor(${Number(professor.idProfessor)})">Editar</button>
+                    <button type="button" class="botao-perigo" onclick="excluirProfessor(${Number(professor.idProfessor)})">Excluir</button>
                 </td>
             </tr>
         `;
@@ -819,6 +839,8 @@ async function carregarAlunos() {
         }
         alunos = await response.json();
         aplicarFiltroAlunos();
+        // A busca geral de Usuários também usa a matrícula do aluno vinculado.
+        aplicarFiltrosUsuarios();
     } catch (erro) {
         console.error("Erro ao carregar alunos:", erro);
         alunos = [];
@@ -874,12 +896,12 @@ function montarTabelaAlunos(dados) {
     dados.forEach(aluno => {
         html += `
             <tr>
-                <td>${aluno.idAluno}</td>
-                <td>${aluno.matricula}</td>
-                <td>${aluno.usuario?.nome ?? "-"}</td>
-                <td>${aluno.usuario?.email ?? "-"}</td>
+                <td>${escapeHtml(aluno.idAluno)}</td>
+                <td>${escapeHtml(aluno.matricula)}</td>
+                <td>${escapeHtml(aluno.usuario?.nome ?? "-")}</td>
+                <td>${escapeHtml(aluno.usuario?.email ?? "-")}</td>
                 <td>
-                    <button type="button" class="botao-perigo" onclick="excluirAluno(${aluno.idAluno})">Excluir</button>
+                    <button type="button" class="botao-perigo" onclick="excluirAluno(${escapeHtml(aluno.idAluno)})">Excluir</button>
                 </td>
             </tr>
         `;
@@ -963,6 +985,7 @@ if (formAluno) {
             mensagemAluno.className = "mensagem-formulario sucesso";
             mensagemAluno.textContent = "Aluno cadastrado com sucesso!";
             await carregarAlunos();
+            await carregarAuditorias();
             setTimeout(fecharModalAluno, 900);
         } catch (erro) {
             console.error("Erro ao cadastrar aluno:", erro);
@@ -989,8 +1012,9 @@ async function excluirAluno(idAluno) {
             alert(resposta?.erro ?? resposta?.mensagem ?? resposta?.message ?? "Não foi possível excluir o aluno.");
             return;
         }
-        alert("Aluno excluído com sucesso.");
+        alert("Cadastro acadêmico do aluno excluído com sucesso.");
         await carregarAlunos();
+        await carregarAuditorias();
     } catch (erro) {
         console.error("Erro ao excluir aluno:", erro);
         alert("Erro ao conectar com o servidor.");
@@ -1058,13 +1082,13 @@ function montarTabelaTurmas(dados) {
     dados.forEach(turma => {
         html += `
             <tr>
-                <td>${turma.idTurma ?? "--"}</td>
-                <td>${turma.nome ?? "--"}</td>
-                <td>${turma.ano ?? "--"}</td>
-                <td>${turma.semestre ?? "--"}º</td>
+                <td>${escapeHtml(turma.idTurma ?? "--")}</td>
+                <td>${escapeHtml(turma.nome ?? "--")}</td>
+                <td>${escapeHtml(turma.ano ?? "--")}</td>
+                <td>${escapeHtml(turma.semestre ?? "--")}º</td>
                 <td>
-                    <button type="button" class="botao-secundario" onclick="abrirModalEditarTurma(${turma.idTurma})">Editar</button>
-                    <button type="button" class="botao-perigo" onclick="excluirTurma(${turma.idTurma})">Excluir</button>
+                    <button type="button" class="botao-secundario" onclick="abrirModalEditarTurma(${Number(turma.idTurma)})">Editar</button>
+                    <button type="button" class="botao-perigo" onclick="excluirTurma(${Number(turma.idTurma)})">Excluir</button>
                 </td>
             </tr>
         `;
@@ -1266,12 +1290,12 @@ function montarTabelaDisciplinas(dados) {
     dados.forEach(disciplina => {
         html += `
             <tr>
-                <td>${disciplina.idDisciplina ?? "--"}</td>
-                <td>${disciplina.nome ?? "--"}</td>
-                <td>${disciplina.cargaHoraria ?? "--"}h</td>
+                <td>${escapeHtml(disciplina.idDisciplina ?? "--")}</td>
+                <td>${escapeHtml(disciplina.nome ?? "--")}</td>
+                <td>${escapeHtml(disciplina.cargaHoraria ?? "--")}h</td>
                 <td>
-                    <button type="button" class="botao-secundario" onclick="abrirModalEditarDisciplina(${disciplina.idDisciplina})">Editar</button>
-                    <button type="button" class="botao-perigo" onclick="excluirDisciplina(${disciplina.idDisciplina})">Excluir</button>
+                    <button type="button" class="botao-secundario" onclick="abrirModalEditarDisciplina(${Number(disciplina.idDisciplina)})">Editar</button>
+                    <button type="button" class="botao-perigo" onclick="excluirDisciplina(${Number(disciplina.idDisciplina)})">Excluir</button>
                 </td>
             </tr>
         `;
@@ -1520,6 +1544,7 @@ function montarTabelaVinculos(dados) {
                         <th>Disciplina</th>
                         <th>Professor</th>
                         <th>Registro</th>
+                        <th>Aulas previstas</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -1528,16 +1553,18 @@ function montarTabelaVinculos(dados) {
     dados.forEach(vinculo => {
         html += `
             <tr>
-                <td>${vinculo.idTurmaDisciplina ?? "--"}</td>
-                <td>${vinculo.turma?.nome ?? "--"}</td>
-                <td>${vinculo.disciplina?.nome ?? "--"}</td>
-                <td>${vinculo.professor?.usuario?.nome ?? "--"}</td>
-                <td>${vinculo.professor?.registro ?? "--"}</td>
+                <td>${escapeHtml(vinculo.idTurmaDisciplina ?? "--")}</td>
+                <td>${escapeHtml(vinculo.turma?.nome ?? "--")}</td>
+                <td>${escapeHtml(vinculo.disciplina?.nome ?? "--")}</td>
+                <td>${escapeHtml(vinculo.professor?.usuario?.nome ?? "--")}</td>
+                <td>${escapeHtml(vinculo.professor?.registro ?? "--")}</td>
+                <td>${vinculo.aulasPrevistas ?? "Não configurado"}</td>
                 <td>
-                    <button type="button" class="botao-secundario" onclick="abrirModalTrocarProfessor(${vinculo.idTurmaDisciplina})">
-                        Trocar professor
+                    <button type="button" class="botao-secundario" onclick="configurarAulasPrevistas(${Number(vinculo.idTurmaDisciplina)})">Configurar aulas</button>
+                    <button type="button" class="botao-secundario" onclick="abrirModalTrocarProfessor(${Number(vinculo.idTurmaDisciplina)})">
+                        Alterar professor
                     </button>
-                    <button type="button" class="botao-perigo" onclick="excluirVinculo(${vinculo.idTurmaDisciplina})">
+                    <button type="button" class="botao-perigo" onclick="excluirVinculo(${Number(vinculo.idTurmaDisciplina)})">
                         Excluir
                     </button>
                 </td>
@@ -1615,13 +1642,19 @@ if (formVinculo) {
             mensagemVinculo.textContent = "Selecione um professor.";
             return;
         }
+        if (!Number.isInteger(Number(vinculoAulasPrevistas?.value)) || Number(vinculoAulasPrevistas.value) <= 0) {
+            mensagemVinculo.className = "mensagem-formulario erro";
+            mensagemVinculo.textContent = "Informe um número de aulas previstas maior que zero.";
+            return;
+        }
 
         mensagemVinculo.className = "mensagem-formulario";
         mensagemVinculo.textContent = "Criando vínculo...";
         const dados = {
             turma: { idTurma: idTurma },
             disciplina: { idDisciplina: idDisciplina },
-            professor: { idProfessor: idProfessor }
+            professor: { idProfessor: idProfessor },
+            aulasPrevistas: Number(vinculoAulasPrevistas?.value)
         };
 
         try {
@@ -1646,19 +1679,44 @@ if (formVinculo) {
     });
 }
 
-function abrirModalTrocarProfessor(idVinculo) {
-    const vinculo = vinculos.find(item => item.idTurmaDisciplina === idVinculo);
+async function configurarAulasPrevistas(idVinculo) {
+    const vinculo = vinculos.find(item => Number(item.idTurmaDisciplina) === Number(idVinculo));
+    if (!vinculo) { alert("Vínculo acadêmico não encontrado."); return; }
+    const atual = vinculo.aulasPrevistas ?? "";
+    const resposta = window.prompt(`Informe o total de aulas previstas para ${vinculo.disciplina?.nome ?? "a disciplina"} — ${vinculo.turma?.nome ?? "turma"}:`, atual);
+    if (resposta === null) return;
+    const dias = Number(resposta.trim());
+    if (!Number.isInteger(dias) || dias <= 0) { alert("Informe um número inteiro de aulas previstas maior que zero."); return; }
+    try {
+        const response = await requisicaoAutenticada(`/turmas-disciplinas/${idVinculo}/aulas-previstas`, { method: "PUT", body: JSON.stringify({ aulasPrevistas: dias }) });
+        if (!response) return;
+        const respostaApi = await lerJsonSeguro(response);
+        if (!response.ok) { alert(respostaApi?.mensagem ?? "Não foi possível atualizar as aulas previstas."); return; }
+        await carregarVinculos();
+        await carregarAuditorias();
+        alert("Aulas previstas atualizadas. A frequência será recalculada no próximo carregamento do resumo do aluno.");
+    } catch (erro) {
+        console.error("Erro ao atualizar aulas previstas:", erro);
+        alert("Erro ao conectar com o servidor.");
+    }
+}
+
+async function abrirModalTrocarProfessor(idVinculo) {
+    const vinculo = vinculos.find(item => Number(item.idTurmaDisciplina) === Number(idVinculo));
     if (!vinculo) {
         alert("Vínculo não encontrado.");
         return;
     }
+
+    formTrocarProfessor.reset();
     trocarProfessorVinculoId.value = vinculo.idTurmaDisciplina;
     trocarProfessorTurmaDisciplina.value = `${vinculo.turma?.nome ?? "--"} / ${vinculo.disciplina?.nome ?? "--"}`;
     trocarProfessorAtual.value = `${vinculo.professor?.usuario?.nome ?? "--"} - ${vinculo.professor?.registro ?? "--"}`;
     trocarProfessorNovo.innerHTML = `<option value="">Selecione o novo professor</option>`;
 
     professores
-        .filter(professor => professor.idProfessor !== vinculo.professor?.idProfessor)
+        .filter(professor => Number(professor.idProfessor) !== Number(vinculo.professor?.idProfessor))
+        .filter(professor => professor.usuario?.ativo === true)
         .forEach(professor => {
             const option = document.createElement("option");
             option.value = professor.idProfessor;
@@ -1668,7 +1726,54 @@ function abrirModalTrocarProfessor(idVinculo) {
 
     mensagemTrocarProfessor.textContent = "";
     mensagemTrocarProfessor.className = "mensagem-formulario";
+    historicoProfessoresVinculo.textContent = "Carregando histórico...";
     modalTrocarProfessor.classList.add("ativo");
+
+    try {
+        const response = await requisicaoAutenticada(`/turmas-disciplinas/${idVinculo}/historico-professores`);
+        if (!response || !response.ok) {
+            historicoProfessoresVinculo.textContent = "Não foi possível carregar o histórico de responsáveis.";
+            return;
+        }
+        const historico = await lerJsonSeguro(response);
+        renderizarHistoricoProfessoresVinculo(historico ?? []);
+    } catch (erro) {
+        console.error("Erro ao carregar histórico de professores:", erro);
+        historicoProfessoresVinculo.textContent = "Erro ao carregar o histórico.";
+    }
+}
+
+function formatarDataHoraHistorico(valor) {
+    if (!valor) return "Não registrada";
+    const data = new Date(valor);
+    return Number.isNaN(data.getTime()) ? "Não registrada" : data.toLocaleString("pt-BR");
+}
+
+function renderizarHistoricoProfessoresVinculo(historico) {
+    if (!historicoProfessoresVinculo) return;
+    if (!historico.length) {
+        historicoProfessoresVinculo.textContent = "Nenhum histórico de responsável disponível.";
+        return;
+    }
+
+    historicoProfessoresVinculo.innerHTML = historico.map(registro => {
+        const atual = !registro.dataFim;
+        const periodo = registro.inicioNaoRegistrado
+            ? (atual
+                ? "Início não registrado · responsável atual"
+                : `Início não registrado · encerrado em ${formatarDataHoraHistorico(registro.dataFim)}`)
+            : `${formatarDataHoraHistorico(registro.dataInicio)} até ${atual ? "Atual" : formatarDataHoraHistorico(registro.dataFim)}`;
+        return `
+            <div class="historico-professor-item">
+                <strong>${escapeHtml(registro.professor ?? "Professor")}</strong>
+                <span>${escapeHtml(registro.registroProfessor ?? "--")}</span>
+                <small>${escapeHtml(periodo)}</small>
+                <small>Registrado por: ${escapeHtml(registro.registradoPor ?? "Não registrado")}</small>
+                ${registro.motivo ? `<small>Motivo: ${escapeHtml(registro.motivo)}</small>` : ""}
+                ${atual ? `<span class="status-historico-atual">Responsável atual</span>` : ""}
+            </div>
+        `;
+    }).join("");
 }
 
 function fecharModalTrocarProfessor() {
@@ -1697,17 +1802,17 @@ if (formTrocarProfessor) {
         try {
             const response = await requisicaoAutenticada(`/turmas-disciplinas/${idVinculo}/professor`, {
                 method: "PUT",
-                body: JSON.stringify({ idProfessor: idProfessor })
+                body: JSON.stringify({ idProfessor: idProfessor, motivo: trocarProfessorMotivo?.value?.trim() || null })
             });
             if (!response) return;
             const resposta = await lerJsonSeguro(response);
             if (!response.ok) {
                 mensagemTrocarProfessor.className = "mensagem-formulario erro";
-                mensagemTrocarProfessor.textContent = resposta?.mensagem ?? "Não foi possível trocar o professor.";
+                mensagemTrocarProfessor.textContent = resposta?.mensagem ?? "Não foi possível alterar o professor responsável.";
                 return;
             }
             mensagemTrocarProfessor.className = "mensagem-formulario sucesso";
-            mensagemTrocarProfessor.textContent = "Professor alterado com sucesso!";
+            mensagemTrocarProfessor.textContent = "Professor responsável alterado com sucesso. O histórico foi preservado.";
             await carregarVinculos();
             await carregarAuditorias();
             setTimeout(fecharModalTrocarProfessor, 900);
@@ -1852,17 +1957,17 @@ function montarTabelaMatriculas(dados) {
         const semestreAluno = matricula.semestreAluno ?? "--";
         html += `
             <tr>
-                <td>${matricula.idMatricula ?? "--"}</td>
-                <td>${nomeAluno}</td>
-                <td>${numeroMatricula}</td>
-                <td>${nomeTurma}</td>
-                <td>${semestreAluno !== "--" ? semestreAluno + "º" : "--"}</td>
-                <td>${formatarData(matricula.dataMatricula)}</td>
-                <td>${matricula.status ?? "--"}</td>
+                <td>${escapeHtml(matricula.idMatricula ?? "--")}</td>
+                <td>${escapeHtml(nomeAluno)}</td>
+                <td>${escapeHtml(numeroMatricula)}</td>
+                <td>${escapeHtml(nomeTurma)}</td>
+                <td>${escapeHtml(semestreAluno !== "--" ? semestreAluno + "º" : "--")}</td>
+                <td>${escapeHtml(formatarData(matricula.dataMatricula))}</td>
+                <td>${escapeHtml(matricula.status ?? "--")}</td>
                 <td>
                     <div class="acoes-tabela">
-                        <button type="button" class="botao-secundario" onclick="abrirModalEditarMatricula(${matricula.idMatricula})">Editar</button>
-                        <button type="button" class="botao-perigo" onclick="excluirMatricula(${matricula.idMatricula})">Excluir</button>
+                        <button type="button" class="botao-secundario" onclick="abrirModalEditarMatricula(${Number(matricula.idMatricula)})">Editar</button>
+                        <button type="button" class="botao-perigo" onclick="excluirMatricula(${Number(matricula.idMatricula)})">Excluir</button>
                     </div>
                 </td>
             </tr>
@@ -2142,7 +2247,8 @@ function montarTabelaNotas(dados) {
                         <th>Matrícula</th>
                         <th>Turma</th>
                         <th>Disciplina</th>
-                        <th>Professor</th>
+                        <th>Professor responsável atual</th>
+                        <th>Lançado por</th>
                         <th>Avaliação</th>
                         <th>Nota</th>
                         <th>Data</th>
@@ -2153,14 +2259,15 @@ function montarTabelaNotas(dados) {
     dados.forEach(nota => {
         html += `
             <tr>
-                <td>${nota.aluno ?? "--"}</td>
-                <td>${nota.matriculaAluno ?? "--"}</td>
-                <td>${nota.turma ?? "--"}</td>
-                <td>${nota.disciplina ?? "--"}</td>
-                <td>${nota.professor ?? "--"}</td>
-                <td>${nota.tipoAvaliacao ?? "--"}</td>
-                <td>${formatarNota(nota.valor)}</td>
-                <td>${formatarData(nota.dataAvaliacao)}</td>
+                <td>${escapeHtml(nota.aluno ?? "--")}</td>
+                <td>${escapeHtml(nota.matriculaAluno ?? "--")}</td>
+                <td>${escapeHtml(nota.turma ?? "--")}</td>
+                <td>${escapeHtml(nota.disciplina ?? "--")}</td>
+                <td>${escapeHtml(nota.professor ?? "--")}</td>
+                <td>${escapeHtml(nota.lancadoPor ?? "Não informado (registro anterior)")}</td>
+                <td>${escapeHtml(nota.tipoAvaliacao ?? "--")}</td>
+                <td>${escapeHtml(formatarNota(nota.valor))}</td>
+                <td>${escapeHtml(formatarData(nota.dataAvaliacao))}</td>
             </tr>
         `;
     });
@@ -2329,7 +2436,8 @@ function montarTabelaFaltas(dados) {
                         <th>Matrícula</th>
                         <th>Turma</th>
                         <th>Disciplina</th>
-                        <th>Professor</th>
+                        <th>Professor responsável atual</th>
+                        <th>Lançado por</th>
                         <th>Quantidade</th>
                         <th>Data</th>
                     </tr>
@@ -2339,13 +2447,14 @@ function montarTabelaFaltas(dados) {
     dados.forEach(falta => {
         html += `
             <tr>
-                <td>${falta.aluno ?? "--"}</td>
-                <td>${falta.matriculaAluno ?? "--"}</td>
-                <td>${falta.turma ?? "--"}</td>
-                <td>${falta.disciplina ?? "--"}</td>
-                <td>${falta.professor ?? "--"}</td>
-                <td>${falta.quantidade ?? 0}</td>
-                <td>${formatarData(falta.dataFalta)}</td>
+                <td>${escapeHtml(falta.aluno ?? "--")}</td>
+                <td>${escapeHtml(falta.matriculaAluno ?? "--")}</td>
+                <td>${escapeHtml(falta.turma ?? "--")}</td>
+                <td>${escapeHtml(falta.disciplina ?? "--")}</td>
+                <td>${escapeHtml(falta.professor ?? "--")}</td>
+                <td>${escapeHtml(falta.lancadoPor ?? "Não informado (registro anterior)")}</td>
+                <td>${escapeHtml(falta.quantidade ?? 0)}</td>
+                <td>${escapeHtml(formatarData(falta.dataFalta))}</td>
             </tr>
         `;
     });
@@ -2489,11 +2598,11 @@ function montarTabelaAuditorias(dados) {
         const dataHora = auditoria.dataHora ?? auditoria.data ?? auditoria.criadoEm ?? "--";
         html += `
             <tr>
-                <td>${id}</td>
-                <td>${usuario}</td>
-                <td>${acao}</td>
-                <td>${descricao}</td>
-                <td>${formatarDataHora(dataHora)}</td>
+                <td>${escapeHtml(id)}</td>
+                <td>${escapeHtml(usuario)}</td>
+                <td>${escapeHtml(acao)}</td>
+                <td>${escapeHtml(descricao)}</td>
+                <td>${escapeHtml(formatarDataHora(dataHora))}</td>
             </tr>
         `;
     });
@@ -2511,7 +2620,7 @@ function valoresUnicos(itens, campo) {
 function preencherFiltro(select, valores, textoPadrao) {
     if (!select) return;
     const valorAtual = select.value;
-    select.innerHTML = `<option value="">${textoPadrao}</option>`;
+    select.innerHTML = `<option value="">${escapeHtml(textoPadrao)}</option>`;
     valores.forEach(valor => {
         const option = document.createElement("option");
         option.value = valor;
@@ -2527,7 +2636,7 @@ function montarBadgePerfil(perfilUsuario) {
     if (perfilUsuario === "ALUNO") return `<span class="badge badge-aluno">ALUNO</span>`;
     if (perfilUsuario === "PROFESSOR") return `<span class="badge badge-professor">PROFESSOR</span>`;
     if (perfilUsuario === "ADMINISTRADOR") return `<span class="badge badge-admin">ADMINISTRADOR</span>`;
-    return perfilUsuario ?? "--";
+    return escapeHtml(perfilUsuario ?? "--");
 }
 
 async function lerJsonSeguro(response) {

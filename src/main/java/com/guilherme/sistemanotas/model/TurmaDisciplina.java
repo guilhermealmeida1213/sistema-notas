@@ -25,6 +25,9 @@ public class TurmaDisciplina {
     )
     private Disciplina disciplina;
 
+    @Column(name = "aulas_previstas")
+    private Integer aulasPrevistas;
+
     @ManyToOne
     @JoinColumn(
             name = "professor_id_professor",
@@ -57,6 +60,14 @@ public class TurmaDisciplina {
 
     public void setDisciplina(Disciplina disciplina) {
         this.disciplina = disciplina;
+    }
+
+    public Integer getAulasPrevistas() {
+        return aulasPrevistas;
+    }
+
+    public void setAulasPrevistas(Integer aulasPrevistas) {
+        this.aulasPrevistas = aulasPrevistas;
     }
 
     public Professor getProfessor() {

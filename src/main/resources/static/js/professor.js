@@ -7,6 +7,17 @@ const token =
 
 const perfil =
     localStorage.getItem("perfil");
+// Escapa dados externos antes de inseri-los em HTML gerado por JavaScript.
+function escapeHtml(valor) {
+    return String(valor ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
+
+
 
 
 // =========================
@@ -441,7 +452,7 @@ function preencherFiltro(
         select.value;
 
     select.innerHTML =
-        `<option value="">${textoPadrao}</option>`;
+        `<option value="">${escapeHtml(textoPadrao)}</option>`;
 
     valores.forEach(valor => {
 
@@ -734,6 +745,7 @@ function montarTabelaNotas(notas) {
                         <th>Matrícula</th>
                         <th>Turma</th>
                         <th>Disciplina</th>
+                        <th>Lançado por</th>
                         <th>Avaliação</th>
                         <th>Nota</th>
                         <th>Data</th>
@@ -757,7 +769,7 @@ function montarTabelaNotas(notas) {
                 <button
                         type="button"
                         class="botao-editar"
-                        onclick="abrirModalEditarNota(${nota.idNota})">
+                        onclick="abrirModalEditarNota(${Number(nota.idNota)})">
 
                     Editar
 
@@ -777,35 +789,39 @@ function montarTabelaNotas(notas) {
             <tr>
 
                 <td>
-                    ${nota.aluno ?? "--"}
+                    ${escapeHtml(nota.aluno ?? "--")}
                 </td>
 
                 <td>
-                    ${nota.matriculaAluno ?? "--"}
+                    ${escapeHtml(nota.matriculaAluno ?? "--")}
                 </td>
 
                 <td>
-                    ${nota.turma ?? "--"}
+                    ${escapeHtml(nota.turma ?? "--")}
                 </td>
 
                 <td>
-                    ${nota.disciplina ?? "--"}
+                    ${escapeHtml(nota.disciplina ?? "--")}
                 </td>
 
                 <td>
-                    ${nota.tipoAvaliacao ?? "--"}
+                    ${escapeHtml(nota.lancadoPor ?? "Não informado (registro anterior)")}
                 </td>
 
                 <td>
-                    ${formatarNota(
+                    ${escapeHtml(nota.tipoAvaliacao ?? "--")}
+                </td>
+
+                <td>
+                    ${escapeHtml(formatarNota(
             nota.valor
-        )}
+        ))}
                 </td>
 
                 <td>
-                    ${formatarData(
+                    ${escapeHtml(formatarData(
             nota.dataAvaliacao
-        )}
+        ))}
                 </td>
 
                 <td>
@@ -1264,6 +1280,7 @@ function montarTabelaFaltas(faltas) {
                         <th>Matrícula</th>
                         <th>Turma</th>
                         <th>Disciplina</th>
+                        <th>Lançado por</th>
                         <th>Quantidade</th>
                         <th>Data</th>
                         <th>Ação</th>
@@ -1279,29 +1296,33 @@ function montarTabelaFaltas(faltas) {
             <tr>
 
                 <td>
-                    ${falta.aluno ?? "--"}
+                    ${escapeHtml(falta.aluno ?? "--")}
                 </td>
 
                 <td>
-                    ${falta.matriculaAluno ?? "--"}
+                    ${escapeHtml(falta.matriculaAluno ?? "--")}
                 </td>
 
                 <td>
-                    ${falta.turma ?? "--"}
+                    ${escapeHtml(falta.turma ?? "--")}
                 </td>
 
                 <td>
-                    ${falta.disciplina ?? "--"}
+                    ${escapeHtml(falta.disciplina ?? "--")}
                 </td>
 
                 <td>
-                    ${falta.quantidade ?? 0}
+                    ${escapeHtml(falta.lancadoPor ?? "Não informado (registro anterior)")}
                 </td>
 
                 <td>
-                    ${formatarData(
+                    ${escapeHtml(falta.quantidade ?? 0)}
+                </td>
+
+                <td>
+                    ${escapeHtml(formatarData(
             falta.dataFalta
-        )}
+        ))}
                 </td>
 
                 <td>
@@ -1309,7 +1330,7 @@ function montarTabelaFaltas(faltas) {
                     <button
                             type="button"
                             class="botao-editar"
-                            onclick="abrirModalEditarFalta(${falta.idFalta})">
+                            onclick="abrirModalEditarFalta(${Number(falta.idFalta)})">
 
                         Editar
 
@@ -2251,11 +2272,11 @@ function atualizarMensagemInicio() {
                 <div class="turma-resumo">
 
                     <strong>
-                        ${turma}
+                        ${escapeHtml(turma)}
                     </strong>
 
                     <span>
-                        ${disciplinas.join(" • ")}
+                        ${escapeHtml(disciplinas.join(" • "))}
                     </span>
 
                 </div>

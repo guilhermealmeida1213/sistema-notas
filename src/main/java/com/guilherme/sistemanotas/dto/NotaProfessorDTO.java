@@ -14,6 +14,7 @@ public class NotaProfessorDTO {
     private String tipoAvaliacao;
     private BigDecimal valor;
     private LocalDate dataAvaliacao;
+    private String lancadoPor;
 
     public NotaProfessorDTO(
             Integer idNota,
@@ -24,7 +25,8 @@ public class NotaProfessorDTO {
             String disciplina,
             String tipoAvaliacao,
             BigDecimal valor,
-            LocalDate dataAvaliacao) {
+            LocalDate dataAvaliacao,
+            String lancadoPor) {
 
         this.idNota = idNota;
         this.idMatricula = idMatricula;
@@ -35,6 +37,7 @@ public class NotaProfessorDTO {
         this.tipoAvaliacao = tipoAvaliacao;
         this.valor = valor;
         this.dataAvaliacao = dataAvaliacao;
+        this.lancadoPor = lancadoPor;
     }
 
     public Integer getIdNota() {
@@ -103,6 +106,10 @@ public class NotaProfessorDTO {
 
     public LocalDate getDataAvaliacao() {
         return dataAvaliacao;
+    }
+
+    public String getLancadoPor() {
+        return lancadoPor;
     }
 
     public void setDataAvaliacao(LocalDate dataAvaliacao) {

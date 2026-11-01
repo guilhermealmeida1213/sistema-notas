@@ -13,6 +13,10 @@ public interface FaltaRepository
             Integer idMatricula
     );
 
+    boolean existsByTurmaDisciplina_IdTurmaDisciplina(
+            Integer idTurmaDisciplina
+    );
+
     // Faltas das turmas/disciplinas de um professor
     List<Falta> findByTurmaDisciplina_Professor_IdProfessor(
             Integer idProfessor

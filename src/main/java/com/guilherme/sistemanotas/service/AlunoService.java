@@ -20,19 +20,22 @@ public class AlunoService {
     private final AlunoRepository alunoRepository;
     private final UsuarioRepository usuarioRepository;
     private final MatriculaRepository matriculaRepository;
+    private final AuditoriaService auditoriaService;
 
     public AlunoService(
             AlunoRepository alunoRepository,
             UsuarioRepository usuarioRepository,
-            MatriculaRepository matriculaRepository) {
+            MatriculaRepository matriculaRepository,
+            AuditoriaService auditoriaService) {
 
         this.alunoRepository = alunoRepository;
         this.usuarioRepository = usuarioRepository;
         this.matriculaRepository = matriculaRepository;
+        this.auditoriaService = auditoriaService;
     }
 
     @Transactional
-    public Aluno salvar(Aluno aluno) {
+    public Aluno salvar(Aluno aluno, String emailAdministrador) {
 
         if (aluno == null) {
             throw new ResponseStatusException(
@@ -106,7 +109,16 @@ public class AlunoService {
 
         aluno.setUsuario(usuario);
 
-        return alunoRepository.save(aluno);
+        Aluno alunoSalvo = alunoRepository.save(aluno);
+        auditoriaService.registrar(
+                emailAdministrador,
+                "CRIACAO_ALUNO",
+                "Cadastro acadêmico do aluno " + usuario.getNome()
+                        + " (" + usuario.getEmail() + ") criado com matrícula "
+                        + alunoSalvo.getMatricula()
+        );
+
+        return alunoSalvo;
     }
 
     public List<Aluno> listar() {
@@ -119,7 +131,7 @@ public class AlunoService {
     }
 
     @Transactional
-    public void excluir(Integer id) {
+    public void excluir(Integer id, String emailAdministrador) {
 
         Aluno aluno =
                 alunoRepository
@@ -141,6 +153,17 @@ public class AlunoService {
             );
         }
 
+        String nomeAluno = aluno.getUsuario().getNome();
+        String emailAluno = aluno.getUsuario().getEmail();
+        String matricula = aluno.getMatricula();
+
         alunoRepository.delete(aluno);
+
+        auditoriaService.registrar(
+                emailAdministrador,
+                "EXCLUSAO_ALUNO",
+                "Cadastro acadêmico do aluno " + nomeAluno + " (" + emailAluno
+                        + "), matrícula " + matricula + ", foi excluído"
+        );
     }
 }

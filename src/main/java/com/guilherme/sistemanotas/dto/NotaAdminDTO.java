@@ -12,6 +12,7 @@ public class NotaAdminDTO {
     private String turma;
     private String disciplina;
     private String professor;
+    private String lancadoPor;
     private String tipoAvaliacao;
     private BigDecimal valor;
     private LocalDate dataAvaliacao;
@@ -24,6 +25,7 @@ public class NotaAdminDTO {
             String turma,
             String disciplina,
             String professor,
+            String lancadoPor,
             String tipoAvaliacao,
             BigDecimal valor,
             LocalDate dataAvaliacao) {
@@ -35,6 +37,7 @@ public class NotaAdminDTO {
         this.turma = turma;
         this.disciplina = disciplina;
         this.professor = professor;
+        this.lancadoPor = lancadoPor;
         this.tipoAvaliacao = tipoAvaliacao;
         this.valor = valor;
         this.dataAvaliacao = dataAvaliacao;
@@ -90,6 +93,10 @@ public class NotaAdminDTO {
 
     public String getProfessor() {
         return professor;
+    }
+
+    public String getLancadoPor() {
+        return lancadoPor;
     }
 
     public void setProfessor(String professor) {

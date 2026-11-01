@@ -9,11 +9,13 @@ import com.guilherme.sistemanotas.model.Falta;
 import com.guilherme.sistemanotas.model.Matricula;
 import com.guilherme.sistemanotas.model.Professor;
 import com.guilherme.sistemanotas.model.TurmaDisciplina;
+import com.guilherme.sistemanotas.model.Usuario;
 import com.guilherme.sistemanotas.repository.AlunoRepository;
 import com.guilherme.sistemanotas.repository.FaltaRepository;
 import com.guilherme.sistemanotas.repository.MatriculaRepository;
 import com.guilherme.sistemanotas.repository.ProfessorRepository;
 import com.guilherme.sistemanotas.repository.TurmaDisciplinaRepository;
+import com.guilherme.sistemanotas.repository.UsuarioRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,6 +36,7 @@ public class FaltaService {
     private final AlunoRepository alunoRepository;
     private final ProfessorRepository professorRepository;
     private final AuditoriaService auditoriaService;
+    private final UsuarioRepository usuarioRepository;
 
     public FaltaService(
             FaltaRepository faltaRepository,
@@ -41,7 +44,8 @@ public class FaltaService {
             TurmaDisciplinaRepository turmaDisciplinaRepository,
             AlunoRepository alunoRepository,
             ProfessorRepository professorRepository,
-            AuditoriaService auditoriaService) {
+            AuditoriaService auditoriaService,
+            UsuarioRepository usuarioRepository) {
 
         this.faltaRepository = faltaRepository;
         this.matriculaRepository = matriculaRepository;
@@ -49,6 +53,7 @@ public class FaltaService {
         this.alunoRepository = alunoRepository;
         this.professorRepository = professorRepository;
         this.auditoriaService = auditoriaService;
+        this.usuarioRepository = usuarioRepository;
     }
 
 
@@ -139,6 +144,7 @@ public class FaltaService {
         falta.setTurmaDisciplina(
                 turmaDisciplina
         );
+        falta.setUsuarioLancamento(buscarUsuarioLancamento(emailUsuario));
 
         Falta faltaSalva =
                 faltaRepository.save(
@@ -296,6 +302,8 @@ public class FaltaService {
 
                             nomeProfessor,
 
+                            nomeUsuarioLancamento(falta.getUsuarioLancamento()),
+
                             falta.getDataFalta(),
 
                             falta.getQuantidade()
@@ -422,6 +430,8 @@ public class FaltaService {
                                     .getDisciplina()
                                     .getNome(),
 
+                            nomeUsuarioLancamento(falta.getUsuarioLancamento()),
+
                             falta.getDataFalta(),
 
                             falta.getQuantidade()
@@ -435,6 +445,20 @@ public class FaltaService {
         return faltasDTO;
     }
 
+
+    private Usuario buscarUsuarioLancamento(String email) {
+        return usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Usuário responsável pelo lançamento não encontrado"
+                ));
+    }
+
+    private String nomeUsuarioLancamento(Usuario usuario) {
+        return usuario == null
+                ? "Não informado (registro anterior)"
+                : usuario.getNome();
+    }
 
     private void validarMatriculaAtiva(Matricula matricula) {
         if (matricula.getStatus() == null || !"ATIVA".equalsIgnoreCase(matricula.getStatus().trim())) {

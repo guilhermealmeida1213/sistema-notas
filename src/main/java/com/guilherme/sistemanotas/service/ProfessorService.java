@@ -5,6 +5,7 @@ import com.guilherme.sistemanotas.model.PerfilUsuario;
 import com.guilherme.sistemanotas.model.Professor;
 import com.guilherme.sistemanotas.model.Usuario;
 import com.guilherme.sistemanotas.repository.ProfessorRepository;
+import com.guilherme.sistemanotas.repository.HistoricoProfessorTurmaDisciplinaRepository;
 import com.guilherme.sistemanotas.repository.TurmaDisciplinaRepository;
 import com.guilherme.sistemanotas.repository.UsuarioRepository;
 import org.springframework.http.HttpStatus;
@@ -22,12 +23,14 @@ public class ProfessorService {
     private final UsuarioRepository usuarioRepository;
     private final TurmaDisciplinaRepository turmaDisciplinaRepository;
     private final AuditoriaService auditoriaService;
+    private final HistoricoProfessorTurmaDisciplinaRepository historicoProfessorRepository;
 
     public ProfessorService(
             ProfessorRepository professorRepository,
             UsuarioRepository usuarioRepository,
             TurmaDisciplinaRepository turmaDisciplinaRepository,
-            AuditoriaService auditoriaService) {
+            AuditoriaService auditoriaService,
+            HistoricoProfessorTurmaDisciplinaRepository historicoProfessorRepository) {
 
         this.professorRepository =
                 professorRepository;
@@ -40,6 +43,7 @@ public class ProfessorService {
 
         this.auditoriaService =
                 auditoriaService;
+        this.historicoProfessorRepository = historicoProfessorRepository;
     }
 
     // =========================
@@ -263,6 +267,14 @@ public class ProfessorService {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
                     "Professor possui disciplinas vinculadas e não pode ser excluído"
+            );
+        }
+
+        boolean possuiHistorico = historicoProfessorRepository.existsByProfessor_IdProfessor(id);
+        if (possuiHistorico) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Professor possui histórico de responsabilidade acadêmica. Desative sua conta em vez de excluir o cadastro."
             );
         }
 

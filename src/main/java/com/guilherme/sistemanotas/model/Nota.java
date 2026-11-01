@@ -1,5 +1,6 @@
 package com.guilherme.sistemanotas.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -50,6 +51,12 @@ public class Nota {
     )
     private LocalDate dataAvaliacao;
 
+    // Usuário que criou originalmente este registro. Não muda quando o professor responsável é substituído.
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "usuario_lancamento_id_usuario")
+    @JsonIgnore
+    private Usuario usuarioLancamento;
+
     public Nota() {
     }
 
@@ -99,5 +106,13 @@ public class Nota {
 
     public void setDataAvaliacao(LocalDate dataAvaliacao) {
         this.dataAvaliacao = dataAvaliacao;
+    }
+
+    public Usuario getUsuarioLancamento() {
+        return usuarioLancamento;
+    }
+
+    public void setUsuarioLancamento(Usuario usuarioLancamento) {
+        this.usuarioLancamento = usuarioLancamento;
     }
 }

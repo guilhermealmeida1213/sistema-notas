@@ -322,7 +322,7 @@
                         </h3>
 
                         <p>
-                            Localize usuários por nome, e-mail, perfil ou status.
+                            Localize por nome, RA de aluno, perfil ou status.
                         </p>
 
                     </div>
@@ -343,13 +343,13 @@
                     <div class="campo-filtro">
 
                         <label for="filtroUsuarioBusca">
-                            Nome ou e-mail
+                            Nome ou RA (alunos)
                         </label>
 
                         <input
                                 type="text"
                                 id="filtroUsuarioBusca"
-                                placeholder="Digite o nome ou e-mail"
+                                placeholder="Digite o nome ou RA do aluno"
                                 autocomplete="off">
 
                     </div>
@@ -670,217 +670,217 @@
 
             </div>
 
-        <!-- TURMAS CADASTRADAS -->
+            <!-- TURMAS CADASTRADAS -->
 
-        <div class="painel">
+            <div class="painel">
 
-            <div class="cabecalho-filtros">
+                <div class="cabecalho-filtros">
 
-                <div>
+                    <div>
 
-                    <h3>
-                        Turmas cadastradas
-                    </h3>
+                        <h3>
+                            Turmas cadastradas
+                        </h3>
 
-                    <p>
-                        Localize uma turma pelo nome, ano ou semestre.
-                    </p>
+                        <p>
+                            Localize uma turma pelo nome, ano ou semestre.
+                        </p>
 
-                </div>
+                    </div>
 
-                <button
-                        id="limparFiltroTurmas"
-                        class="botao-limpar-filtros"
-                        type="button">
+                    <button
+                            id="limparFiltroTurmas"
+                            class="botao-limpar-filtros"
+                            type="button">
 
-                    Limpar busca
+                        Limpar busca
 
-                </button>
-
-            </div>
-
-            <div class="grade-filtros">
-
-                <div class="campo-filtro">
-
-                    <label for="filtroTurmaBusca">
-                        Buscar turma
-                    </label>
-
-                    <input
-                            type="text"
-                            id="filtroTurmaBusca"
-                            placeholder="Ex.: 4ADS-A ou 2026"
-                            autocomplete="off">
+                    </button>
 
                 </div>
 
-            </div>
+                <div class="grade-filtros">
 
-            <p
-                    id="contadorTurmas"
-                    class="contador-registros">
-            </p>
+                    <div class="campo-filtro">
 
-            <div id="listaTurmas">
-                Carregando turmas...
-            </div>
+                        <label for="filtroTurmaBusca">
+                            Buscar turma
+                        </label>
 
-        </div>
+                        <input
+                                type="text"
+                                id="filtroTurmaBusca"
+                                placeholder="Ex.: 4ADS-A ou 2026"
+                                autocomplete="off">
 
-
-        <!-- DISCIPLINAS CADASTRADAS -->
-
-        <div class="painel">
-
-            <div class="cabecalho-filtros">
-
-                <div>
-
-                    <h3>
-                        Disciplinas cadastradas
-                    </h3>
-
-                    <p>
-                        Localize uma disciplina pelo nome.
-                    </p>
+                    </div>
 
                 </div>
 
-                <button
-                        id="limparFiltroDisciplinas"
-                        class="botao-limpar-filtros"
-                        type="button">
+                <p
+                        id="contadorTurmas"
+                        class="contador-registros">
+                </p>
 
-                    Limpar busca
-
-                </button>
-
-            </div>
-
-            <div class="grade-filtros">
-
-                <div class="campo-filtro">
-
-                    <label for="filtroDisciplinaBusca">
-                        Buscar disciplina
-                    </label>
-
-                    <input
-                            type="text"
-                            id="filtroDisciplinaBusca"
-                            placeholder="Ex.: Técnicas de Programação"
-                            autocomplete="off">
-
+                <div id="listaTurmas">
+                    Carregando turmas...
                 </div>
 
             </div>
 
-            <p
-                    id="contadorDisciplinas"
-                    class="contador-registros">
-            </p>
 
-            <div id="listaDisciplinas">
-                Carregando disciplinas...
-            </div>
+            <!-- DISCIPLINAS CADASTRADAS -->
 
-        </div>
+            <div class="painel">
 
+                <div class="cabecalho-filtros">
 
-        <!-- VÍNCULOS ACADÊMICOS -->
+                    <div>
 
-        <div class="painel">
+                        <h3>
+                            Disciplinas cadastradas
+                        </h3>
 
-            <div class="cabecalho-filtros">
+                        <p>
+                            Localize uma disciplina pelo nome.
+                        </p>
 
-                <div>
+                    </div>
 
-                    <h3>
-                        Vínculos acadêmicos
-                    </h3>
+                    <button
+                            id="limparFiltroDisciplinas"
+                            class="botao-limpar-filtros"
+                            type="button">
 
-                    <p>
-                        Localize vínculos por turma, disciplina, professor ou registro.
-                    </p>
+                        Limpar busca
 
-                </div>
-
-                <button
-                        id="limparFiltrosVinculos"
-                        class="botao-limpar-filtros"
-                        type="button">
-
-                    Limpar filtros
-
-                </button>
-
-            </div>
-
-            <div class="grade-filtros">
-
-                <div class="campo-filtro">
-
-                    <label for="filtroVinculoTurma">
-                        Turma
-                    </label>
-
-                    <select id="filtroVinculoTurma">
-
-                        <option value="">
-                            Todas as turmas
-                        </option>
-
-                    </select>
+                    </button>
 
                 </div>
 
+                <div class="grade-filtros">
 
-                <div class="campo-filtro">
+                    <div class="campo-filtro">
 
-                    <label for="filtroVinculoDisciplina">
-                        Disciplina
-                    </label>
+                        <label for="filtroDisciplinaBusca">
+                            Buscar disciplina
+                        </label>
 
-                    <select id="filtroVinculoDisciplina">
+                        <input
+                                type="text"
+                                id="filtroDisciplinaBusca"
+                                placeholder="Ex.: Técnicas de Programação"
+                                autocomplete="off">
 
-                        <option value="">
-                            Todas as disciplinas
-                        </option>
-
-                    </select>
+                    </div>
 
                 </div>
 
+                <p
+                        id="contadorDisciplinas"
+                        class="contador-registros">
+                </p>
 
-                <div class="campo-filtro">
-
-                    <label for="filtroVinculoProfessor">
-                        Professor ou registro
-                    </label>
-
-                    <input
-                            type="text"
-                            id="filtroVinculoProfessor"
-                            placeholder="Ex.: Rafael ou PROF0001"
-                            autocomplete="off">
-
+                <div id="listaDisciplinas">
+                    Carregando disciplinas...
                 </div>
 
             </div>
 
-            <p
-                    id="contadorVinculos"
-                    class="contador-registros">
-            </p>
 
-            <div id="listaVinculos">
-                Carregando vínculos...
+            <!-- VÍNCULOS ACADÊMICOS -->
+
+            <div class="painel">
+
+                <div class="cabecalho-filtros">
+
+                    <div>
+
+                        <h3>
+                            Vínculos acadêmicos
+                        </h3>
+
+                        <p>
+                            Localize vínculos por turma, disciplina, professor ou registro.
+                        </p>
+
+                    </div>
+
+                    <button
+                            id="limparFiltrosVinculos"
+                            class="botao-limpar-filtros"
+                            type="button">
+
+                        Limpar filtros
+
+                    </button>
+
+                </div>
+
+                <div class="grade-filtros">
+
+                    <div class="campo-filtro">
+
+                        <label for="filtroVinculoTurma">
+                            Turma
+                        </label>
+
+                        <select id="filtroVinculoTurma">
+
+                            <option value="">
+                                Todas as turmas
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="campo-filtro">
+
+                        <label for="filtroVinculoDisciplina">
+                            Disciplina
+                        </label>
+
+                        <select id="filtroVinculoDisciplina">
+
+                            <option value="">
+                                Todas as disciplinas
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="campo-filtro">
+
+                        <label for="filtroVinculoProfessor">
+                            Professor ou registro
+                        </label>
+
+                        <input
+                                type="text"
+                                id="filtroVinculoProfessor"
+                                placeholder="Ex.: Rafael ou PROF0001"
+                                autocomplete="off">
+
+                    </div>
+
+                </div>
+
+                <p
+                        id="contadorVinculos"
+                        class="contador-registros">
+                </p>
+
+                <div id="listaVinculos">
+                    Carregando vínculos...
+                </div>
+
             </div>
 
-        </div>
-
-        </section>>
+        </section>
 
         <!-- =========================
          MATRÍCULAS
@@ -1485,11 +1485,6 @@
     </main>
 
 </div>
-
-
-<!-- =========================================================
-     MODAL - NOVO USUÁRIO
-     ========================================================= -->
 
 <div
         id="modalUsuario"
@@ -2459,6 +2454,12 @@
             </div>
 
 
+            <div class="campo-formulario">
+                <label for="vinculoAulasPrevistas">Aulas previstas para esta disciplina</label>
+                <input id="vinculoAulasPrevistas" type="number" min="1" step="1" required>
+                <small>Informe o total de aulas previstas para esta disciplina nesta turma durante o semestre. Esse valor será usado para calcular a frequência.</small>
+            </div>
+
             <p
                     id="mensagemVinculo"
                     class="mensagem-formulario">
@@ -2493,7 +2494,7 @@
         <div class="modal-cabecalho">
 
             <h3>
-                Trocar professor responsável
+                Alterar professor responsável
             </h3>
 
             <button
@@ -2559,6 +2560,21 @@
 
             </div>
 
+            <div class="campo-formulario">
+                <label for="trocarProfessorMotivo">Motivo da alteração (opcional)</label>
+                <textarea
+                        id="trocarProfessorMotivo"
+                        maxlength="500"
+                        rows="3"
+                        placeholder="Ex.: substituição por afastamento, redistribuição de carga horária..."></textarea>
+            </div>
+
+            <div class="campo-formulario">
+                <label>Histórico de responsáveis</label>
+                <div id="historicoProfessoresVinculo" class="historico-professores-vinculo">
+                    Selecione um vínculo para consultar o histórico.
+                </div>
+            </div>
 
             <p
                     id="mensagemTrocarProfessor"

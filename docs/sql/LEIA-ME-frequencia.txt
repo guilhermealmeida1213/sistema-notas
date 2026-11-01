@@ -1,0 +1,15 @@
+CORRECAO DO CALCULO DE FREQUENCIA
+
+1. Faça backup do banco mydb antes de alterar a estrutura.
+2. No MySQL Workbench, selecione o schema mydb e execute o arquivo:
+   2026-10-27-adicionar-aulas-previstas.sql
+3. Inicie a aplicação atualizada. O projeto usa ddl-auto=validate, então a coluna precisa existir antes da inicialização.
+4. Entre como administrador e abra os vínculos de turma/disciplina.
+5. Use “Configurar aulas” e informe o total REAL de aulas previstas daquela disciplina durante o semestre.
+6. Não copie automaticamente os valores antigos de dias_letivos_previstos. Por exemplo, o valor antigo 30 significa dias configurados anteriormente, não 30 aulas.
+7. Confira o resumo do aluno: ele deve exibir aulas previstas, faltas somadas daquela disciplina e percentual de frequência.
+
+Fórmula: ((aulas previstas - faltas) / aulas previstas) * 100.
+As faltas são somadas por aluno e por vínculo turma/disciplina. Se o aluno perde 4 aulas em um lançamento, registre quantidade 4.
+
+OBSERVAÇÃO DE TESTE: não foi possível executar os testes Maven neste ambiente porque o Maven não estava instalado e o wrapper não conseguiu baixar a distribuição (falha de rede). Execute `mvnw.cmd test` no Windows, dentro da pasta do projeto, com acesso ao Maven Central, antes de publicar.

@@ -223,6 +223,11 @@ public class SecurityConfig {
                                 ).hasRole("ADMINISTRADOR")
 
                                 .requestMatchers(
+                                        HttpMethod.PUT,
+                                        "/turmas-disciplinas/*/aulas-previstas"
+                                ).hasRole("ADMINISTRADOR")
+
+                                .requestMatchers(
                                         HttpMethod.DELETE,
                                         "/turmas-disciplinas/**"
                                 ).hasRole("ADMINISTRADOR")

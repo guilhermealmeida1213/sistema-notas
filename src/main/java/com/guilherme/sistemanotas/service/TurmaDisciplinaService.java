@@ -1,11 +1,16 @@
 package com.guilherme.sistemanotas.service;
 
 import com.guilherme.sistemanotas.dto.AtualizarProfessorTurmaDisciplinaDTO;
+import com.guilherme.sistemanotas.dto.HistoricoProfessorTurmaDisciplinaDTO;
 import com.guilherme.sistemanotas.model.Disciplina;
+import com.guilherme.sistemanotas.model.HistoricoProfessorTurmaDisciplina;
 import com.guilherme.sistemanotas.model.Professor;
 import com.guilherme.sistemanotas.model.Turma;
 import com.guilherme.sistemanotas.model.TurmaDisciplina;
 import com.guilherme.sistemanotas.repository.DisciplinaRepository;
+import com.guilherme.sistemanotas.repository.FaltaRepository;
+import com.guilherme.sistemanotas.repository.HistoricoProfessorTurmaDisciplinaRepository;
+import com.guilherme.sistemanotas.repository.NotaRepository;
 import com.guilherme.sistemanotas.repository.ProfessorRepository;
 import com.guilherme.sistemanotas.repository.TurmaDisciplinaRepository;
 import com.guilherme.sistemanotas.repository.TurmaRepository;
@@ -14,7 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -24,14 +31,20 @@ public class TurmaDisciplinaService {
     private final TurmaRepository turmaRepository;
     private final DisciplinaRepository disciplinaRepository;
     private final ProfessorRepository professorRepository;
+    private final NotaRepository notaRepository;
+    private final FaltaRepository faltaRepository;
     private final AuditoriaService auditoriaService;
+    private final HistoricoProfessorTurmaDisciplinaRepository historicoProfessorRepository;
 
     public TurmaDisciplinaService(
             TurmaDisciplinaRepository turmaDisciplinaRepository,
             TurmaRepository turmaRepository,
             DisciplinaRepository disciplinaRepository,
             ProfessorRepository professorRepository,
-            AuditoriaService auditoriaService) {
+            NotaRepository notaRepository,
+            FaltaRepository faltaRepository,
+            AuditoriaService auditoriaService,
+            HistoricoProfessorTurmaDisciplinaRepository historicoProfessorRepository) {
 
         this.turmaDisciplinaRepository =
                 turmaDisciplinaRepository;
@@ -45,8 +58,12 @@ public class TurmaDisciplinaService {
         this.professorRepository =
                 professorRepository;
 
+        this.notaRepository = notaRepository;
+        this.faltaRepository = faltaRepository;
+
         this.auditoriaService =
                 auditoriaService;
+        this.historicoProfessorRepository = historicoProfessorRepository;
     }
 
     // =========================
@@ -58,6 +75,10 @@ public class TurmaDisciplinaService {
     public TurmaDisciplina salvar(
             TurmaDisciplina turmaDisciplina,
             String emailAdministrador) {
+
+        if (turmaDisciplina.getAulasPrevistas() == null || turmaDisciplina.getAulasPrevistas() <= 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Informe o total de aulas previstas para esta disciplina nesta turma");
+        }
 
         // =========================
         // VALIDAR TURMA
@@ -161,6 +182,8 @@ public class TurmaDisciplinaService {
                                 )
                         );
 
+        validarProfessorAtivo(professor);
+
         // =========================
         // IMPEDIR VÍNCULO DUPLICADO
         // =========================
@@ -198,6 +221,13 @@ public class TurmaDisciplinaService {
                                 turmaDisciplina
                         );
 
+        registrarNovaAtribuicao(
+                vinculoSalvo,
+                professor,
+                emailAdministrador,
+                "Atribuição inicial do professor ao vínculo acadêmico."
+        );
+
         // =========================
         // AUDITORIA
         // =========================
@@ -217,6 +247,21 @@ public class TurmaDisciplinaService {
         );
 
         return vinculoSalvo;
+    }
+
+    @Transactional
+    public TurmaDisciplina atualizarAulasPrevistas(Integer id, Integer aulasPrevistas, String emailAdministrador) {
+        if (aulasPrevistas == null || aulasPrevistas <= 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O total de aulas previstas deve ser maior que zero");
+        }
+        TurmaDisciplina vinculo = turmaDisciplinaRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vínculo acadêmico não encontrado"));
+        Integer anterior = vinculo.getAulasPrevistas();
+        vinculo.setAulasPrevistas(aulasPrevistas);
+        TurmaDisciplina atualizado = turmaDisciplinaRepository.save(vinculo);
+        auditoriaService.registrar(emailAdministrador, "ALTERACAO_AULAS_PREVISTAS",
+                "Aulas previstas da disciplina " + vinculo.getDisciplina().getNome() + " da turma " + vinculo.getTurma().getNome() + " alterados de " + (anterior == null ? "não configurado" : anterior) + " para " + aulasPrevistas);
+        return atualizado;
     }
 
     // =========================
@@ -276,83 +321,98 @@ public class TurmaDisciplinaService {
             AtualizarProfessorTurmaDisciplinaDTO dados,
             String emailAdministrador) {
 
-        if (dados == null ||
-                dados.getIdProfessor() == null) {
-
+        if (dados == null || dados.getIdProfessor() == null) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
                     "Professor é obrigatório"
             );
         }
 
-        TurmaDisciplina vinculo =
-                turmaDisciplinaRepository
-                        .findById(idTurmaDisciplina)
-                        .orElseThrow(() ->
-                                new ResponseStatusException(
-                                        HttpStatus.NOT_FOUND,
-                                        "Turma/Disciplina não encontrada"
-                                )
-                        );
+        if (dados.getMotivo() != null && dados.getMotivo().length() > 500) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "O motivo deve ter no máximo 500 caracteres"
+            );
+        }
 
-        Professor novoProfessor =
-                professorRepository
-                        .findById(
-                                dados.getIdProfessor()
-                        )
-                        .orElseThrow(() ->
-                                new ResponseStatusException(
-                                        HttpStatus.NOT_FOUND,
-                                        "Professor não encontrado"
-                                )
-                        );
+        TurmaDisciplina vinculo = turmaDisciplinaRepository
+                .findById(idTurmaDisciplina)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Turma/Disciplina não encontrada"
+                ));
 
-        Professor professorAnterior =
-                vinculo.getProfessor();
+        Professor novoProfessor = professorRepository
+                .findById(dados.getIdProfessor())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Professor não encontrado"
+                ));
 
-        // =========================
-        // EVITAR ALTERAÇÃO DESNECESSÁRIA
-        // =========================
+        validarProfessorAtivo(novoProfessor);
 
-        if (professorAnterior != null &&
-                professorAnterior
-                        .getIdProfessor()
-                        .equals(
-                                novoProfessor.getIdProfessor()
-                        )) {
+        Professor professorAnterior = vinculo.getProfessor();
+        if (professorAnterior == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "O vínculo não possui um professor atual para registrar a substituição"
+            );
+        }
 
+        if (professorAnterior.getIdProfessor().equals(novoProfessor.getIdProfessor())) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
                     "O professor informado já é responsável por esta disciplina"
             );
         }
 
-        String nomeProfessorAnterior =
-                professorAnterior != null
-                        ? professorAnterior
-                        .getUsuario()
-                        .getNome()
-                        : "Sem professor";
+        LocalDateTime agora = LocalDateTime.now();
+        String motivo = dados.getMotivo() == null || dados.getMotivo().isBlank()
+                ? "Substituição do professor responsável."
+                : dados.getMotivo().trim();
 
-        String registroProfessorAnterior =
-                professorAnterior != null
-                        ? professorAnterior
-                        .getRegistro()
-                        : "--";
+        // Fecha a atribuição atualmente aberta. Para vínculos anteriores ao
+        // controle de histórico, cria um registro legado sem inventar a data inicial.
+        HistoricoProfessorTurmaDisciplina historicoAtual = historicoProfessorRepository
+                .findFirstByTurmaDisciplina_IdTurmaDisciplinaAndDataFimIsNullOrderByRegistradoEmDesc(
+                        idTurmaDisciplina
+                )
+                .orElse(null);
 
-        vinculo.setProfessor(
-                novoProfessor
+        if (historicoAtual != null) {
+            if (!historicoAtual.getProfessor().getIdProfessor().equals(professorAnterior.getIdProfessor())) {
+                throw new ResponseStatusException(
+                        HttpStatus.CONFLICT,
+                        "O histórico de responsáveis está divergente do professor atual. A alteração foi cancelada para preservar os registros."
+                );
+            }
+            historicoAtual.setDataFim(agora);
+            historicoProfessorRepository.save(historicoAtual);
+        } else {
+            HistoricoProfessorTurmaDisciplina historicoLegado =
+                    criarRegistroHistorico(
+                            vinculo,
+                            professorAnterior,
+                            null,
+                            agora,
+                            null,
+                            "Registro anterior ao controle de histórico. A data inicial e o responsável pela atribuição original não estavam armazenados."
+                    );
+            historicoProfessorRepository.save(historicoLegado);
+        }
+
+        String nomeProfessorAnterior = professorAnterior.getUsuario().getNome();
+        String registroProfessorAnterior = professorAnterior.getRegistro();
+
+        vinculo.setProfessor(novoProfessor);
+        TurmaDisciplina vinculoAtualizado = turmaDisciplinaRepository.save(vinculo);
+
+        registrarNovaAtribuicao(
+                vinculoAtualizado,
+                novoProfessor,
+                emailAdministrador,
+                motivo
         );
-
-        TurmaDisciplina vinculoAtualizado =
-                turmaDisciplinaRepository
-                        .save(
-                                vinculo
-                        );
-
-        // =========================
-        // AUDITORIA
-        // =========================
 
         auditoriaService.registrar(
                 emailAdministrador,
@@ -363,16 +423,120 @@ public class TurmaDisciplinaService {
                         + vinculo.getTurma().getNome()
                         + " alterado de "
                         + nomeProfessorAnterior
-                        + " ("
-                        + registroProfessorAnterior
-                        + ") para "
+                        + " (" + registroProfessorAnterior + ") para "
                         + novoProfessor.getUsuario().getNome()
-                        + " ("
-                        + novoProfessor.getRegistro()
-                        + ")"
+                        + " (" + novoProfessor.getRegistro() + ")"
+                        + ". Motivo: " + motivo
         );
 
         return vinculoAtualizado;
+    }
+
+    @Transactional(readOnly = true)
+    public List<HistoricoProfessorTurmaDisciplinaDTO> listarHistoricoProfessores(
+            Integer idTurmaDisciplina) {
+
+        TurmaDisciplina vinculo = turmaDisciplinaRepository.findById(idTurmaDisciplina)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Turma/Disciplina não encontrada"
+                ));
+
+        List<HistoricoProfessorTurmaDisciplina> registros =
+                historicoProfessorRepository
+                        .findByTurmaDisciplina_IdTurmaDisciplinaOrderByRegistradoEmDesc(idTurmaDisciplina);
+
+        List<HistoricoProfessorTurmaDisciplinaDTO> resposta = new ArrayList<>();
+        for (HistoricoProfessorTurmaDisciplina registro : registros) {
+            resposta.add(toHistoricoDTO(registro));
+        }
+
+        // Vínculos criados antes desta melhoria ainda não têm linha do tempo.
+        // Exibimos o responsável atual, deixando explícito que a data inicial é desconhecida.
+        if (resposta.isEmpty() && vinculo.getProfessor() != null) {
+            Professor professor = vinculo.getProfessor();
+            resposta.add(new HistoricoProfessorTurmaDisciplinaDTO(
+                    null,
+                    professor.getIdProfessor(),
+                    professor.getUsuario() != null ? professor.getUsuario().getNome() : "Professor",
+                    professor.getRegistro(),
+                    null,
+                    null,
+                    null,
+                    "Não registrado (vínculo anterior ao histórico)",
+                    "Responsável atual identificado no cadastro. A data de início não era registrada na versão anterior.",
+                    true
+            ));
+        }
+
+        return resposta;
+    }
+
+    private void registrarNovaAtribuicao(
+            TurmaDisciplina vinculo,
+            Professor professor,
+            String emailResponsavel,
+            String motivo) {
+
+        LocalDateTime agora = LocalDateTime.now();
+        historicoProfessorRepository.save(
+                criarRegistroHistorico(
+                        vinculo,
+                        professor,
+                        agora,
+                        null,
+                        emailResponsavel,
+                        motivo
+                )
+        );
+    }
+
+    private HistoricoProfessorTurmaDisciplina criarRegistroHistorico(
+            TurmaDisciplina vinculo,
+            Professor professor,
+            LocalDateTime dataInicio,
+            LocalDateTime dataFim,
+            String emailResponsavel,
+            String motivo) {
+
+        HistoricoProfessorTurmaDisciplina historico = new HistoricoProfessorTurmaDisciplina();
+        historico.setTurmaDisciplina(vinculo);
+        historico.setProfessor(professor);
+        historico.setDataInicio(dataInicio);
+        historico.setDataFim(dataFim);
+        historico.setRegistradoEm(LocalDateTime.now());
+        historico.setRegistradoPorEmail(emailResponsavel);
+        historico.setMotivo(motivo);
+        return historico;
+    }
+
+    private HistoricoProfessorTurmaDisciplinaDTO toHistoricoDTO(
+            HistoricoProfessorTurmaDisciplina historico) {
+
+        Professor professor = historico.getProfessor();
+        return new HistoricoProfessorTurmaDisciplinaDTO(
+                historico.getIdHistoricoProfessor(),
+                professor.getIdProfessor(),
+                professor.getUsuario() != null ? professor.getUsuario().getNome() : "Professor",
+                professor.getRegistro(),
+                historico.getDataInicio(),
+                historico.getDataFim(),
+                historico.getRegistradoEm(),
+                historico.getRegistradoPorEmail() == null
+                        ? "Não registrado"
+                        : historico.getRegistradoPorEmail(),
+                historico.getMotivo(),
+                historico.getDataInicio() == null
+        );
+    }
+
+    private void validarProfessorAtivo(Professor professor) {
+        if (professor.getUsuario() == null || !Boolean.TRUE.equals(professor.getUsuario().getAtivo())) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Não é possível atribuir uma disciplina a um professor com usuário inativo"
+            );
+        }
     }
 
     // =========================
@@ -394,6 +558,32 @@ public class TurmaDisciplinaService {
                                         "Vínculo acadêmico não encontrado"
                                 )
                         );
+
+        boolean possuiNotas = notaRepository
+                .existsByTurmaDisciplina_IdTurmaDisciplina(idTurmaDisciplina);
+        boolean possuiFaltas = faltaRepository
+                .existsByTurmaDisciplina_IdTurmaDisciplina(idTurmaDisciplina);
+
+        if (possuiNotas || possuiFaltas) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Não é possível excluir este vínculo porque existem notas ou faltas registradas. Preserve o histórico acadêmico e, se necessário, altere o professor do vínculo."
+            );
+        }
+
+        boolean possuiSubstituicaoAnterior = historicoProfessorRepository
+                .existsByTurmaDisciplina_IdTurmaDisciplinaAndDataFimIsNotNull(idTurmaDisciplina);
+
+        if (possuiSubstituicaoAnterior) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Não é possível excluir este vínculo porque já houve substituição de professor. Preserve o histórico de responsáveis e mantenha o vínculo acadêmico."
+            );
+        }
+
+        // Se só existe a atribuição inicial e ainda não há notas ou faltas,
+        // o vínculo pode ser removido sem apagar um histórico de substituições.
+        historicoProfessorRepository.deleteByTurmaDisciplina_IdTurmaDisciplina(idTurmaDisciplina);
 
         String nomeTurma =
                 vinculo.getTurma().getNome();

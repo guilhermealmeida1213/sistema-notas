@@ -11,6 +11,7 @@ public class FaltaAdminDTO {
     private String turma;
     private String disciplina;
     private String professor;
+    private String lancadoPor;
     private LocalDate dataFalta;
     private Integer quantidade;
 
@@ -22,6 +23,7 @@ public class FaltaAdminDTO {
             String turma,
             String disciplina,
             String professor,
+            String lancadoPor,
             LocalDate dataFalta,
             Integer quantidade) {
 
@@ -32,6 +34,7 @@ public class FaltaAdminDTO {
         this.turma = turma;
         this.disciplina = disciplina;
         this.professor = professor;
+        this.lancadoPor = lancadoPor;
         this.dataFalta = dataFalta;
         this.quantidade = quantidade;
     }
@@ -86,6 +89,10 @@ public class FaltaAdminDTO {
 
     public String getProfessor() {
         return professor;
+    }
+
+    public String getLancadoPor() {
+        return lancadoPor;
     }
 
     public void setProfessor(String professor) {

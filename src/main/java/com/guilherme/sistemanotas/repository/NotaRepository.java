@@ -19,6 +19,10 @@ public interface NotaRepository
             Integer idMatricula
     );
 
+    boolean existsByTurmaDisciplina_IdTurmaDisciplina(
+            Integer idTurmaDisciplina
+    );
+
     List<Nota> findByMatricula_IdMatriculaAndTurmaDisciplina_IdTurmaDisciplina(
             Integer idMatricula,
             Integer idTurmaDisciplina

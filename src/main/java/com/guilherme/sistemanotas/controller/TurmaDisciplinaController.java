@@ -1,6 +1,7 @@
 package com.guilherme.sistemanotas.controller;
 
 import com.guilherme.sistemanotas.dto.AtualizarProfessorTurmaDisciplinaDTO;
+import com.guilherme.sistemanotas.dto.HistoricoProfessorTurmaDisciplinaDTO;
 import com.guilherme.sistemanotas.model.TurmaDisciplina;
 import com.guilherme.sistemanotas.service.TurmaDisciplinaService;
 import org.springframework.http.ResponseEntity;
@@ -52,6 +53,15 @@ public class TurmaDisciplinaController {
                 .listar();
     }
 
+    @PutMapping("/{id}/aulas-previstas")
+    public TurmaDisciplina atualizarAulasPrevistas(
+            @PathVariable Integer id,
+            @RequestBody java.util.Map<String, Integer> dados,
+            Authentication authentication) {
+        return turmaDisciplinaService.atualizarAulasPrevistas(
+                id, dados == null ? null : dados.get("aulasPrevistas"), authentication.getName());
+    }
+
     @PutMapping("/{id}/professor")
     public TurmaDisciplina atualizarProfessor(
             @PathVariable Integer id,
@@ -64,6 +74,12 @@ public class TurmaDisciplinaController {
                         dados,
                         authentication.getName()
                 );
+    }
+
+    @GetMapping("/{id}/historico-professores")
+    public List<HistoricoProfessorTurmaDisciplinaDTO> listarHistoricoProfessores(
+            @PathVariable Integer id) {
+        return turmaDisciplinaService.listarHistoricoProfessores(id);
     }
 
     @GetMapping("/{id:\\d+}")

@@ -1,5 +1,6 @@
 package com.guilherme.sistemanotas.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -32,6 +33,12 @@ public class Falta {
             nullable = false
     )
     private TurmaDisciplina turmaDisciplina;
+
+    // Usuário que criou originalmente este registro. Não muda quando o professor responsável é substituído.
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "usuario_lancamento_id_usuario")
+    @JsonIgnore
+    private Usuario usuarioLancamento;
 
     public Falta() {
     }
@@ -74,5 +81,13 @@ public class Falta {
 
     public void setTurmaDisciplina(TurmaDisciplina turmaDisciplina) {
         this.turmaDisciplina = turmaDisciplina;
+    }
+
+    public Usuario getUsuarioLancamento() {
+        return usuarioLancamento;
+    }
+
+    public void setUsuarioLancamento(Usuario usuarioLancamento) {
+        this.usuarioLancamento = usuarioLancamento;
     }
 }

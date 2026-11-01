@@ -15,12 +15,14 @@ import com.guilherme.sistemanotas.model.Nota;
 import com.guilherme.sistemanotas.model.Professor;
 import com.guilherme.sistemanotas.model.TipoAvaliacao;
 import com.guilherme.sistemanotas.model.TurmaDisciplina;
+import com.guilherme.sistemanotas.model.Usuario;
 import com.guilherme.sistemanotas.repository.AlunoRepository;
 import com.guilherme.sistemanotas.repository.FaltaRepository;
 import com.guilherme.sistemanotas.repository.MatriculaRepository;
 import com.guilherme.sistemanotas.repository.NotaRepository;
 import com.guilherme.sistemanotas.repository.ProfessorRepository;
 import com.guilherme.sistemanotas.repository.TurmaDisciplinaRepository;
+import com.guilherme.sistemanotas.repository.UsuarioRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -45,6 +47,7 @@ public class NotaService {
     private final ProfessorRepository professorRepository;
     private final FaltaRepository faltaRepository;
     private final AuditoriaService auditoriaService;
+    private final UsuarioRepository usuarioRepository;
 
     public NotaService(
             NotaRepository notaRepository,
@@ -53,7 +56,8 @@ public class NotaService {
             AlunoRepository alunoRepository,
             ProfessorRepository professorRepository,
             FaltaRepository faltaRepository,
-            AuditoriaService auditoriaService) {
+            AuditoriaService auditoriaService,
+            UsuarioRepository usuarioRepository) {
 
         this.notaRepository = notaRepository;
         this.matriculaRepository = matriculaRepository;
@@ -62,6 +66,7 @@ public class NotaService {
         this.professorRepository = professorRepository;
         this.faltaRepository = faltaRepository;
         this.auditoriaService = auditoriaService;
+        this.usuarioRepository = usuarioRepository;
     }
 
 
@@ -183,6 +188,7 @@ public class NotaService {
         nota.setTurmaDisciplina(
                 turmaDisciplina
         );
+        nota.setUsuarioLancamento(buscarUsuarioLancamento(emailUsuario));
 
         Nota notaSalva =
                 notaRepository.save(nota);
@@ -287,6 +293,8 @@ public class NotaService {
             }
         }
 
+        Usuario usuarioLancamento = buscarUsuarioLancamento(emailUsuario);
+
         List<Nota> notasAvi =
                 new ArrayList<>();
 
@@ -302,6 +310,7 @@ public class NotaService {
             nota.setTurmaDisciplina(
                     vinculo
             );
+            nota.setUsuarioLancamento(usuarioLancamento);
 
             nota.setTipoAvaliacao(
                     TipoAvaliacao.AVI
@@ -498,6 +507,7 @@ public class NotaService {
                                     .getDisciplina()
                                     .getNome(),
                             nomeProfessor,
+                            nomeUsuarioLancamento(nota.getUsuarioLancamento()),
                             nota.getTipoAvaliacao()
                                     .name(),
                             nota.getValor(),
@@ -687,6 +697,9 @@ public class NotaService {
                 new ArrayList<>();
 
         for (Matricula matricula : matriculas) {
+            if (!matriculaAtiva(matricula)) {
+                continue;
+            }
 
             List<TurmaDisciplina> disciplinas =
                     turmaDisciplinaRepository
@@ -862,11 +875,10 @@ public class NotaService {
                                 .getDisciplina()
                                 .getCargaHoraria();
 
-                BigDecimal frequencia =
-                        calcularFrequencia(
-                                cargaHoraria,
-                                totalFaltas
-                        );
+                Integer aulasPrevistas = turmaDisciplina.getAulasPrevistas();
+                BigDecimal frequencia = aulasPrevistas == null || aulasPrevistas <= 0
+                        ? null
+                        : calcularFrequencia(aulasPrevistas, totalFaltas);
 
                 BigDecimal media =
                         null;
@@ -876,10 +888,9 @@ public class NotaService {
                 String situacaoFrequencia;
 
 
-                situacaoFrequencia =
-                        calcularSituacaoFrequencia(
-                                frequencia
-                        );
+                situacaoFrequencia = frequencia == null
+                        ? "AULAS PREVISTAS NÃO CONFIGURADAS"
+                        : calcularSituacaoFrequencia(frequencia);
 
 
                 if (possuiTodasAsNotas(
@@ -899,19 +910,22 @@ public class NotaService {
                                     media
                             );
 
-                    situacao =
-                            calcularSituacaoFinal(
-                                    media,
-                                    frequencia
-                            );
+                    situacao = frequencia == null
+                            ? "FREQUÊNCIA NÃO CONFIGURADA"
+                            : calcularSituacaoFinal(media, frequencia);
 
                 } else {
 
                     situacaoNota =
                             "EM ANDAMENTO";
 
-                    situacao =
-                            "EM ANDAMENTO";
+                    if (frequencia != null && frequencia.compareTo(BigDecimal.valueOf(75)) < 0) {
+                        situacao = "REPROVADO POR FALTA";
+                    } else if (frequencia == null) {
+                        situacao = "FREQUÊNCIA NÃO CONFIGURADA";
+                    } else {
+                        situacao = "EM ANDAMENTO";
+                    }
                 }
 
                 ResumoDisciplinaDTO dto =
@@ -927,12 +941,16 @@ public class NotaService {
                                 frequencia,
                                 situacao,
                                 situacaoNota,
-                                situacaoFrequencia
+                                situacaoFrequencia,
+                                matricula.getTurma().getNome(),
+                                matricula.getTurma().getAno(),
+                                matricula.getTurma().getSemestre(),
+                                matricula.getStatus(),
+                                matricula.getIdMatricula()
                         );
 
-                resumos.add(
-                        dto
-                );
+                dto.setAulasPrevistas(turmaDisciplina.getAulasPrevistas());
+                resumos.add(dto);
             }
         }
 
@@ -985,7 +1003,8 @@ public class NotaService {
                             nota.getTipoAvaliacao()
                                     .name(),
                             nota.getValor(),
-                            nota.getDataAvaliacao()
+                            nota.getDataAvaliacao(),
+                            nomeUsuarioLancamento(nota.getUsuarioLancamento())
                     );
 
             notasDTO.add(
@@ -996,6 +1015,20 @@ public class NotaService {
         return notasDTO;
     }
 
+
+    private Usuario buscarUsuarioLancamento(String email) {
+        return usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Usuário responsável pelo lançamento não encontrado"
+                ));
+    }
+
+    private String nomeUsuarioLancamento(Usuario usuario) {
+        return usuario == null
+                ? "Não informado (registro anterior)"
+                : usuario.getNome();
+    }
 
     private Aluno buscarAlunoPorEmail(
             String email) {
@@ -1094,57 +1127,13 @@ public class NotaService {
     }
 
 
-    private BigDecimal calcularFrequencia(
-            Integer cargaHoraria,
-            Integer faltas) {
-
-        if (cargaHoraria == null ||
-                cargaHoraria <= 0) {
-
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "Carga horária da disciplina é inválida"
-            );
+    private BigDecimal calcularFrequencia(Integer aulasPrevistas, Integer aulasAusencia) {
+        try {
+            return CalculoFrequenciaAcademica.calcular(aulasPrevistas, aulasAusencia);
+        } catch (IllegalArgumentException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);
         }
-
-        BigDecimal carga =
-                BigDecimal.valueOf(
-                        cargaHoraria
-                );
-
-        BigDecimal quantidadeFaltas =
-                BigDecimal.valueOf(
-                        faltas
-                );
-
-        BigDecimal aulasPresentes =
-                carga.subtract(
-                        quantidadeFaltas
-                );
-
-        if (aulasPresentes.compareTo(
-                BigDecimal.ZERO
-        ) < 0) {
-
-            aulasPresentes =
-                    BigDecimal.ZERO;
-        }
-
-        return aulasPresentes
-                .divide(
-                        carga,
-                        4,
-                        RoundingMode.HALF_UP
-                )
-                .multiply(
-                        BigDecimal.valueOf(100)
-                )
-                .setScale(
-                        2,
-                        RoundingMode.HALF_UP
-                );
     }
-
 
     private String calcularSituacaoNota(
             BigDecimal media) {
@@ -1209,6 +1198,11 @@ public class NotaService {
         return "REPROVADO POR NOTA E FALTA";
     }
 
+
+    private boolean matriculaAtiva(Matricula matricula) {
+        return matricula != null && matricula.getStatus() != null
+                && "ATIVA".equalsIgnoreCase(matricula.getStatus().trim());
+    }
 
     private void validarValorNota(
             BigDecimal valor) {

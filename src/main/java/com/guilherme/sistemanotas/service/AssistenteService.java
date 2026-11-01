@@ -5,6 +5,7 @@ import com.guilherme.sistemanotas.dto.ResumoDisciplinaDTO;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.text.Normalizer;
 import java.util.List;
 
 @Service
@@ -61,16 +62,55 @@ public class AssistenteService {
         // =========================
 
         List<ResumoDisciplinaDTO> resumos =
-                notaService.gerarMeuResumo(email);
+                notaService.gerarMeuResumo(email).stream()
+                        .filter(resumo -> "ATIVA".equalsIgnoreCase(resumo.getStatusMatricula()))
+                        .filter(resumo -> resumo.getFrequencia() != null)
+                        .toList();
 
-        String perguntaNormalizada =
-                pergunta
-                        .toLowerCase()
-                        .trim();
+        String perguntaNormalizada = normalizarPergunta(pergunta);
 
         // ==================================================
-        // RESPOSTAS DETERMINÍSTICAS
-        // NÃO PASSAM PELA NVIDIA
+        // RESPOSTAS ACADÊMICAS DIRETAS
+        // A linguagem pode variar; os fatos vêm do Java.
+        // ==================================================
+
+        if (perguntaSobreFaltas(perguntaNormalizada)) {
+            return new AssistenteRespostaDTO(
+                    pergunta,
+                    responderSobreFaltas(resumos)
+            );
+        }
+
+        if (perguntaComparacaoDesempenho(perguntaNormalizada)) {
+            return new AssistenteRespostaDTO(
+                    pergunta,
+                    responderMateriaParaMelhorar(resumos)
+            );
+        }
+
+        if (perguntaSobreMateriasAbaixoDaMedia(perguntaNormalizada)) {
+            return new AssistenteRespostaDTO(
+                    pergunta,
+                    responderMateriasAbaixoDaMedia(resumos)
+            );
+        }
+
+        if (perguntaSobreNotas(perguntaNormalizada)) {
+            return new AssistenteRespostaDTO(
+                    pergunta,
+                    responderSobreNotas(resumos)
+            );
+        }
+
+        if (perguntaResumoGeral(perguntaNormalizada)) {
+            return new AssistenteRespostaDTO(
+                    pergunta,
+                    gerarResumoGeral(resumos)
+            );
+        }
+
+        // ==================================================
+        // OUTRAS ANÁLISES DETERMINÍSTICAS
         // ==================================================
 
         if (
@@ -102,8 +142,8 @@ public class AssistenteService {
         }
 
         // =========================
-// CONTEXTO PARA IA
-// =========================
+        // CONTEXTO PARA IA
+        // =========================
 
         String contexto =
                 montarContextoAcademico(
@@ -134,6 +174,151 @@ public class AssistenteService {
                 pergunta,
                 resposta
         );
+    }
+
+    private String normalizarPergunta(String pergunta) {
+
+        String semAcentos = Normalizer.normalize(
+                pergunta == null ? "" : pergunta.toLowerCase().trim(),
+                Normalizer.Form.NFD
+        ).replaceAll("\\p{M}+", "");
+
+        return semAcentos.replaceAll("[^a-z0-9\\s]", " ")
+                .replaceAll("\\s+", " ")
+                .trim();
+    }
+
+    private boolean perguntaSobreFaltas(String pergunta) {
+
+        boolean mencionaFalta = pergunta.contains("falta")
+                || pergunta.contains("faltas")
+                || pergunta.contains("frequencia")
+                || pergunta.contains("presenca")
+                || pergunta.contains("presencas");
+
+        boolean pedeConsulta = pergunta.contains("quantas")
+                || pergunta.contains("quanto")
+                || pergunta.contains("como")
+                || pergunta.contains("minha")
+                || pergunta.contains("meu")
+                || pergunta.contains("estou")
+                || pergunta.contains("to ")
+                || pergunta.contains("tenho")
+                || pergunta.contains("situacao")
+                || pergunta.contains("materia")
+                || pergunta.contains("disciplina")
+                || pergunta.contains("total")
+                || pergunta.contains("muito")
+                || pergunta.contains("risco");
+
+        return mencionaFalta && pedeConsulta;
+    }
+
+    private boolean perguntaComparacaoDesempenho(String pergunta) {
+
+        boolean pedeComparacao = pergunta.contains("pior")
+                || pergunta.contains("menor media")
+                || pergunta.contains("media mais baixa")
+                || pergunta.contains("nota mais baixa")
+                || pergunta.contains("qual materia")
+                || pergunta.contains("qual disciplina");
+
+        boolean querOrientacao = pergunta.contains("estudar")
+                || pergunta.contains("melhorar")
+                || pergunta.contains("focar")
+                || pergunta.contains("foco")
+                || pergunta.contains("desempenho")
+                || pergunta.contains("preciso")
+                || pergunta.contains("devo");
+
+        return pedeComparacao && querOrientacao
+                || pergunta.contains("em qual materia estou pior")
+                || pergunta.contains("em qual disciplina estou pior");
+    }
+
+    private boolean perguntaSobreNotas(String pergunta) {
+
+        boolean mencionaNota = pergunta.contains("nota")
+                || pergunta.contains("notas")
+                || pergunta.contains("media")
+                || pergunta.contains("medias")
+                || pergunta.contains("desempenho");
+
+        boolean pedeConsulta = pergunta.contains("como")
+                || pergunta.contains("quais")
+                || pergunta.contains("qual")
+                || pergunta.contains("minha")
+                || pergunta.contains("meu")
+                || pergunta.contains("estou")
+                || pergunta.contains("to ")
+                || pergunta.contains("tenho")
+                || pergunta.contains("cada")
+                || pergunta.contains("materia")
+                || pergunta.contains("disciplina")
+                || pergunta.contains("situacao")
+                || pergunta.contains("abaixo")
+                || pergunta.contains("melhor")
+                || pergunta.contains("pior");
+
+        return mencionaNota && pedeConsulta;
+    }
+
+    private boolean perguntaSobreMateriasAbaixoDaMedia(String pergunta) {
+
+        return (pergunta.contains("abaixo da media")
+                || pergunta.contains("abaixo da minima")
+                || pergunta.contains("reprovada por nota")
+                || pergunta.contains("reprovadas por nota")
+                || pergunta.contains("quais materias estou reprovado")
+                || pergunta.contains("quais disciplinas estou reprovado"))
+                && (pergunta.contains("materia")
+                || pergunta.contains("disciplina")
+                || pergunta.contains("quais")
+                || pergunta.contains("qual"));
+    }
+
+    private boolean perguntaResumoGeral(String pergunta) {
+
+        return pergunta.contains("resumo academico")
+                || pergunta.contains("resumo geral")
+                || pergunta.contains("como estou indo")
+                || pergunta.contains("como estou no geral")
+                || pergunta.contains("meu desempenho geral")
+                || pergunta.contains("meu desempenho academico");
+    }
+
+    private String responderMateriasAbaixoDaMedia(
+            List<ResumoDisciplinaDTO> resumos) {
+
+        List<ResumoDisciplinaDTO> abaixo = resumos.stream()
+                .filter(r -> possuiTexto(r.getSituacaoNota(), "REPROVADO"))
+                .toList();
+
+        if (abaixo.isEmpty()) {
+            return "Pelos resultados registrados no sistema, nenhuma disciplina aparece reprovada por nota. Consulte a média e a situação de cada disciplina para ver os detalhes.";
+        }
+
+        StringBuilder resposta = new StringBuilder(
+                "Disciplinas com situação de reprovação por nota: "
+        );
+
+        for (int i = 0; i < abaixo.size(); i++) {
+
+            ResumoDisciplinaDTO resumo = abaixo.get(i);
+
+            if (i > 0) {
+                resposta.append("; ");
+            }
+
+            resposta.append(resumo.getDisciplina())
+                    .append(" (média ")
+                    .append(formatarNota(resumo.getMedia()))
+                    .append(")");
+        }
+
+        resposta.append(". Usei a situação por nota calculada pelo sistema, sem criar um limite de aprovação novo.");
+
+        return resposta.toString();
     }
 
     // ==================================================
@@ -511,10 +696,7 @@ public class AssistenteService {
             List<ResumoDisciplinaDTO> resumos,
             String pergunta) {
 
-        String perguntaNormalizada =
-                pergunta
-                        .toLowerCase()
-                        .trim();
+        String perguntaNormalizada = normalizarPergunta(pergunta);
 
         ResumoDisciplinaDTO disciplinaEncontrada =
                 buscarDisciplinaNaPergunta(
@@ -899,53 +1081,78 @@ public class AssistenteService {
     private String responderMateriaParaMelhorar(
             List<ResumoDisciplinaDTO> resumos) {
 
-        ResumoDisciplinaDTO prioritario =
-                encontrarDisciplinaPrioritaria(
-                        resumos
-                );
+        // Ordena somente as disciplinas que possuem média registrada.
+        List<ResumoDisciplinaDTO> ordenadas = resumos.stream()
+                .filter(resumo -> resumo.getMedia() != null)
+                .sorted((a, b) -> a.getMedia().compareTo(b.getMedia()))
+                .toList();
 
-        if (prioritario == null) {
-
-            return "Ainda não existem dados suficientes para identificar uma disciplina prioritária.";
+        if (ordenadas.isEmpty()) {
+            return "Ainda não existem médias registradas suficientes para comparar suas disciplinas.";
         }
 
-        String resposta =
-                "A disciplina que mais precisa de atenção é "
-                        + prioritario.getDisciplina()
-                        + ", com média "
-                        + formatarNota(
-                        prioritario.getMedia()
-                )
-                        + " e situação "
-                        + formatarTexto(
-                        prioritario.getSituacao()
-                )
-                        + ".";
+        ResumoDisciplinaDTO prioritario = ordenadas.get(0);
 
-        String menorAvaliacao =
-                identificarMenorAvaliacao(
-                        prioritario
+        StringBuilder resposta = new StringBuilder();
+
+        resposta.append(
+                        "Comparando as médias registradas, a disciplina que mais precisa de atenção é "
+                )
+                .append(prioritario.getDisciplina())
+                .append(", com média ")
+                .append(formatarNota(prioritario.getMedia()))
+                .append(".");
+
+        if (ordenadas.size() > 1) {
+
+            resposta.append(
+                    " Para comparar, suas médias da menor para a maior são: "
+            );
+
+            for (int i = 0; i < ordenadas.size(); i++) {
+
+                ResumoDisciplinaDTO resumo = ordenadas.get(i);
+
+                if (i > 0) {
+                    resposta.append("; ");
+                }
+
+                resposta.append(resumo.getDisciplina())
+                        .append(" (")
+                        .append(formatarNota(resumo.getMedia()))
+                        .append(")");
+            }
+
+            resposta.append(".");
+        }
+
+        resposta.append(
+                        " Eu começaria revisando "
+                )
+                .append(prioritario.getDisciplina())
+                .append(
+                        " e depois seguiria para a próxima menor média. Essa comparação considera as médias disponíveis e não substitui a situação oficial calculada pelo sistema."
                 );
+
+        String menorAvaliacao = identificarMenorAvaliacao(prioritario);
 
         if (menorAvaliacao != null) {
 
-            resposta +=
-                    " A avaliação com menor desempenho é "
-                            + menorAvaliacao
-                            + ".";
+            resposta.append(
+                            " Na disciplina prioritária, a avaliação com menor desempenho é "
+                    )
+                    .append(menorAvaliacao)
+                    .append(".");
         }
 
-        if (
-                "FREQUÊNCIA REGULAR".equalsIgnoreCase(
-                        prioritario.getSituacaoFrequencia()
-                )
-        ) {
+        if ("FREQUÊNCIA REGULAR".equalsIgnoreCase(prioritario.getSituacaoFrequencia())) {
 
-            resposta +=
-                    " Sua frequência está regular.";
+            resposta.append(
+                    " Sua frequência nessa disciplina está regular."
+            );
         }
 
-        return resposta;
+        return resposta.toString();
     }
 
     // =========================
@@ -1226,6 +1433,29 @@ public class AssistenteService {
         );
 
         return analise.toString();
+    }
+
+    // =========================
+    // MENOR MÉDIA REGISTRADA
+    // =========================
+
+    private ResumoDisciplinaDTO encontrarDisciplinaComMenorMedia(
+            List<ResumoDisciplinaDTO> resumos) {
+
+        ResumoDisciplinaDTO menorMedia = null;
+
+        for (ResumoDisciplinaDTO resumo : resumos) {
+
+            if (resumo.getMedia() == null) {
+                continue;
+            }
+
+            if (menorMedia == null || mediaMenor(resumo, menorMedia)) {
+                menorMedia = resumo;
+            }
+        }
+
+        return menorMedia;
     }
 
     // =========================
